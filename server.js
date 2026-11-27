@@ -58,7 +58,7 @@ app.use(express.static(__dirname));
 // ==========================================
 // Amar Bingo cluster. Set MONGODB_PASSWORD in the host environment (Render) before deploying.
 const dbUser = "amarmeftuh971_db_user";
-const dbPass = encodeURIComponent(process.env.MONGODB_PASSWORD || "YOUR_MONGODB_PASSWORD"); // ፓስወርዱን በራሱ አስተካክሎ እንዲያነብ ያደርገዋል
+const dbPass = encodeURIComponent(process.env.MONGODB_PASSWORD || "Jo97BJbi3208"); // ፓስወርዱን በራሱ አስተካክሎ እንዲያነብ ያደርገዋል
 const dbName = "amarBingo";
 const dbCluster = "cluster0.ktvuu20.mongodb.net";
 
