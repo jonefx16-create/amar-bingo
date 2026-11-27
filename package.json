@@ -1,0 +1,20 @@
+{
+  "name": "bingo-ultimate",
+  "version": "1.0.0",
+  "description": "Bingo Stream Ultimate Game Live",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --max-old-space-size=450 server.js",
+    "test": "node mobileOpsPanel.test.js && node game/birrBalance.test.js && node claimBroadcast.test.js && node cooldownManager.test.js && node contactGuard.test.js && node adminLiveView.test.js && node adminLabels.test.js && node game/divisionGuard.test.js && node game/highStakeBotPace.test.js && node game/gameEngine.test.js && node game/roundTiming.sim.js && node game/lineIndex.sim.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "socket.io": "^4.7.2",
+    "node-telegram-bot-api": "^0.64.0"
+  }
+}
+
+
+
+
