@@ -5,24 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Dashboard - Amar Bingo</title>
     <style>
-        :root { --bg-dark: #050810; --panel: #161b22; --faded-green: #4ade80; --text-gray: #94a3b8; --border: #30363d; --red: #ef4444; --blue: #3b82f6; --orange: #ea580c; --purple: #a855f7; --cyan: #06b6d4; --gold: #fbbf24; }
+        :root { --bg-dark: #16130f; --panel: #241e19; --faded-green: #2dd4bf; --text-gray: #c4b8a8; --border: #3d342c; --red: #fb7185; --blue: #818cf8; --orange: #fb923c; --purple: #c084fc; --cyan: #7dd3fc; --gold: #f6c177; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: white; margin: 0; display: flex; height: 100vh; overflow: hidden; flex-direction: row; }
         
-        #login-sec { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #161b22 0%, #050810 100%); z-index: 9999; }
-        .login-card { background: rgba(22, 27, 34, 0.7); backdrop-filter: blur(15px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(74, 222, 128, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(74, 222, 128, 0.1); box-sizing: border-box;}
-        .login-card h2 { color: var(--faded-green); margin-top: 0; margin-bottom: 30px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(74,222,128,0.5); }
+        #login-sec { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #241e19 0%, #16130f 100%); z-index: 9999; }
+        .login-card { background: rgba(36, 30, 25, 0.7); backdrop-filter: blur(15px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(45, 212, 191, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(45, 212, 191, 0.1); box-sizing: border-box;}
+        .login-card h2 { color: var(--faded-green); margin-top: 0; margin-bottom: 30px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(45, 212, 191, 0.5); }
         .login-card input { background: rgba(0,0,0,0.6); border: 1px solid var(--border); padding: 16px; font-size: 16px; border-radius: 12px; transition: 0.3s; text-align: center; letter-spacing: 2px; color: white;}
-        .login-card input:focus { border-color: var(--faded-green); box-shadow: 0 0 15px rgba(74,222,128,0.3); outline: none; }
-        .login-card button { padding: 16px; font-size: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 5px 15px rgba(74,222,128,0.4); }
-        .login-card button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(74,222,128,0.6); }
+        .login-card input:focus { border-color: var(--faded-green); box-shadow: 0 0 15px rgba(45, 212, 191, 0.3); outline: none; }
+        .login-card button { padding: 16px; font-size: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 5px 15px rgba(45, 212, 191, 0.4); }
+        .login-card button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.6); }
 
         #dash-sec { display: none; width: 100%; height: 100%; flex-direction: row; position: relative; }
         
         .sidebar { width: 250px; background: var(--panel); border-right: 1px solid var(--border); display: block; padding: 20px 0 80px 0; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; transition: 0.3s ease; z-index: 1000; height: 100%; box-sizing: border-box;}
         .sidebar-header { text-align: center; color: var(--faded-green); font-size: 18px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase;}
         .nav-btn { width: 100%; background: transparent; color: var(--text-gray); border: none; padding: 15px 20px; text-align: left; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: bold; border-left: 4px solid transparent; white-space: nowrap; box-sizing: border-box;}
-        .nav-btn:hover { background: rgba(74, 222, 128, 0.05); color: white; }
-        .nav-btn.active { background: rgba(74, 222, 128, 0.1); color: var(--faded-green); border-left-color: var(--faded-green); }
+        .nav-btn:hover { background: rgba(45, 212, 191, 0.05); color: white; }
+        .nav-btn.active { background: rgba(45, 212, 191, 0.1); color: var(--faded-green); border-left-color: var(--faded-green); }
         .close-sidebar { display: none; background: transparent; border: none; color: white; font-size: 24px; position: absolute; top: 10px; right: 15px; cursor: pointer; }
 
         .badge-alert { background: var(--red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; display: none; font-weight: 900; box-shadow: 0 0 8px var(--red); animation: pulseAlert 1.5s infinite; }
@@ -44,23 +44,23 @@
         .stat-card h3 { margin: 0; color: var(--text-gray); font-size: 12px; text-transform: uppercase;}
         .stat-card h2 { margin: 10px 0 0 0; font-size: 20px; font-weight: 900;}
         
-        .live-player-box:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--purple) !important; }
+        .live-player-box:hover { background: rgba(192, 132, 252, 0.1); border-color: var(--purple) !important; }
 
-        input, select, textarea { padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); background: #000; color: white; width: 100%; box-sizing: border-box; margin-bottom: 10px; outline: none; font-size: 14px;}
+        input, select, textarea { padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); background: #100e0c; color: white; width: 100%; box-sizing: border-box; margin-bottom: 10px; outline: none; font-size: 14px;}
         
         input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--faded-green); margin:0; }
         tbody tr.selectable-row { transition: 0.2s; cursor: pointer; }
-        tbody tr.selectable-row:hover { background: rgba(74, 222, 128, 0.05); }
-        tbody tr.selectable-row.selected { background: rgba(74, 222, 128, 0.15) !important; border-left: 3px solid var(--faded-green); }
+        tbody tr.selectable-row:hover { background: rgba(45, 212, 191, 0.05); }
+        tbody tr.selectable-row.selected { background: rgba(45, 212, 191, 0.15) !important; border-left: 3px solid var(--faded-green); }
 
-        .bulk-action-bar { display: none; justify-content: space-between; align-items: center; background: rgba(239, 68, 68, 0.1); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--red); margin-bottom: 15px; }
+        .bulk-action-bar { display: none; justify-content: space-between; align-items: center; background: rgba(251, 113, 133, 0.1); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--red); margin-bottom: 15px; }
         .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap;}
         .page-btn { background: var(--border); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .page-btn:hover:not(:disabled) { background: var(--blue); }
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .page-info { color: var(--gold); font-weight: bold; font-size: 14px; }
 
-        .search-bar { background-color: #050810; border: 1px solid var(--blue); flex: 1; min-width: 200px;}
+        .search-bar { background-color: #16130f; border: 1px solid var(--blue); flex: 1; min-width: 200px;}
         .search-container { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;}
         
         button.action-btn { background: var(--faded-green); color: black; border: none; padding: 12px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;}
@@ -75,34 +75,34 @@
         th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle;}
         th { color: var(--text-gray); font-size: 11px; text-transform: uppercase; white-space: nowrap; background: rgba(0,0,0,0.2);}
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
-        .bg-pending { background: rgba(234, 88, 12, 0.2); color: var(--orange); border: 1px solid var(--orange); }
-        .bg-approved { background: rgba(74, 222, 128, 0.2); color: var(--faded-green); border: 1px solid var(--faded-green); }
-        .bg-rejected { background: rgba(239, 68, 68, 0.2); color: var(--red); border: 1px solid var(--red); }
-        .bg-win { background: rgba(251, 191, 36, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .bg-pending { background: rgba(251, 146, 60, 0.2); color: var(--orange); border: 1px solid var(--orange); }
+        .bg-approved { background: rgba(45, 212, 191, 0.2); color: var(--faded-green); border: 1px solid var(--faded-green); }
+        .bg-rejected { background: rgba(251, 113, 133, 0.2); color: var(--red); border: 1px solid var(--red); }
+        .bg-win { background: rgba(246, 193, 119, 0.2); color: var(--gold); border: 1px solid var(--gold); }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;}
         .modal-content { background: var(--panel); padding: 20px; border-radius: 10px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; color: white; position: relative;}
-        .grid-preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #000; padding: 10px; border-radius: 8px; text-align: center; margin: 10px 0;}
+        .grid-preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #100e0c; padding: 10px; border-radius: 8px; text-align: center; margin: 10px 0;}
         .grid-preview div { background: var(--border); padding: 8px 0; border-radius: 4px; font-weight: bold; font-family: monospace;}
         .grid-preview .highlight { background: var(--faded-green); color: black; }
-        .grid-preview.card-closed { outline: 2px solid var(--faded-green); box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15); }
+        .grid-preview.card-closed { outline: 2px solid var(--faded-green); box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.15); }
 
         .tx-tab-btn { background: transparent; color: var(--text-gray); border: 1px solid var(--border); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight:bold; white-space: nowrap;}
         .tx-tab-btn.active { background: var(--border); color: white;}
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; }
         
-        #sms-text { font-size: 16px !important; line-height: 1.6; background: #000; padding: 15px; border-radius: 8px; border: 1px solid var(--faded-green); color: white; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; min-height: 80px; }
+        #sms-text { font-size: 16px !important; line-height: 1.6; background: #100e0c; padding: 15px; border-radius: 8px; border: 1px solid var(--faded-green); color: white; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; min-height: 80px; }
         .disabled-input { opacity: 0.4; pointer-events: none; display: none !important; }
 
-        .promoter-header { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 20px; border-radius: 12px; border: 1px solid var(--cyan); margin-bottom: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .promoter-stats { display: flex; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .promoter-header { background: linear-gradient(135deg, #1e1914, #2c241e); padding: 20px; border-radius: 12px; border: 1px solid var(--cyan); margin-bottom: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .promoter-stats { display: flex; justify-content: space-between; background: #100e0c; padding: 15px; border-radius: 8px; margin-top: 15px; }
         .p-stat-box { text-align: center; flex: 1; }
         .p-stat-title { font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-bottom: 5px; display: block; }
         .p-stat-val { font-size: 18px; font-weight: 900; color: white; }
 
         .switch { position: relative; display: inline-block; width: 50px; height: 26px; margin: 0; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4d433a; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--faded-green); }
         input:checked + .slider:before { transform: translateX(24px); }
@@ -201,29 +201,29 @@
                     <h3>💰 Live Jackpot (የስክሪን ላይ)</h3>
                     <h2 style="color: var(--gold);" id="stat-current-jackpot">0.00 ETB</h2>
                     <div style="font-size:12px; color:var(--text-gray); display:flex; justify-content:space-around; background:rgba(0,0,0,0.3); padding:10px; border-radius:5px; margin-top: 10px; border: 1px solid var(--border);">
-                        <span>👤 Money: <b style="color:#4ade80; font-size:14px;" id="split-real-money">0.00</b></span>
-                        <span>Money: <b style="color:#4ade80; font-size:14px;" id="split-bot-money">0.00</b></span>
+                        <span>👤 Money: <b style="color:#2dd4bf; font-size:14px;" id="split-real-money">0.00</b></span>
+                        <span>Money: <b style="color:#2dd4bf; font-size:14px;" id="split-bot-money">0.00</b></span>
                     </div>
                 </div>
                 
-                <div class="stat-card" style="border-bottom: 4px solid var(--cyan); grid-column: span 2; background: rgba(6, 182, 212, 0.1);">
+                <div class="stat-card" style="border-bottom: 4px solid var(--cyan); grid-column: span 2; background: rgba(125, 211, 252, 0.1);">
                     <h3>💎 Hidden Bank (እውነተኛው ድብቅ ካዝና)</h3>
                     <p style="font-size:10px; color:gray; margin:0;">ይህ ሲስተሙ ሰው ሲያሸንፍ እውነተኛ ብር የሚከፍልበት ካዝና ነው (ማንም አያየውም)</p>
                     <h2 style="color: var(--cyan);" id="stat-virtual-pool">0.00 ETB</h2>
                 </div>
 
                 <div class="stat-card live-player-box" style="border-bottom: 4px solid var(--purple); cursor: pointer; transition: 0.3s;" onclick="openLivePlayersModal()">
-                    <h3 style="color:#4ade80;">👤 Player</h3>
+                    <h3 style="color:#2dd4bf;">👤 Player</h3>
                     <h2 style="color: var(--purple);" id="stat-live-players">0 / 0</h2>
-                    <div style="font-size:11px; font-weight:bold; color:var(--purple); margin-top:8px; background:rgba(168, 85, 247, 0.15); padding:6px; border-radius:4px; display:inline-block;">👁️ View List (እዚህ ይጫኑ)</div>
+                    <div style="font-size:11px; font-weight:bold; color:var(--purple); margin-top:8px; background:rgba(192, 132, 252, 0.15); padding:6px; border-radius:4px; display:inline-block;">👁️ View List (እዚህ ይጫኑ)</div>
                 </div>
 
                 <div class="stat-card" style="border-bottom: 4px solid var(--blue);">
                     <h3>Daily Admin Profit (Today)</h3>
                     <h2 style="color: var(--blue); margin-bottom:5px;" id="stat-total-profit">0.00 ETB</h2>
                     <div style="font-size:10px; color:var(--text-gray); display:flex; justify-content:space-around; background:rgba(0,0,0,0.3); padding:5px; border-radius:5px;">
-                        <span>Admin (70%): <b style="color:#4ade80;" id="split-admin">0.00</b></span>
-                        <span>Partner (30%): <b style="color:#fbbf24;" id="split-partner">0.00</b></span>
+                        <span>Admin (70%): <b style="color:#2dd4bf;" id="split-admin">0.00</b></span>
+                        <span>Partner (30%): <b style="color:#f6c177;" id="split-partner">0.00</b></span>
                     </div>
                 </div>
                 
@@ -250,8 +250,8 @@
                         <thead>
                             <tr>
                                 <th>Date (ቀን)</th>
-                                <th style="background:rgba(59,130,246,0.15); border-left:3px solid var(--blue); color:white;">📱 ከ iPhone የመጣው እውነተኛ SMS</th>
-                                <th style="background:rgba(74,222,128,0.15); border-left:3px solid var(--faded-green); color:white;">🧾 ደንበኛው ያስገባው (App ላይ)</th>
+                                <th style="background:rgba(129, 140, 248, 0.15); border-left:3px solid var(--blue); color:white;">📱 ከ iPhone የመጣው እውነተኛ SMS</th>
+                                <th style="background:rgba(45, 212, 191, 0.15); border-left:3px solid var(--faded-green); color:white;">🧾 ደንበኛው ያስገባው (App ላይ)</th>
                                 <th>Status & Action</th>
                             </tr>
                         </thead>
@@ -530,7 +530,7 @@
         <div id="tab-referral" class="tab-content">
             
             <!-- 🔥 የጠላፊዎችን (Hackers) የውሸት አካውንት እና ብር ማፅጃ 🔥 -->
-            <div class="card" style="border-left: 4px solid var(--red); margin-bottom: 15px; background: rgba(239, 68, 68, 0.1);">
+            <div class="card" style="border-left: 4px solid var(--red); margin-bottom: 15px; background: rgba(251, 113, 133, 0.1);">
                 <h3 style="color:var(--red); margin-top:0;">🛑 የጠላፊዎችን (Hackers) የውሸት አካውንት እና ብር ማፅጃ</h3>
                 <p style="font-size:12px; color:var(--text-gray);">ይህ ቁልፍ ሀከሮች የራስን ሊንክ ለራስ በመላክ የሰበሰቡትን የውሸት ቦነስ አጣርቶ ያጠፋል (ለእውነተኛ ተጫዋቾች አይነካም)።</p>
                 <button class="action-btn btn-red" onclick="cleanFakeReferrals()">🗑️ የውሸት (Hacker) ሪፈራሎችን አፅዳ</button>
@@ -641,7 +641,7 @@
                 
                 <div class="card" style="border-left: 4px solid var(--purple);">
                     <h3 style="margin-top:0; color:var(--purple);">🎁 Bulk List Bonus</h3>
-                    <textarea id="b-phones" rows="3" style="width: 100%; background: #000; color: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px;" placeholder="0911..., 0922... OR type 'ALL' for everyone"></textarea>
+                    <textarea id="b-phones" rows="3" style="width: 100%; background: #100e0c; color: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px;" placeholder="0911..., 0922... OR type 'ALL' for everyone"></textarea>
                     <input type="number" id="mb-amt-bulk" placeholder="Amount per person">
                     <button class="action-btn btn-purple" style="width:100%;" onclick="sendBulkBonus()">Send Bulk Bonus</button>
                 </div>
@@ -672,7 +672,7 @@
                     <div style="flex: 1; min-width: 250px;">
                         <h3 style="margin-top:0; color:var(--cyan); font-size:18px;">🏦 ካዝና 1 (ዋና / Vault 1)</h3>
                         <p style="font-size:11px; color:var(--text-gray);">ለ 3፣ 4 እና 5 አሸናፊዎች የሚከፍል ዋና ካዝና።</p>
-                        <div style="background: rgba(6, 182, 212, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--cyan);">
+                        <div style="background: rgba(125, 211, 252, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--cyan);">
                             <span style="font-size:11px; color:gray; text-transform:uppercase;">Current Balance</span>
                             <h2 id="disp-vault1" style="margin:5px 0; color:var(--cyan); font-size:24px;">0.00 ETB</h2>
                         </div>
@@ -684,7 +684,7 @@
                     <div style="flex: 1; min-width: 250px;">
                         <h3 style="margin-top:0; color:var(--faded-green); font-size:18px;">🛡️ ካዝና 2 (Vault 2)</h3>
                         <p style="font-size:11px; color:var(--text-gray);">1 እውነተኛ ሰው ሲያሸንፍ ሙሉ ክፍያ ይፈፅማል።</p>
-                        <div style="background: rgba(74, 222, 128, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--faded-green);">
+                        <div style="background: rgba(45, 212, 191, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--faded-green);">
                             <span style="font-size:11px; color:gray; text-transform:uppercase;">Current Balance</span>
                             <h2 id="disp-vault2" style="margin:5px 0; color:var(--faded-green); font-size:24px;">0.00 ETB</h2>
                         </div>
@@ -700,7 +700,7 @@
                     <div style="flex: 1; min-width: 250px;">
                         <h3 style="margin-top:0; color:var(--purple); font-size:18px;">🔥 ካዝና 3 (Vault 3)</h3>
                         <p style="font-size:11px; color:var(--text-gray);">1 ሰው እና 1 ቦት እኩል (Tie) ሲወጡ ይከፍላል።</p>
-                        <div style="background: rgba(168, 85, 247, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--purple);">
+                        <div style="background: rgba(192, 132, 252, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--purple);">
                             <span style="font-size:11px; color:gray; text-transform:uppercase;">Current Balance</span>
                             <h2 id="disp-vault3" style="margin:5px 0; color:var(--purple); font-size:24px;">0.00 ETB</h2>
                         </div>
@@ -725,12 +725,12 @@
                     </label>
                 </div>
                 <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:15px;">
-                    <div style="flex:1; min-width:180px; background: rgba(6, 182, 212, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--cyan);">
+                    <div style="flex:1; min-width:180px; background: rgba(125, 211, 252, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--cyan);">
                         <span style="font-size:11px; color:gray; text-transform:uppercase;">Transferred to Vault 1 + 3</span>
                         <h2 id="disp-vault-transferred" style="margin:5px 0; color:var(--cyan); font-size:22px;">0.00 ETB</h2>
                         <button type="button" class="action-btn" style="width:100%; margin-top:8px; background:var(--cyan); color:black;" onclick="clearVaultLedger('transferred')">Clear</button>
                     </div>
-                    <div style="flex:1; min-width:180px; background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--red);">
+                    <div style="flex:1; min-width:180px; background: rgba(251, 113, 133, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--red);">
                         <span style="font-size:11px; color:gray; text-transform:uppercase;">Blocked in Main Wallet</span>
                         <h2 id="disp-vault-blocked" style="margin:5px 0; color:var(--red); font-size:22px;">0.00 ETB</h2>
                         <button type="button" class="action-btn" style="width:100%; margin-top:8px; background:var(--red); color:white;" onclick="clearVaultLedger('blocked')">Clear</button>
@@ -738,7 +738,7 @@
                 </div>
 
                 <!-- 🔥 በአንድ ጊዜ ሁሉንም ሴቭ ማድረጊያ አዝራር 🔥 -->
-                <button class="action-btn" style="width: 100%; background: linear-gradient(135deg, var(--gold), var(--orange)); color: black; font-size: 18px; padding: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);" onclick="updateSettings('all_vaults')">
+                <button class="action-btn" style="width: 100%; background: linear-gradient(135deg, var(--gold), var(--orange)); color: black; font-size: 18px; padding: 15px; margin-top: 20px; box-shadow: 0 5px 15px rgba(246, 193, 119, 0.4);" onclick="updateSettings('all_vaults')">
                     💾 የ 3ቱንም ካዝና ብር እና ፐርሰንት በአንድ ጊዜ ሴቭ አድርግ (Save All)
                 </button>
             </div>
@@ -760,7 +760,7 @@
                     <h3 style="margin-top:0; color:var(--gold);">📥 Tiered Deposit Auto-Bonus</h3>
                     <p style="font-size:11px; color:var(--text-gray); margin-top:0;">ከከፍተኛው (Tier 3) ጀምሮ ያረጋግጣል። የቱንም ያህል ቢያስገቡ 1 አይነት ቦነስ ብቻ ያገኛሉ።</p>
                     
-                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; border:1px solid #334155;">
+                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; border:1px solid #4d433a;">
                         <label style="color:var(--faded-green); font-size:12px; font-weight:bold;">🌟 Tier 1 Bonus</label>
                         <div style="display:flex; gap:10px; margin-top:5px;">
                             <div style="flex:1;"><label style="font-size:10px; color:gray;">Min Amount</label><input type="number" id="set-dep-min" placeholder="e.g. 50"></div>
@@ -768,13 +768,13 @@
                         </div>
                     </div>
                     
-                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; border:1px solid #334155;">
+                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; border:1px solid #4d433a;">
                         <label style="color:var(--gold); font-size:12px; font-weight:bold;">🏆 Tier 2 Bonus</label>
                         <div style="display:flex; gap:10px; margin-top:5px;">
                             <div style="flex:1;"><label style="font-size:10px; color:gray;">Min Amount</label><input type="number" id="set-dep-tier2-min" placeholder="e.g. 200"></div>
                             <div style="flex:1;"><label style="font-size:10px; color:gray;">Bonus %</label><input type="number" id="set-dep-tier2-perc" placeholder="e.g. 100"></div>
                         </div>
-                        <div style="margin-top:12px; padding:10px; border-radius:8px; border:1px dashed var(--gold); background:rgba(251,191,36,0.06);">
+                        <div style="margin-top:12px; padding:10px; border-radius:8px; border:1px dashed var(--gold); background:rgba(246, 193, 119, 0.06);">
                             <label style="display:flex; align-items:center; gap:8px; color:var(--gold); font-size:12px; font-weight:bold; cursor:pointer;">
                                 <input type="checkbox" id="set-dep-sched-active"> Deposit Bonus Scheduler / Happy Hour
                             </label>
@@ -788,7 +788,7 @@
                         </div>
                     </div>
 
-                    <div style="background: rgba(168, 85, 247, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 10px; border:1px solid var(--purple);">
+                    <div style="background: rgba(192, 132, 252, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 10px; border:1px solid var(--purple);">
                         <label style="color:var(--purple); font-size:12px; font-weight:bold;">💎 Tier 3 (Loyalty - ለድሮ ደንበኞች)</label>
                         <p style="font-size:9px; color:gray; margin:2px 0 5px 0;">ይህ ቦነስ የሚሰራው ከዚህ በፊት ገቢ (Deposit) አድርገው ለሚያውቁ የድሮ ሰዎች ብቻ ነው።</p>
                         <div style="display:flex; gap:10px; margin-top:5px;">
@@ -806,12 +806,12 @@
                     </div>
 
                     <hr style="border-color: var(--border); margin: 15px 0;">
-                    <h4 style="margin-top:0; margin-bottom: 10px; color:#f59e0b;">📣 Deposit Banner Text</h4>
+                    <h4 style="margin-top:0; margin-bottom: 10px; color:#e8b86d;">📣 Deposit Banner Text</h4>
                     <label style="color:var(--text-gray); font-size:12px; font-weight:bold;">🇪🇹 በአማርኛ (Amharic Text)</label>
-                    <textarea id="set-dep-banner-am" rows="2" style="margin-bottom: 10px; background:#000; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="ለምሳሌ: ልዩ ስጦታ! ከ 100 ብር ጀምሮ..."></textarea>
+                    <textarea id="set-dep-banner-am" rows="2" style="margin-bottom: 10px; background:#100e0c; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="ለምሳሌ: ልዩ ስጦታ! ከ 100 ብር ጀምሮ..."></textarea>
                     
                     <label style="color:var(--text-gray); font-size:12px; font-weight:bold;">🇺🇸 በእንግሊዝኛ (English Text)</label>
-                    <textarea id="set-dep-banner-en" rows="2" style="margin-bottom: 10px; background:#000; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="e.g. Special Gift! Get 20% bonus..."></textarea>
+                    <textarea id="set-dep-banner-en" rows="2" style="margin-bottom: 10px; background:#100e0c; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="e.g. Special Gift! Get 20% bonus..."></textarea>
 
                     <button class="action-btn" style="width: 100%; margin-top:10px;" onclick="updateSettings('dep_bonus')">💾 Save Deposit Settings</button>
                 </div>
@@ -836,10 +836,10 @@
                     <hr style="border-color: var(--border); margin: 15px 0;">
                     <h4 style="margin-top:0; margin-bottom: 10px; color:var(--cyan);">📣 Withdraw Warning (የወጪ ማስጠንቀቂያ)</h4>
                     <label style="color:var(--text-gray); font-size:12px; font-weight:bold;">🇪🇹 በአማርኛ (Amharic Text)</label>
-                    <textarea id="set-wit-banner-am" rows="2" style="margin-bottom: 10px; background:#000; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="ለምሳሌ: ለደህንነት ሲባል ገንዘብ ወጪ ማድረግ የሚቻለው..."></textarea>
+                    <textarea id="set-wit-banner-am" rows="2" style="margin-bottom: 10px; background:#100e0c; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="ለምሳሌ: ለደህንነት ሲባል ገንዘብ ወጪ ማድረግ የሚቻለው..."></textarea>
                     
                     <label style="color:var(--text-gray); font-size:12px; font-weight:bold;">🇺🇸 በእንግሊዝኛ (English Text)</label>
-                    <textarea id="set-wit-banner-en" rows="2" style="margin-bottom: 10px; background:#000; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="e.g. For security reasons, withdrawals..."></textarea>
+                    <textarea id="set-wit-banner-en" rows="2" style="margin-bottom: 10px; background:#100e0c; color:white; border:1px solid var(--border); padding:8px; border-radius:6px; width: 100%; box-sizing: border-box;" placeholder="e.g. For security reasons, withdrawals..."></textarea>
 
                     <button class="action-btn btn-blue" style="width: 100%; margin-top:10px;" onclick="updateSettings('wit_bonus')">💾 Save Withdraw Settings</button>
                 </div>
@@ -874,7 +874,7 @@
                     </div>
                     
                     <label style="color:var(--text-gray); font-weight:bold; font-size:12px;">የት ላይ ይላክ? (Platform)</label>
-                    <select id="cb-platform" style="margin-bottom:10px; background:#000; color:white; padding:10px; border-radius:6px; border:1px solid var(--border); width:100%;">
+                    <select id="cb-platform" style="margin-bottom:10px; background:#100e0c; color:white; padding:10px; border-radius:6px; border:1px solid var(--border); width:100%;">
                         <option value="both">🌐 ዌብሳይት እና ✈️ ቴሌግራም (Both)</option>
                         <option value="web">🌐 ዌብሳይት (Home Page Popup) ላይ ብቻ</option>
                         <option value="tg">✈️ ቴሌግራም ላይ ብቻ (Telegram Only)</option>
@@ -883,9 +883,9 @@
                     <input type="text" id="cb-photo-url" placeholder="🔗 የፎቶ ሊንክ (URL) (አማራጭ)" style="margin-bottom:5px;">
                     <input type="file" id="cb-photo-file" accept="image/*" style="background:var(--panel); border:1px dashed var(--orange); margin-bottom:10px;">
                     
-                    <textarea id="cb-msg" rows="4" style="width:100%; background:#000; color:white; border:1px solid var(--border); padding:10px; border-radius:6px; margin-bottom:10px;" placeholder="መልዕክትዎን እዚህ ይፃፉ..."></textarea>
+                    <textarea id="cb-msg" rows="4" style="width:100%; background:#100e0c; color:white; border:1px solid var(--border); padding:10px; border-radius:6px; margin-bottom:10px;" placeholder="መልዕክትዎን እዚህ ይፃፉ..."></textarea>
                     
-                    <label style="display:block; margin-bottom:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #334155;">
+                    <label style="display:block; margin-bottom:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #4d433a;">
                         <input type="checkbox" id="cb-dep-only" onchange="toggleBroadcastDepOptions('cb')"> <span style="color:var(--gold); font-weight:bold; font-size:13px;">💰 ገቢ (Deposit) ላደረጉ ደንበኞች ብቻ</span>
                     </label>
                     
@@ -908,9 +908,9 @@
                     <input type="text" id="tg-photo-url" placeholder="🔗 የፎቶ ሊንክ (URL)" style="margin-bottom:5px;">
                     <input type="file" id="tg-photo-file" accept="image/*" style="background:var(--panel); border:1px dashed var(--blue); margin-bottom:15px;">
                     
-                    <textarea id="tg-msg" rows="5" style="width:100%; background:#000; color:white; border:1px solid var(--border); padding:10px; border-radius:6px; margin-bottom:10px;" placeholder="Write message here..."></textarea>
+                    <textarea id="tg-msg" rows="5" style="width:100%; background:#100e0c; color:white; border:1px solid var(--border); padding:10px; border-radius:6px; margin-bottom:10px;" placeholder="Write message here..."></textarea>
                     
-                    <label style="display:block; margin-bottom:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #334155;">
+                    <label style="display:block; margin-bottom:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #4d433a;">
                         <input type="checkbox" id="tg-dep-only" onchange="toggleBroadcastDepOptions('tg')"> <span style="color:var(--gold); font-weight:bold; font-size:13px;">💰 ገቢ (Deposit) ላደረጉ ደንበኞች ብቻ</span>
                     </label>
                     
@@ -964,7 +964,7 @@
                 <h3 style="margin-top:0; color:var(--cyan);">🏦 የባንክ አካውንት መቆጣጠሪያ (Bank Settings)</h3>
                 <p style="font-size:12px; color:gray;">ተጠቃሚዎች ብር ሲያስገቡ የሚያዩትን ስም እና አካውንት ቁጥር እዚህ ይቀይሩ።</p>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px; background: rgba(59, 130, 246, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--blue);">
+                    <div style="flex: 1; min-width: 250px; background: rgba(129, 140, 248, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--blue);">
                         <h4 style="margin-top:0; color:var(--blue);">📱 TeleBirr (ቴሌብር)</h4>
                         <label style="font-size:11px; color:gray;">Account Name (የባለቤት ስም)</label>
                         <input type="text" id="set-tb-name" placeholder="e.g. Abebe Kebede">
@@ -972,7 +972,7 @@
                         <input type="text" id="set-tb-num" placeholder="e.g. 0911...">
                     </div>
                     
-                    <div style="flex: 1; min-width: 250px; background: rgba(168, 85, 247, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--purple);">
+                    <div style="flex: 1; min-width: 250px; background: rgba(192, 132, 252, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--purple);">
                         <h4 style="margin-top:0; color:var(--purple);">🏦 CBE Birr (ሲቢኢ ብር)</h4>
                         <label style="font-size:11px; color:gray;">Account Name (የባለቤት ስም)</label>
                         <input type="text" id="set-cbe-name" placeholder="e.g. Abebe Kebede">
@@ -1078,7 +1078,7 @@
     <div class="modal-content" style="max-width: 450px;">
         <h3 style="color: var(--purple); margin-top:0; text-align: center;">🎮 Currently Live Players</h3>
         <p style="font-size: 13px; text-align: center; margin-bottom: 10px; color: var(--text-gray);">በአሁን ሰዓት ላይቭ እየተጫወቱ ያሉ ተጠቃሚዎች</p>
-        <div id="live-players-list" style="background: #000; padding: 15px; border-radius: 6px; border: 1px solid var(--border); max-height: 350px; overflow-y: auto;">
+        <div id="live-players-list" style="background: #100e0c; padding: 15px; border-radius: 6px; border: 1px solid var(--border); max-height: 350px; overflow-y: auto;">
             <div style="text-align:center; color:gray;">Loading list...</div>
         </div>
         <button class="action-btn btn-red" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('live-players-modal').style.display='none'">Close List</button>
@@ -1143,9 +1143,9 @@
         </div>
         
         <label style="color:var(--gold); font-weight:bold;">🏆 Rank Edit (Won)</label>
-        <input type="number" id="eu-won" style="border-color:var(--gold); background:rgba(251, 191, 36, 0.1);">
+        <input type="number" id="eu-won" style="border-color:var(--gold); background:rgba(246, 193, 119, 0.1);">
         <label style="color:var(--gold); font-weight:bold;">🏅 Weekly Rank / Points Override</label>
-        <input type="number" id="eu-weekly-rank" min="0" placeholder="Leave blank to keep computed weekly score" style="border-color:var(--gold); background:rgba(251, 191, 36, 0.1);">
+        <input type="number" id="eu-weekly-rank" min="0" placeholder="Leave blank to keep computed weekly score" style="border-color:var(--gold); background:rgba(246, 193, 119, 0.1);">
         
         <div style="display:flex; gap:10px; margin-top: 10px;">
             <button class="action-btn btn-blue" style="flex:1;" onclick="saveUserEdit()">Save Edit</button>
@@ -1178,7 +1178,7 @@
             <button class="action-btn btn-orange" style="flex:1;" onclick="cooldownAction('increase','1h')">+1h</button>
             <button class="action-btn btn-purple" style="flex:1;" onclick="cooldownAction('increase','custom')">+ Time</button>
         </div>
-        <button class="action-btn" style="width:100%; margin-top:16px; background:#334155; color:white;" onclick="document.getElementById('cooldown-user-modal').style.display='none'">Close</button>
+        <button class="action-btn" style="width:100%; margin-top:16px; background:#4d433a; color:white;" onclick="document.getElementById('cooldown-user-modal').style.display='none'">Close</button>
     </div>
 </div>
 
@@ -1186,7 +1186,7 @@
     <div class="modal-content" style="max-width: 350px;">
         <h3 style="color: var(--orange); margin-top:0;">🎁 Claimed Users</h3>
         <p style="font-size: 13px;"><b>Count:</b> <span id="claimed-count" style="color:var(--faded-green); font-weight:bold;">0</span> / <span id="claimed-max">0</span></p>
-        <div id="claimed-list" style="background: #000; padding: 12px; border-radius: 6px; border: 1px solid var(--border); margin-top: 10px; max-height: 300px; overflow-y: auto;"></div>
+        <div id="claimed-list" style="background: #100e0c; padding: 12px; border-radius: 6px; border: 1px solid var(--border); margin-top: 10px; max-height: 300px; overflow-y: auto;"></div>
         <button class="action-btn btn-red" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('claimed-users-modal').style.display='none'">Close</button>
     </div>
 </div>
@@ -1225,34 +1225,34 @@
             <div style="flex:1; min-width: 120px;"><span style="color:var(--text-gray);">Play Balance:</span><br><b id="ui-play" style="color:var(--faded-green); font-size:16px;"></b> ETB</div>
         </div>
 
-        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:15px; font-size:13px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 8px; border: 1px solid #334155;">
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:15px; font-size:13px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 8px; border: 1px solid #4d433a;">
            <!-- 🔥 Manual Deposit Box (ደረሰኝ መሙያ) 🔥 -->
-<div style="background: rgba(74, 222, 128, 0.1); padding: 18px; border-radius: 12px; border: 1px solid var(--faded-green); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.4);">
+<div style="background: rgba(45, 212, 191, 0.1); padding: 18px; border-radius: 12px; border: 1px solid var(--faded-green); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.4);">
     <h4 style="margin:0 0 12px 0; color:var(--faded-green); font-size:15px;">📥 Support ደረሰኝ መሙያ (Manual Deposit)</h4>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <input type="text" id="man-txref" placeholder="ደረሰኝ ቁጥር (TxRef)" style="flex:2; margin:0; height:45px; background:#000; border:1px solid #334155; padding:10px; color:white;">
-        <input type="number" id="man-amount" placeholder="ብር መጠን" style="flex:1; margin:0; height:45px; background:#000; border:1px solid #334155; padding:10px; color:white;">
-        <select id="man-bank" style="flex:1; margin:0; height:45px; background:#000; color:white; border:1px solid #334155; border-radius:8px; padding:0 10px;">
+        <input type="text" id="man-txref" placeholder="ደረሰኝ ቁጥር (TxRef)" style="flex:2; margin:0; height:45px; background:#100e0c; border:1px solid #4d433a; padding:10px; color:white;">
+        <input type="number" id="man-amount" placeholder="ብር መጠን" style="flex:1; margin:0; height:45px; background:#100e0c; border:1px solid #4d433a; padding:10px; color:white;">
+        <select id="man-bank" style="flex:1; margin:0; height:45px; background:#100e0c; color:white; border:1px solid #4d433a; border-radius:8px; padding:0 10px;">
             <option value="TeleBirr">TeleBirr</option>
             <option value="CBEBirr">CBEBirr</option>
         </select>
         <button class="action-btn" onclick="submitManualDeposit()" style="flex:1; background:var(--faded-green); color:black; font-weight:bold; min-width:130px; cursor:pointer; border-radius:8px; border:none; height:45px;">✅ ብር ሙላ (Deposit)</button>
     </div>
-    <p style="font-size:10px; color:#94a3b8; margin-top:8px;">* እዚህ ጋር ብር ሲሞሉ ሲስተሙ ራሱ አሁን ያለውን ቦነስ አስልቶ ይጨምርለታል።</p>
+    <p style="font-size:10px; color:#c4b8a8; margin-top:8px;">* እዚህ ጋር ብር ሲሞሉ ሲስተሙ ራሱ አሁን ያለውን ቦነስ አስልቶ ይጨምርለታል።</p>
 </div>
-            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #334155;">
+            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #4d433a;">
                 <span style="color:var(--text-gray); font-size:10px;">Total Deposited</span><br>
                 <b id="ui-tot-dep" style="color:var(--faded-green); font-size:14px;">0</b>
             </div>
-            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #334155;">
+            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #4d433a;">
                 <span style="color:var(--text-gray); font-size:10px;">Total Withdrawn</span><br>
                 <b id="ui-tot-wit" style="color:var(--red); font-size:14px;">0</b>
             </div>
-            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #334155;">
+            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #4d433a;">
                 <span style="color:var(--text-gray); font-size:10px;">Total Bonus</span><br>
                 <b id="ui-tot-bon" style="color:var(--gold); font-size:14px;">0</b>
             </div>
-            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #334155;">
+            <div style="flex:1; min-width:80px; text-align:center; border-right:1px solid #4d433a;">
                 <span style="color:var(--text-gray); font-size:10px;">Total Won</span><br>
                 <b id="ui-tot-won" style="color:var(--purple); font-size:14px;">0</b>
             </div>
@@ -1293,7 +1293,7 @@
     <div class="modal-content" style="max-width: 450px;">
         <h3 style="color: var(--purple); margin-top:0; text-align: center;">👥 People Invited By This User</h3>
         <p style="font-size: 13px; text-align: center; margin-bottom: 10px;"><b>Inviter Phone:</b> <span id="inviter-phone" style="color:var(--cyan); font-weight:bold;"></span></p>
-        <div id="invited-list" style="background: #000; padding: 15px; border-radius: 6px; border: 1px solid var(--border); max-height: 350px; overflow-y: auto;">
+        <div id="invited-list" style="background: #100e0c; padding: 15px; border-radius: 6px; border: 1px solid var(--border); max-height: 350px; overflow-y: auto;">
             <div style="text-align:center; color:gray;">Loading...</div>
         </div>
         <button class="action-btn btn-red" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('invited-modal').style.display='none'">Close</button>
@@ -1304,7 +1304,7 @@
     <div class="modal-content" style="max-width: 500px;">
         <h3 style="color: var(--gold); margin-top:0; text-align: center;">🟢 የዛሬ ተጫዋቾች (Main Balance)</h3>
         <p style="font-size: 12px; text-align: center; margin-bottom: 10px; color: var(--text-gray);">ባለፉት 24 ሰዓት ገብተው Main Balance ያላቸው ሰዎች ዝርዝር (ከፍተኛ ላለው ቅድሚያ ይሰጣል)</p>
-        <div id="daily-active-list" style="background: #000; padding: 15px; border-radius: 6px; border: 1px solid var(--border); max-height: 400px; overflow-y: auto;">
+        <div id="daily-active-list" style="background: #100e0c; padding: 15px; border-radius: 6px; border: 1px solid var(--border); max-height: 400px; overflow-y: auto;">
             <div style="text-align:center; color:gray;">Loading list...</div>
         </div>
         <button class="action-btn btn-red" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('daily-active-modal').style.display='none'">Close List</button>
@@ -1642,7 +1642,7 @@ async function submitManualDeposit() {
                     if(isLive) {
                         statusBadge = `<span class="badge bg-approved" style="animation: pulseAlert 1.5s infinite;">ON (Active)</span>`;
                     } else if(b.isActive !== false) {
-                        statusBadge = `<span class="badge" style="background:#475569; color:white;">NO ACTIVE</span>`;
+                        statusBadge = `<span class="badge" style="background:#6b5e52; color:white;">NO ACTIVE</span>`;
                     } else {
                         statusBadge = `<span class="badge bg-rejected">OFF (Disabled)</span>`;
                     }
@@ -1993,7 +1993,7 @@ async function submitManualDeposit() {
         let jackpotHeader = document.getElementById('header-jackpot');
         if(stateHeader && jackpotHeader) {
             stateHeader.innerText = data.state;
-            stateHeader.style.color = data.state === 'PLAYING' ? '#4ade80' : 'var(--orange)';
+            stateHeader.style.color = data.state === 'PLAYING' ? '#2dd4bf' : 'var(--orange)';
             jackpotHeader.innerText = Number(data.totalPrizePool || 0).toLocaleString('en-US', {minimumFractionDigits: 2}) + " ETB";
         }
     });
@@ -2033,7 +2033,7 @@ async function submitManualDeposit() {
             return;
         }
         let html = data.players.map((p, i) => {
-            let botLabel = `<span style="color:#4ade80; font-size:10px; border:1px solid #4ade80; padding:2px 4px; border-radius:4px; margin-left:5px; white-space:nowrap;">👤 Player</span>`;
+            let botLabel = `<span style="color:#2dd4bf; font-size:10px; border:1px solid #2dd4bf; padding:2px 4px; border-radius:4px; margin-left:5px; white-space:nowrap;">👤 Player</span>`;
             const tickets = p.ticketsData || [];
             const closedCount = tickets.filter((t) => t && (t.isClosed || t.status === 'won')).length;
             const readyCount = tickets.filter((t) => t && t.patternComplete && !(t.isClosed || t.status === 'won')).length;
@@ -2045,7 +2045,7 @@ async function submitManualDeposit() {
             const cardsArg = JSON.stringify(tickets).replace(/"/g, '&quot;');
             const calledArg = JSON.stringify(window.liveCalledNumbers).replace(/"/g, '&quot;');
             return `
-            <div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div style="padding:10px; border-bottom:1px solid #3f3832; display:flex; justify-content:space-between; align-items:center; gap:8px;">
                 <div>
                     <div style="color:white; font-weight:bold;">${i+1}. ${p.name || 'Unknown'} ${botLabel}</div>
                     <div style="font-family:monospace; font-size:13px;"><a href="#" style="color:var(--cyan); text-decoration:none;" onclick="fetchAndShowUserInfo('${p.phone}'); return false;">${p.phone}</a></div>
@@ -2069,7 +2069,7 @@ async function submitManualDeposit() {
             let data = await res.json();
             renderLivePlayersList(data);
         } catch(e) {
-            if (list) list.innerHTML = `<div style="text-align:center; color:red;">Failed to load data. The list is empty or API is not ready.</div>`;
+            if (list) list.innerHTML = `<div style="text-align:center; color:#fb7185;">Failed to load data. The list is empty or API is not ready.</div>`;
         }
     }
 
@@ -2091,7 +2091,7 @@ async function submitManualDeposit() {
             
             if(data.success && data.users.length > 0) {
                 let headerHtml = `
-                    <div style="background: rgba(234, 88, 12, 0.15); border: 1px solid var(--orange); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
+                    <div style="background: rgba(251, 146, 60, 0.15); border: 1px solid var(--orange); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;">
                         <span style="font-size: 12px; color: var(--text-gray); text-transform: uppercase;">🔥 የዛሬ አሸናፊዎች ያላወጡት ብር (Risk)</span>
                         <h2 style="margin: 5px 0 0 0; color: var(--orange); font-size: 24px;">${Number(data.totalRiskAmount).toLocaleString('en-US', {minimumFractionDigits: 2})} ETB</h2>
                     </div>
@@ -2099,7 +2099,7 @@ async function submitManualDeposit() {
 
                 let listHtml = data.users.map((u, i) => {
                     return `
-                    <div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="padding:10px; border-bottom:1px solid #3f3832; display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <div style="color:white; font-weight:bold;">${i+1}. ${u.name || 'Unknown'}</div>
                             <div style="font-family:monospace; font-size:13px;"><a href="#" style="color:var(--cyan); text-decoration:none;" onclick="fetchAndShowUserInfo('${u.phone}'); return false;">${u.phone}</a></div>
@@ -2114,7 +2114,7 @@ async function submitManualDeposit() {
                 document.getElementById('daily-active-list').innerHTML = `<div style="text-align:center; color:gray;">በአሁኑ ሰዓት ዛሬ ያሸነፈ እና ያላወጣ (Risk) የለም።</div>`;
             }
         } catch(e) {
-            document.getElementById('daily-active-list').innerHTML = `<div style="text-align:center; color:red;">መረጃ ማምጣት አልተቻለም።</div>`;
+            document.getElementById('daily-active-list').innerHTML = `<div style="text-align:center; color:#fb7185;">መረጃ ማምጣት አልተቻለም።</div>`;
         }
     }
     async function loadLiveStats() {
@@ -2209,7 +2209,7 @@ async function submitManualDeposit() {
                         } else {
                             let baseActive = statusCell.getAttribute('data-base-active');
                             if(baseActive === 'true') {
-                                statusCell.innerHTML = '<span class="badge" style="background:#475569; color:white;">NO ACTIVE</span>';
+                                statusCell.innerHTML = '<span class="badge" style="background:#6b5e52; color:white;">NO ACTIVE</span>';
                             } else {
                                 statusCell.innerHTML = '<span class="badge bg-rejected">OFF (Disabled)</span>';
                             }
@@ -2478,7 +2478,7 @@ async function submitManualDeposit() {
                         <td style="color:var(--purple); font-weight:bold;">${actualWonAmount(u).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                         <td>
                             <div style="display:flex; gap:6px; align-items:center;">
-                                <input type="number" min="0" value="${rankPts}" id="rank-pts-${u.phone}" style="width:90px; margin:0; padding:6px; background:#000; color:var(--gold); border:1px solid var(--gold); border-radius:6px;">
+                                <input type="number" min="0" value="${rankPts}" id="rank-pts-${u.phone}" style="width:90px; margin:0; padding:6px; background:#100e0c; color:var(--gold); border:1px solid var(--gold); border-radius:6px;">
                                 <button class="btn-sm btn-gold" onclick="saveUserRankPoints('${u.phone}')">Save</button>
                             </div>
                         </td>
@@ -2525,7 +2525,7 @@ async function submitManualDeposit() {
                 let dateStr = d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
                 
                 if (dateStr !== lastDateStr) {
-                    html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(6, 182, 212, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px; border-bottom: 1px solid var(--cyan);">📅 ${dateStr}</td></tr>`;
+                    html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(125, 211, 252, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px; border-bottom: 1px solid var(--cyan);">📅 ${dateStr}</td></tr>`;
                     lastDateStr = dateStr;
                 }
 
@@ -2612,7 +2612,7 @@ async function submitManualDeposit() {
                     `<br><span style="color:var(--gold); font-weight:bold; font-size:11px;">+${Number(t.bonusGiven).toFixed(2)} ETB (Bonus)</span>` : "";
 
                 if (dateStr !== lastDateStr) {
-                    html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(6, 182, 212, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px; border-bottom: 1px solid var(--cyan);">📅 ${dateStr}</td></tr>`;
+                    html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(125, 211, 252, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px; border-bottom: 1px solid var(--cyan);">📅 ${dateStr}</td></tr>`;
                     lastDateStr = dateStr;
                 }
 
@@ -2675,13 +2675,13 @@ async function submitManualDeposit() {
             
             let bDep = document.getElementById('badge-dep'); if(deps.length > 0) { bDep.style.display = 'inline-block'; bDep.innerText = deps.length; } else { bDep.style.display = 'none'; }
             
-            let depsHtml = deps.map(t => { let safeSMS = encodeURIComponent(t.smsText || "No SMS"); let smsPreview = t.smsText ? (t.smsText.substring(0, 15) + "...") : "No SMS"; return `<tr><td>${new Date(t.date).toLocaleString()}</td><td><a href="#" style="color:var(--cyan); text-decoration:none; font-weight:bold;" onclick="fetchAndShowUserInfo('${t.phone}'); return false;">${t.phone}</a></td><td style="text-transform:uppercase;">${t.method}</td><td style="font-weight:bold; color:var(--faded-green);">${Number(t.amount).toLocaleString('en-US', {minimumFractionDigits: 2})} ETB</td><td><div style="display:flex; align-items:center; gap:5px;"><span style="color:#cbd5e1; font-size:10px;">${smsPreview}</span> <button class="btn-sm btn-blue" onclick="showTxDetailsModal('${t.phone}', '${t.method}', '${t.amount}', '${safeSMS}')">👁️ View</button></div></td><td><button class="btn-sm btn-purple" style="margin-right:5px;" onclick="fetchAndShowUserInfo('${t.phone}')">👁️ User</button><button class="btn-sm" style="background:var(--faded-green); color:black; margin-right:5px;" onclick="actionTx('${t._id}', 'Approve')">Approve</button> <button class="btn-sm btn-red" onclick="actionTx('${t._id}', 'Reject')">Reject</button></td></tr>`; }).join('') || `<tr><td colspan="6" style="text-align:center;">No pending deposits.</td></tr>`;
+            let depsHtml = deps.map(t => { let safeSMS = encodeURIComponent(t.smsText || "No SMS"); let smsPreview = t.smsText ? (t.smsText.substring(0, 15) + "...") : "No SMS"; return `<tr><td>${new Date(t.date).toLocaleString()}</td><td><a href="#" style="color:var(--cyan); text-decoration:none; font-weight:bold;" onclick="fetchAndShowUserInfo('${t.phone}'); return false;">${t.phone}</a></td><td style="text-transform:uppercase;">${t.method}</td><td style="font-weight:bold; color:var(--faded-green);">${Number(t.amount).toLocaleString('en-US', {minimumFractionDigits: 2})} ETB</td><td><div style="display:flex; align-items:center; gap:5px;"><span style="color:#ddd4c6; font-size:10px;">${smsPreview}</span> <button class="btn-sm btn-blue" onclick="showTxDetailsModal('${t.phone}', '${t.method}', '${t.amount}', '${safeSMS}')">👁️ View</button></div></td><td><button class="btn-sm btn-purple" style="margin-right:5px;" onclick="fetchAndShowUserInfo('${t.phone}')">👁️ User</button><button class="btn-sm" style="background:var(--faded-green); color:black; margin-right:5px;" onclick="actionTx('${t._id}', 'Approve')">Approve</button> <button class="btn-sm btn-red" onclick="actionTx('${t._id}', 'Reject')">Reject</button></td></tr>`; }).join('') || `<tr><td colspan="6" style="text-align:center;">No pending deposits.</td></tr>`;
             if (document.getElementById('pend-dep-body').innerHTML !== depsHtml) document.getElementById('pend-dep-body').innerHTML = depsHtml;
 
             let bWit = document.getElementById('badge-wit'); if(wits.length > 0) { bWit.style.display = 'inline-block'; bWit.innerText = wits.length; } else { bWit.style.display = 'none'; }
             
             let witsHtml = wits.map(t => { 
-                let methodStr = (t.method || "").toUpperCase(); let methodBadge = ""; if (methodStr.includes("CBE")) { methodBadge = `<span style="background: #a855f7; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; border: 1px solid #d8b4fe;">🏦 CBE</span>`; } else if (methodStr.includes("TELEBIRR")) { methodBadge = `<span style="background: #3b82f6; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; border: 1px solid #93c5fd;">📱 TELEBIRR</span>`; } else { methodBadge = `<span style="background: #475569; color: white; padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase;">${t.method}</span>`; }
+                let methodStr = (t.method || "").toUpperCase(); let methodBadge = ""; if (methodStr.includes("CBE")) { methodBadge = `<span style="background: #c084fc; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; border: 1px solid #e9d5ff;">🏦 CBE</span>`; } else if (methodStr.includes("TELEBIRR")) { methodBadge = `<span style="background: #818cf8; color: white; padding: 4px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; border: 1px solid #c7d2fe;">📱 TELEBIRR</span>`; } else { methodBadge = `<span style="background: #6b5e52; color: white; padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; text-transform: uppercase;">${t.method}</span>`; }
                 return `<tr><td>${new Date(t.date).toLocaleString()}</td><td style="font-weight: 900; font-size: 15px; letter-spacing: 1px;"><a href="#" style="color:var(--cyan); text-decoration:none;" onclick="fetchAndShowUserInfo('${t.phone}'); return false;">${t.phone}</a></td><td>${methodBadge}</td><td style="font-weight: 900; font-size: 16px; color: var(--orange);">${Number(t.amount).toLocaleString('en-US', {minimumFractionDigits: 2})} ETB</td><td style="font-family: monospace; font-weight: 900; font-size: 15px; color: var(--cyan); letter-spacing: 1px;">${(t.smsText||'').replace('Transfer to: ', '')}</td><td><button class="btn-sm btn-purple" style="font-weight:bold; padding: 8px 12px; margin-right:5px;" onclick="fetchAndShowUserInfo('${t.phone}')">👁️ User</button><button class="btn-sm" style="background:var(--faded-green); color:black; font-weight:bold; padding: 8px 12px; margin-right:5px;" onclick="actionTx('${t._id}', 'Approve')">✅ Approve</button> <button class="btn-sm btn-red" style="font-weight:bold; padding: 8px 12px;" onclick="actionTx('${t._id}', 'Reject')">❌ Reject</button></td></tr>`; 
             }).join('') || `<tr><td colspan="6" style="text-align:center;">No pending normal withdraws.</td></tr>`;
             if (document.getElementById('pend-wit-body').innerHTML !== witsHtml) document.getElementById('pend-wit-body').innerHTML = witsHtml;
@@ -2730,20 +2730,20 @@ async function submitManualDeposit() {
             if(data.success) {
                 let html = data.users.map((u, i) => {
                     let d = new Date(u.date || new Date()).toLocaleDateString();
-                    return `<div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                    return `<div style="padding:10px; border-bottom:1px solid #3f3832; display:flex; justify-content:space-between; align-items:center;">
                         <div>
                             <div style="color:var(--faded-green); font-weight:bold;">${i+1}. ${u.name || 'Unknown'}</div>
-                            <div style="font-family:monospace; font-size:12px; color:#cbd5e1;"><a href="#" style="color:#cbd5e1; text-decoration:none;" onclick="fetchAndShowUserInfo('${u.phone}'); return false;">${u.phone}</a></div>
+                            <div style="font-family:monospace; font-size:12px; color:#ddd4c6;"><a href="#" style="color:#ddd4c6; text-decoration:none;" onclick="fetchAndShowUserInfo('${u.phone}'); return false;">${u.phone}</a></div>
                         </div>
                         <div style="font-size:11px; color:gray;">${d}</div>
                     </div>`;
                 }).join('');
                 document.getElementById('invited-list').innerHTML = html || `<div style="text-align:center; color:gray;">No users found.</div>`;
             } else {
-                document.getElementById('invited-list').innerHTML = `<div style="text-align:center; color:red;">Failed to load data.</div>`;
+                document.getElementById('invited-list').innerHTML = `<div style="text-align:center; color:#fb7185;">Failed to load data.</div>`;
             }
         } catch(e) {
-            document.getElementById('invited-list').innerHTML = `<div style="text-align:center; color:red;">Error connecting to server.</div>`;
+            document.getElementById('invited-list').innerHTML = `<div style="text-align:center; color:#fb7185;">Error connecting to server.</div>`;
         }
     }
 
@@ -2768,9 +2768,9 @@ async function submitManualDeposit() {
                     let isFull = c.currentUses >= c.maxUses;
                     let status = (isExpired || isFull) ? '<span class="badge bg-rejected">INACTIVE</span>' : '<span class="badge bg-approved">ACTIVE</span>';
                     
-                    let reqDepRule = c.requireDeposit ? `<span style="color:#f59e0b; font-size:11px; font-weight:bold;">ገቢ ያደረጉ ቢያንስ ${c.minDepositAmount||0}ETB</span>` : '<span style="color:gray; font-size:11px;">ለሁሉም</span>';
+                    let reqDepRule = c.requireDeposit ? `<span style="color:#e8b86d; font-size:11px; font-weight:bold;">ገቢ ያደረጉ ቢያንስ ${c.minDepositAmount||0}ETB</span>` : '<span style="color:gray; font-size:11px;">ለሁሉም</span>';
                     if (c.requireDeposit && c.requireDepositWithinHours > 0) {
-                        reqDepRule += `<br><span style="color:#38bdf8; font-size:10px;">(በ ${c.requireDepositWithinHours} ሰዓት ውስጥ)</span>`;
+                        reqDepRule += `<br><span style="color:#93c5fd; font-size:10px;">(በ ${c.requireDepositWithinHours} ሰዓት ውስጥ)</span>`;
                     }
 
                     return `<tr>
@@ -3010,7 +3010,7 @@ async function submitManualDeposit() {
                 renderPlayerBetsPagination(0, 1, 15);
             }
         } catch(e) {
-            document.getElementById('game-players-body').innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Connection Error!</td></tr>';
+            document.getElementById('game-players-body').innerHTML = '<tr><td colspan="6" style="text-align:center; color:#fb7185;">Connection Error!</td></tr>';
             renderPlayerBetsPagination(0, 1, 15);
         }
     }
@@ -3549,7 +3549,7 @@ async function submitManualDeposit() {
         btn.innerText = "Create Promo & Broadcast"; 
     }
 
-    async function viewClaimedUsers() { try { document.querySelector('#btn-send-promo').nextElementSibling.innerText = "Loading..."; let res = await fetch('/api/admin/claim-bonus-list', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({adminPass: pass})}); let data = await res.json(); document.querySelector('#btn-send-promo').nextElementSibling.innerText = "👁️ View Claimed Users"; if(data.success) { document.getElementById('claimed-count').innerText = data.claimedBy.length; document.getElementById('claimed-max').innerText = data.max; let listHtml = data.claimedBy.map((p, i) => `<div style="padding:8px 5px; border-bottom:1px solid #333; font-family:monospace; font-size:13px; color:#cbd5e1;">${i+1}. <a href="#" style="color:#cbd5e1; text-decoration:none;" onclick="fetchAndShowUserInfo('${p}'); return false;">${p}</a></div>`).join(''); document.getElementById('claimed-list').innerHTML = listHtml || `<div style="text-align:center; color:gray;">No claims yet.</div>`; document.getElementById('claimed-users-modal').style.display = 'flex'; } else { alert(data.message || "No promo active."); } } catch(e) { alert("Error fetching data."); document.querySelector('#btn-send-promo').nextElementSibling.innerText = "👁️ View Claimed Users"; } }
+    async function viewClaimedUsers() { try { document.querySelector('#btn-send-promo').nextElementSibling.innerText = "Loading..."; let res = await fetch('/api/admin/claim-bonus-list', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({adminPass: pass})}); let data = await res.json(); document.querySelector('#btn-send-promo').nextElementSibling.innerText = "👁️ View Claimed Users"; if(data.success) { document.getElementById('claimed-count').innerText = data.claimedBy.length; document.getElementById('claimed-max').innerText = data.max; let listHtml = data.claimedBy.map((p, i) => `<div style="padding:8px 5px; border-bottom:1px solid #3f3832; font-family:monospace; font-size:13px; color:#ddd4c6;">${i+1}. <a href="#" style="color:#ddd4c6; text-decoration:none;" onclick="fetchAndShowUserInfo('${p}'); return false;">${p}</a></div>`).join(''); document.getElementById('claimed-list').innerHTML = listHtml || `<div style="text-align:center; color:gray;">No claims yet.</div>`; document.getElementById('claimed-users-modal').style.display = 'flex'; } else { alert(data.message || "No promo active."); } } catch(e) { alert("Error fetching data."); document.querySelector('#btn-send-promo').nextElementSibling.innerText = "👁️ View Claimed Users"; } }
     
     async function sendTelegramPromo(type) { 
         let msg = document.getElementById('tg-msg').value; 
@@ -3656,7 +3656,7 @@ async function submitManualDeposit() {
                     <td><a href="#" style="color:var(--cyan); text-decoration:none;" onclick="fetchAndShowUserInfo('${u.phone}'); return false;">${u.phone}</a></td>
                     <td style="color:var(--gold); font-weight:bold;">${cards.toLocaleString('en-US')} Cards</td>
                     <td>
-                        <input type="number" min="0" step="0.01" value="" placeholder="ETB" id="lb-prize-${u.phone}" style="width:110px; margin:0; padding:6px; background:#000; color:white; border:1px solid var(--gold); border-radius:6px;">
+                        <input type="number" min="0" step="0.01" value="" placeholder="ETB" id="lb-prize-${u.phone}" style="width:110px; margin:0; padding:6px; background:#100e0c; color:white; border:1px solid var(--gold); border-radius:6px;">
                     </td>
                 </tr>`;
             }).join('') : `<tr><td colspan="5" style="text-align:center; color:gray;">No cards played in this season yet.</td></tr>`;
@@ -4371,7 +4371,7 @@ async function submitManualDeposit() {
                     
                     // የ iPhone ገፅታ
                     let iphoneSide = `
-                        <div style="font-family:monospace; font-size:12px; line-height:1.4; color:#cbd5e1;">${d.iphoneSms}</div>
+                        <div style="font-family:monospace; font-size:12px; line-height:1.4; color:#ddd4c6;">${d.iphoneSms}</div>
                         <div style="margin-top:8px; font-weight:bold; color:var(--cyan);">TxRef: ${d.txRef || 'N/A'}</div>
                         <div style="color:var(--faded-green); font-weight:bold; font-size:14px;">Extracted: ${d.extraction} ETB</div>
                     `;
@@ -4385,7 +4385,7 @@ async function submitManualDeposit() {
                         userSide = `
                             <div><b>Phone:</b> <a href="#" style="color:var(--cyan);" onclick="fetchAndShowUserInfo('${sys.phone}'); return false;">${sys.phone}</a></div>
                             <div style="color:var(--orange); font-weight:bold;">Amount: ${sys.amount} ETB</div>
-                            <div style="margin-top:5px; font-size:11px; color:gray; background:#000; padding:5px; border-radius:4px; font-family:monospace;">${sys.userSms}</div>
+                            <div style="margin-top:5px; font-size:11px; color:gray; background:#100e0c; padding:5px; border-radius:4px; font-family:monospace;">${sys.userSms}</div>
                         `;
                         
                         statusAndAction = `
@@ -4405,8 +4405,8 @@ async function submitManualDeposit() {
                     html += `
                     <tr>
                         <td style="font-size:12px; color:gray;">${dateStr}</td>
-                        <td style="background:rgba(59,130,246,0.05); border-left:3px solid var(--blue); vertical-align:top;">${iphoneSide}</td>
-                        <td style="background:rgba(74,222,128,0.05); border-left:3px solid var(--faded-green); vertical-align:top;">${userSide}</td>
+                        <td style="background:rgba(129, 140, 248, 0.05); border-left:3px solid var(--blue); vertical-align:top;">${iphoneSide}</td>
+                        <td style="background:rgba(45, 212, 191, 0.05); border-left:3px solid var(--faded-green); vertical-align:top;">${userSide}</td>
                         <td style="vertical-align:middle; text-align:center;">${statusAndAction}</td>
                     </tr>`;
                 });
@@ -4415,10 +4415,10 @@ async function submitManualDeposit() {
                 renderPagination('pag-sms-compare', data.total, p_sms, 'loadSmsComparison');
                 
             } else {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">መረጃ ማምጣት አልተቻለም!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#fb7185;">መረጃ ማምጣት አልተቻለም!</td></tr>';
             }
         } catch(e) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">የኔትወርክ ስህተት!</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#fb7185;">የኔትወርክ ስህተት!</td></tr>';
         }
     }
 

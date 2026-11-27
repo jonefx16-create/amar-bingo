@@ -47,11 +47,11 @@ assert.ok(!html.includes('Real Money') && !html.includes('Bot Money'), 'money na
 assert.ok(!html.includes('🤖 Money'), 'the robot icon is gone from Money');
 assert.ok(live.includes('👤 Money:'), 'the user icon can stay on the first Money amount');
 assert.ok(live.includes('>Money:'), 'the second Money amount has no robot icon');
-assert.ok(html.includes('color:#4ade80; font-size:14px;" id="split-real-money"'), 'the first Money amount is green');
-assert.ok(html.includes('color:#4ade80; font-size:14px;" id="split-bot-money"'), 'the second Money amount is green');
+assert.ok(html.includes('color:#2dd4bf; font-size:14px;" id="split-real-money"'), 'the first Money amount uses the accent color');
+assert.ok(html.includes('color:#2dd4bf; font-size:14px;" id="split-bot-money"'), 'the second Money amount uses the accent color');
 assert.ok(!html.includes('id="split-bot-money"') || !html.includes('#f87171; font-size:14px;" id="split-bot-money"'), 'the second Money amount is not red');
 assert.ok(live.includes('👤 Player'), 'the player label is Player with a person icon');
-assert.ok(live.includes('color:#4ade80;">👤 Player'), 'the player label is green');
+assert.ok(live.includes('color:#2dd4bf;">👤 Player'), 'the player label uses the accent color');
 assert.ok(!live.includes('Real /'), 'Real / Real is gone from the player card');
 assert.ok(html.includes('👁️ View List (እዚህ ይጫኑ)'), 'View List stays in place');
 assert.ok(html.includes('👤 Player</span>'), 'live list badges say Player');
