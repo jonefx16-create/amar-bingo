@@ -5,24 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Admin Dashboard - Amar Bingo</title>
     <style>
-        :root { --bg-dark: #16130f; --panel: #241e19; --faded-green: #2dd4bf; --text-gray: #c4b8a8; --border: #3d342c; --red: #fb7185; --blue: #818cf8; --orange: #fb923c; --purple: #c084fc; --cyan: #7dd3fc; --gold: #f6c177; }
+        :root { --bg-dark: #07261c; --panel: #0e3a2c; --faded-green: #d4bc78; --text-gray: #d4cba8; --border: #7a6844; --red: #c45656; --blue: #3e8f6e; --orange: #d4924a; --purple: #b08968; --cyan: #e6d7a8; --gold: #e0c98a; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: white; margin: 0; display: flex; height: 100vh; overflow: hidden; flex-direction: row; }
         
-        #login-sec { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #241e19 0%, #16130f 100%); z-index: 9999; }
-        .login-card { background: rgba(36, 30, 25, 0.7); backdrop-filter: blur(15px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(45, 212, 191, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(45, 212, 191, 0.1); box-sizing: border-box;}
-        .login-card h2 { color: var(--faded-green); margin-top: 0; margin-bottom: 30px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(45, 212, 191, 0.5); }
+        #login-sec { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #0e3a2c 0%, #07261c 100%); z-index: 9999; }
+        .login-card { background: rgba(14, 58, 44, 0.7); backdrop-filter: blur(15px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(212, 188, 120, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(212, 188, 120, 0.1); box-sizing: border-box;}
+        .login-card h2 { color: var(--faded-green); margin-top: 0; margin-bottom: 30px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(212, 188, 120, 0.5); }
         .login-card input { background: rgba(0,0,0,0.6); border: 1px solid var(--border); padding: 16px; font-size: 16px; border-radius: 12px; transition: 0.3s; text-align: center; letter-spacing: 2px; color: white;}
-        .login-card input:focus { border-color: var(--faded-green); box-shadow: 0 0 15px rgba(45, 212, 191, 0.3); outline: none; }
-        .login-card button { padding: 16px; font-size: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 5px 15px rgba(45, 212, 191, 0.4); }
-        .login-card button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(45, 212, 191, 0.6); }
+        .login-card input:focus { border-color: var(--faded-green); box-shadow: 0 0 15px rgba(212, 188, 120, 0.3); outline: none; }
+        .login-card button { padding: 16px; font-size: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 5px 15px rgba(212, 188, 120, 0.4); }
+        .login-card button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212, 188, 120, 0.6); }
 
         #dash-sec { display: none; width: 100%; height: 100%; flex-direction: row; position: relative; }
         
         .sidebar { width: 250px; background: var(--panel); border-right: 1px solid var(--border); display: block; padding: 20px 0 80px 0; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; transition: 0.3s ease; z-index: 1000; height: 100%; box-sizing: border-box;}
         .sidebar-header { text-align: center; color: var(--faded-green); font-size: 18px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase;}
         .nav-btn { width: 100%; background: transparent; color: var(--text-gray); border: none; padding: 15px 20px; text-align: left; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: bold; border-left: 4px solid transparent; white-space: nowrap; box-sizing: border-box;}
-        .nav-btn:hover { background: rgba(45, 212, 191, 0.05); color: white; }
-        .nav-btn.active { background: rgba(45, 212, 191, 0.1); color: var(--faded-green); border-left-color: var(--faded-green); }
+        .nav-btn:hover { background: rgba(212, 188, 120, 0.05); color: white; }
+        .nav-btn.active { background: rgba(212, 188, 120, 0.1); color: var(--faded-green); border-left-color: var(--faded-green); }
         .close-sidebar { display: none; background: transparent; border: none; color: white; font-size: 24px; position: absolute; top: 10px; right: 15px; cursor: pointer; }
 
         .badge-alert { background: var(--red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; display: none; font-weight: 900; box-shadow: 0 0 8px var(--red); animation: pulseAlert 1.5s infinite; }
@@ -44,23 +44,23 @@
         .stat-card h3 { margin: 0; color: var(--text-gray); font-size: 12px; text-transform: uppercase;}
         .stat-card h2 { margin: 10px 0 0 0; font-size: 20px; font-weight: 900;}
         
-        .live-player-box:hover { background: rgba(192, 132, 252, 0.1); border-color: var(--purple) !important; }
+        .live-player-box:hover { background: rgba(176, 137, 104, 0.1); border-color: var(--purple) !important; }
 
-        input, select, textarea { padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); background: #100e0c; color: white; width: 100%; box-sizing: border-box; margin-bottom: 10px; outline: none; font-size: 14px;}
+        input, select, textarea { padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); background: #041910; color: white; width: 100%; box-sizing: border-box; margin-bottom: 10px; outline: none; font-size: 14px;}
         
         input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--faded-green); margin:0; }
         tbody tr.selectable-row { transition: 0.2s; cursor: pointer; }
-        tbody tr.selectable-row:hover { background: rgba(45, 212, 191, 0.05); }
-        tbody tr.selectable-row.selected { background: rgba(45, 212, 191, 0.15) !important; border-left: 3px solid var(--faded-green); }
+        tbody tr.selectable-row:hover { background: rgba(212, 188, 120, 0.05); }
+        tbody tr.selectable-row.selected { background: rgba(212, 188, 120, 0.15) !important; border-left: 3px solid var(--faded-green); }
 
-        .bulk-action-bar { display: none; justify-content: space-between; align-items: center; background: rgba(251, 113, 133, 0.1); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--red); margin-bottom: 15px; }
+        .bulk-action-bar { display: none; justify-content: space-between; align-items: center; background: rgba(196, 86, 86, 0.1); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--red); margin-bottom: 15px; }
         .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap;}
         .page-btn { background: var(--border); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .page-btn:hover:not(:disabled) { background: var(--blue); }
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .page-info { color: var(--gold); font-weight: bold; font-size: 14px; }
 
-        .search-bar { background-color: #16130f; border: 1px solid var(--blue); flex: 1; min-width: 200px;}
+        .search-bar { background-color: #07261c; border: 1px solid var(--blue); flex: 1; min-width: 200px;}
         .search-container { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;}
         
         button.action-btn { background: var(--faded-green); color: black; border: none; padding: 12px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;}
@@ -75,34 +75,34 @@
         th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle;}
         th { color: var(--text-gray); font-size: 11px; text-transform: uppercase; white-space: nowrap; background: rgba(0,0,0,0.2);}
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
-        .bg-pending { background: rgba(251, 146, 60, 0.2); color: var(--orange); border: 1px solid var(--orange); }
-        .bg-approved { background: rgba(45, 212, 191, 0.2); color: var(--faded-green); border: 1px solid var(--faded-green); }
-        .bg-rejected { background: rgba(251, 113, 133, 0.2); color: var(--red); border: 1px solid var(--red); }
-        .bg-win { background: rgba(246, 193, 119, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .bg-pending { background: rgba(212, 146, 74, 0.2); color: var(--orange); border: 1px solid var(--orange); }
+        .bg-approved { background: rgba(212, 188, 120, 0.2); color: var(--faded-green); border: 1px solid var(--faded-green); }
+        .bg-rejected { background: rgba(196, 86, 86, 0.2); color: var(--red); border: 1px solid var(--red); }
+        .bg-win { background: rgba(224, 201, 138, 0.2); color: var(--gold); border: 1px solid var(--gold); }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;}
         .modal-content { background: var(--panel); padding: 20px; border-radius: 10px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; color: white; position: relative;}
-        .grid-preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #100e0c; padding: 10px; border-radius: 8px; text-align: center; margin: 10px 0;}
+        .grid-preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #041910; padding: 10px; border-radius: 8px; text-align: center; margin: 10px 0;}
         .grid-preview div { background: var(--border); padding: 8px 0; border-radius: 4px; font-weight: bold; font-family: monospace;}
         .grid-preview .highlight { background: var(--faded-green); color: black; }
-        .grid-preview.card-closed { outline: 2px solid var(--faded-green); box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.15); }
+        .grid-preview.card-closed { outline: 2px solid var(--faded-green); box-shadow: 0 0 0 3px rgba(212, 188, 120, 0.15); }
 
         .tx-tab-btn { background: transparent; color: var(--text-gray); border: 1px solid var(--border); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight:bold; white-space: nowrap;}
         .tx-tab-btn.active { background: var(--border); color: white;}
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; }
         
-        #sms-text { font-size: 16px !important; line-height: 1.6; background: #100e0c; padding: 15px; border-radius: 8px; border: 1px solid var(--faded-green); color: white; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; min-height: 80px; }
+        #sms-text { font-size: 16px !important; line-height: 1.6; background: #041910; padding: 15px; border-radius: 8px; border: 1px solid var(--faded-green); color: white; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; min-height: 80px; }
         .disabled-input { opacity: 0.4; pointer-events: none; display: none !important; }
 
-        .promoter-header { background: linear-gradient(135deg, #1e1914, #2c241e); padding: 20px; border-radius: 12px; border: 1px solid var(--cyan); margin-bottom: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .promoter-stats { display: flex; justify-content: space-between; background: #100e0c; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .promoter-header { background: linear-gradient(135deg, #0a3026, #145038); padding: 20px; border-radius: 12px; border: 1px solid var(--cyan); margin-bottom: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .promoter-stats { display: flex; justify-content: space-between; background: #041910; padding: 15px; border-radius: 8px; margin-top: 15px; }
         .p-stat-box { text-align: center; flex: 1; }
         .p-stat-title { font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-bottom: 5px; display: block; }
         .p-stat-val { font-size: 18px; font-weight: 900; color: white; }
 
         .switch { position: relative; display: inline-block; width: 50px; height: 26px; margin: 0; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4d433a; transition: .4s; border-radius: 34px; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1a5640; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--faded-green); }
         input:checked + .slider:before { transform: translateX(24px); }
@@ -122,7 +122,7 @@
 
         .overlay.active { display: block; }
         .stats-line { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .stat-pill { flex: 1; min-width: 90px; background: #100e0c; border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
+        .stat-pill { flex: 1; min-width: 90px; background: #041910; border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
         .stat-pill span { display: block; color: var(--text-gray); font-size: 11px; }
         .mini-table { width: 100%; border-collapse: collapse; min-width: 0 !important; }
         .mini-table th, .mini-table td { font-size: 12px; }
@@ -175,11 +175,11 @@
                         <p style="margin:6px 0 0 0; font-size:12px; color:var(--text-gray);">All times below are Ethiopia Time (EAT / UTC+3). The configured ramp applies only when the schedule automatically shifts between slots. Manual bot counts apply immediately.</p>
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <div style="background:#100e0c; border:1px solid var(--cyan); border-radius:8px; padding:10px 14px;">
+                        <div style="background:#041910; border:1px solid var(--cyan); border-radius:8px; padding:10px 14px;">
                             <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase;">Server Time (UTC)</div>
                             <div id="sched-server-time" style="font-size:20px; font-weight:900; color:var(--cyan); font-family:monospace;">--:--:--</div>
                         </div>
-                        <div style="background:#100e0c; border:1px solid var(--gold); border-radius:8px; padding:10px 14px;">
+                        <div style="background:#041910; border:1px solid var(--gold); border-radius:8px; padding:10px 14px;">
                             <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase;">Ethiopia Time (EAT)</div>
                             <div id="sched-eat-time" style="font-size:20px; font-weight:900; color:var(--gold); font-family:monospace;">--:--:--</div>
                         </div>
@@ -195,13 +195,13 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                <div id="sched-active-banner" style="margin:15px 0; padding:12px; border-radius:8px; background:rgba(45, 212, 191, 0.08); border:1px solid var(--faded-green);">
+                <div id="sched-active-banner" style="margin:15px 0; padding:12px; border-radius:8px; background:rgba(212, 188, 120, 0.08); border:1px solid var(--faded-green);">
                     <b>Control:</b> <span id="sched-control-mode" style="color:var(--cyan);">Manual</span>
                     <span style="color:var(--text-gray);"> · Active slot:</span> <span id="sched-active-label" style="color:var(--faded-green);">None</span>
                     <span style="color:var(--text-gray);"> · Injected: </span><span id="sched-injected-count" style="color:var(--orange);">0</span>
                     <span style="color:var(--text-gray);"> · Configured ramp is used only for automatic slot-to-slot shifts, not for admin manual overrides.</span>
                 </div>
-                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin:0 0 15px 0; padding:12px; border-radius:8px; background:rgba(246, 193, 119, 0.08); border:1px solid var(--gold);">
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin:0 0 15px 0; padding:12px; border-radius:8px; background:rgba(224, 201, 138, 0.08); border:1px solid var(--gold);">
                     <div style="min-width:220px;">
                         <label style="font-size:12px; color:var(--gold); font-weight:bold;">Slot transition ramp (minutes)</label>
                         <input type="number" id="bot-ramp-minutes" min="1" max="180" value="30" style="margin:6px 0 0 0;">
@@ -257,32 +257,32 @@
                         <p style="font-size:11px; color:var(--text-gray); margin-top:0;">* የቦት እና የሰው ማሸነፊያ ሎጂክ ይምረጡ</p>
                         
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <label style="flex:1; padding:10px; background: rgba(251, 113, 133, 0.1); border: 1px solid var(--red); border-radius:6px; cursor:pointer;">
+                            <label style="flex:1; padding:10px; background: rgba(196, 86, 86, 0.1); border: 1px solid var(--red); border-radius:6px; cursor:pointer;">
                                 <input type="radio" name="bot-master-winner" value="bots" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
                                 <span style="color:white; font-size:12px; font-weight:bold;">🤖 Bots (100% ቦት)</span>
                             </label>
 
-                            <label style="flex:1; padding:10px; background: rgba(45, 212, 191, 0.1); border: 1px solid var(--faded-green); border-radius:6px; cursor:pointer;">
+                            <label style="flex:1; padding:10px; background: rgba(212, 188, 120, 0.1); border: 1px solid var(--faded-green); border-radius:6px; cursor:pointer;">
                                 <input type="radio" name="bot-master-winner" value="real" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
                                 <span style="color:white; font-size:12px; font-weight:bold;">👤 Real (ሰው ብቻ)</span>
                             </label>
 
-                            <label style="flex:1; padding:10px; background: rgba(232, 184, 109, 0.1); border: 1px solid var(--gold); border-radius:6px; cursor:pointer;">
+                            <label style="flex:1; padding:10px; background: rgba(201, 163, 90, 0.1); border: 1px solid var(--gold); border-radius:6px; cursor:pointer;">
                                 <input type="radio" name="bot-master-winner" value="mix" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
                                 <span style="color:white; font-size:12px; font-weight:bold;">🔄 Mix (ሰው+ቦት)</span>
                             </label>
                             
-                            <label style="flex:1; padding:10px; background: rgba(192, 132, 252, 0.1); border: 1px solid var(--purple); border-radius:6px; cursor:pointer;">
+                            <label style="flex:1; padding:10px; background: rgba(176, 137, 104, 0.1); border: 1px solid var(--purple); border-radius:6px; cursor:pointer;">
                                 <input type="radio" name="bot-master-winner" value="mix_real" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
                                 <span style="color:white; font-size:12px; font-weight:bold;">🤝 Mix 4 (ሰው+ሰው)</span>
                             </label>
 
-                            <label style="flex:1; padding:10px; background: rgba(125, 211, 252, 0.1); border: 1px solid var(--cyan); border-radius:6px; cursor:pointer;">
+                            <label style="flex:1; padding:10px; background: rgba(230, 215, 168, 0.1); border: 1px solid var(--cyan); border-radius:6px; cursor:pointer;">
                                 <input type="radio" name="bot-master-winner" value="mix_dep" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
                                 <span style="color:white; font-size:12px; font-weight:bold;">💎 Mix Dep</span>
                             </label>
 
-                            <label style="flex:1; padding:10px; background: rgba(129, 140, 248, 0.1); border: 1px solid var(--blue); border-radius:6px; cursor:pointer; box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);">
+                            <label style="flex:1; padding:10px; background: rgba(62, 143, 110, 0.1); border: 1px solid var(--blue); border-radius:6px; cursor:pointer; box-shadow: 0 0 10px rgba(62, 143, 110, 0.5);">
                                 <input type="radio" name="bot-master-winner" value="ai" style="width:auto; margin-right:5px;" onchange="toggleMixInput()" checked>
                                 <span style="color:white; font-size:12px; font-weight:bold;">🧠 Smart Casino AI</span>
                             </label>
@@ -317,7 +317,7 @@
                             </label>
                         </div>
                         
-                        <div id="active-schedule-info" style="background: rgba(45, 212, 191, 0.1); border: 1px solid var(--faded-green); padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none;">
+                        <div id="active-schedule-info" style="background: rgba(212, 188, 120, 0.1); border: 1px solid var(--faded-green); padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none;">
                             <div style="font-size: 14px; margin-bottom: 5px; font-weight:bold;">🟢 Active Schedule: <b id="sch-active-name" style="color: var(--faded-green);">Loading...</b></div>
                             <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 3px;">⏱ Time Range: <b id="sch-active-range" style="color: var(--cyan);">-</b> | Current EAT: <b id="sch-current-time" style="color: var(--gold);">-</b></div>
                             <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 3px;">🤖 Target Range: <b id="sch-active-target" style="color: var(--purple);">-</b> bots</div>
@@ -358,10 +358,10 @@
 
             <div class="search-container">
                 <input type="text" class="search-bar" id="search-bot" oninput="searchBots()" placeholder="🔍 Search Bot Name or Phone...">
-                <input type="number" id="rename-bot-limit" placeholder="ስንት ቦት? (ባዶ = ሁሉንም)" style="width: 150px; background:#100e0c; color:white; border:1px solid var(--orange); padding:8px; border-radius:6px;">
-                <label style="display:flex; align-items:center; gap:4px; color:#e8dfd4; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-at"> @ prefix</label>
-                <label style="display:flex; align-items:center; gap:4px; color:#e8dfd4; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-caps"> ALL CAPS</label>
-                <label style="display:flex; align-items:center; gap:4px; color:#e8dfd4; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-hyphen"> Hyphen</label>
+                <input type="number" id="rename-bot-limit" placeholder="ስንት ቦት? (ባዶ = ሁሉንም)" style="width: 150px; background:#041910; color:white; border:1px solid var(--orange); padding:8px; border-radius:6px;">
+                <label style="display:flex; align-items:center; gap:4px; color:#efe6cf; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-at"> @ prefix</label>
+                <label style="display:flex; align-items:center; gap:4px; color:#efe6cf; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-caps"> ALL CAPS</label>
+                <label style="display:flex; align-items:center; gap:4px; color:#efe6cf; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-hyphen"> Hyphen</label>
                 <button class="action-btn btn-orange" onclick="randomizeAllBotNames()">🎲 ስሞችን ቀይር</button>
             </div>
             <div class="card">
@@ -426,7 +426,7 @@
         <label style="color:var(--gold); font-size:12px; font-weight:bold;">Cards Count (ስንት ካርቴላ ይግዛ?)</label>
         <input type="number" id="eb-cards" style="border-color:var(--gold);">
         
-        <label style="display:flex; align-items:center; margin-top:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #4d433a;">
+        <label style="display:flex; align-items:center; margin-top:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #1a5640;">
             <input type="checkbox" id="eb-active" style="width:20px; height:20px; margin-right:10px; accent-color:var(--faded-green);">
             <span style="font-weight:bold; color:white;">Is Active (ቦቱ አሁን ይስራ?)</span>
         </label>
@@ -625,7 +625,7 @@
             if (window.activeBotPhones.includes(phone)) {
                 statusCell.innerHTML = '<span class="badge bg-approved">ON (Active)</span>';
             } else if (statusCell.getAttribute('data-base-active') === 'true') {
-                statusCell.innerHTML = '<span class="badge" style="background:#6b5e52; color:white;">NO ACTIVE</span>';
+                statusCell.innerHTML = '<span class="badge" style="background:#8d7b58; color:white;">NO ACTIVE</span>';
             } else {
                 statusCell.innerHTML = '<span class="badge bg-rejected">OFF (Disabled)</span>';
             }
@@ -857,7 +857,7 @@
                     const isLive = (window.activeBotPhones || []).includes(b.phone);
                     let statusBadge = '';
                     if (isLive) statusBadge = '<span class="badge bg-approved">ON (Active)</span>';
-                    else if (b.isActive !== false) statusBadge = '<span class="badge" style="background:#6b5e52; color:white;">NO ACTIVE</span>';
+                    else if (b.isActive !== false) statusBadge = '<span class="badge" style="background:#8d7b58; color:white;">NO ACTIVE</span>';
                     else statusBadge = '<span class="badge bg-rejected">OFF (Disabled)</span>';
                     return `<tr>
                         <td style="font-weight:800; color:var(--cyan);">${safeName}</td>
@@ -1145,7 +1145,7 @@
             const d = new Date(h.date);
             const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             if (dateStr !== lastDateStr) {
-                html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(125, 211, 252, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px;">📅 ${dateStr}</td></tr>`;
+                html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(230, 215, 168, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px;">📅 ${dateStr}</td></tr>`;
                 lastDateStr = dateStr;
             }
             const phonesArr = (h.winnerPhone || '').toString().split(',').map((p) => p.trim()).filter((p) => p);
