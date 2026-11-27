@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Admin Dashboard - Amar Bingo</title>
+    <style>
+        :root { --bg-dark: #050810; --panel: #161b22; --faded-green: #4ade80; --text-gray: #94a3b8; --border: #30363d; --red: #ef4444; --blue: #3b82f6; --orange: #ea580c; --purple: #a855f7; --cyan: #06b6d4; --gold: #fbbf24; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: white; margin: 0; display: flex; height: 100vh; overflow: hidden; flex-direction: row; }
+        
+        #login-sec { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #161b22 0%, #050810 100%); z-index: 9999; }
+        .login-card { background: rgba(22, 27, 34, 0.7); backdrop-filter: blur(15px); padding: 50px 40px; border-radius: 24px; border: 1px solid rgba(74, 222, 128, 0.3); text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(74, 222, 128, 0.1); box-sizing: border-box;}
+        .login-card h2 { color: var(--faded-green); margin-top: 0; margin-bottom: 30px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(74,222,128,0.5); }
+        .login-card input { background: rgba(0,0,0,0.6); border: 1px solid var(--border); padding: 16px; font-size: 16px; border-radius: 12px; transition: 0.3s; text-align: center; letter-spacing: 2px; color: white;}
+        .login-card input:focus { border-color: var(--faded-green); box-shadow: 0 0 15px rgba(74,222,128,0.3); outline: none; }
+        .login-card button { padding: 16px; font-size: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; box-shadow: 0 5px 15px rgba(74,222,128,0.4); }
+        .login-card button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(74,222,128,0.6); }
+
+        #dash-sec { display: none; width: 100%; height: 100%; flex-direction: row; position: relative; }
+        
+        .sidebar { width: 250px; background: var(--panel); border-right: 1px solid var(--border); display: block; padding: 20px 0 80px 0; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; transition: 0.3s ease; z-index: 1000; height: 100%; box-sizing: border-box;}
+        .sidebar-header { text-align: center; color: var(--faded-green); font-size: 18px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase;}
+        .nav-btn { width: 100%; background: transparent; color: var(--text-gray); border: none; padding: 15px 20px; text-align: left; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: bold; border-left: 4px solid transparent; white-space: nowrap; box-sizing: border-box;}
+        .nav-btn:hover { background: rgba(74, 222, 128, 0.05); color: white; }
+        .nav-btn.active { background: rgba(74, 222, 128, 0.1); color: var(--faded-green); border-left-color: var(--faded-green); }
+        .close-sidebar { display: none; background: transparent; border: none; color: white; font-size: 24px; position: absolute; top: 10px; right: 15px; cursor: pointer; }
+
+        .badge-alert { background: var(--red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; display: none; font-weight: 900; box-shadow: 0 0 8px var(--red); animation: pulseAlert 1.5s infinite; }
+        @keyframes pulseAlert { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .main-content { flex: 1; padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg-dark); width: 100%; box-sizing: border-box;}
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; gap: 10px;}
+        .menu-toggle-btn { display: none; background: transparent; border: none; color: white; font-size: 24px; cursor: pointer; margin-right: 15px;}
+        
+        .tab-content { display: none; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-sizing: border-box;}
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px;}
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--panel); padding: 20px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+        .stat-card h3 { margin: 0; color: var(--text-gray); font-size: 12px; text-transform: uppercase;}
+        .stat-card h2 { margin: 10px 0 0 0; font-size: 20px; font-weight: 900;}
+        
+        .live-player-box:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--purple) !important; }
+
+        input, select, textarea { padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); background: #000; color: white; width: 100%; box-sizing: border-box; margin-bottom: 10px; outline: none; font-size: 14px;}
+        
+        input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: var(--faded-green); margin:0; }
+        tbody tr.selectable-row { transition: 0.2s; cursor: pointer; }
+        tbody tr.selectable-row:hover { background: rgba(74, 222, 128, 0.05); }
+        tbody tr.selectable-row.selected { background: rgba(74, 222, 128, 0.15) !important; border-left: 3px solid var(--faded-green); }
+
+        .bulk-action-bar { display: none; justify-content: space-between; align-items: center; background: rgba(239, 68, 68, 0.1); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--red); margin-bottom: 15px; }
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap;}
+        .page-btn { background: var(--border); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .page-btn:hover:not(:disabled) { background: var(--blue); }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-info { color: var(--gold); font-weight: bold; font-size: 14px; }
+
+        .search-bar { background-color: #050810; border: 1px solid var(--blue); flex: 1; min-width: 200px;}
+        .search-container { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap;}
+        
+        button.action-btn { background: var(--faded-green); color: black; border: none; padding: 12px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        button.btn-red { background: var(--red); color: white; } 
+        button.btn-blue { background: var(--blue); color: white; } 
+        button.btn-purple { background: var(--purple); color: white; }
+        button.btn-orange { background: var(--orange); color: white; }
+        button.btn-gold { background: var(--gold); color: black; }
+        button.btn-sm { padding: 6px 10px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; white-space: nowrap;}
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; min-width: 600px; }
+        th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle;}
+        th { color: var(--text-gray); font-size: 11px; text-transform: uppercase; white-space: nowrap; background: rgba(0,0,0,0.2);}
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
+        .bg-pending { background: rgba(234, 88, 12, 0.2); color: var(--orange); border: 1px solid var(--orange); }
+        .bg-approved { background: rgba(74, 222, 128, 0.2); color: var(--faded-green); border: 1px solid var(--faded-green); }
+        .bg-rejected { background: rgba(239, 68, 68, 0.2); color: var(--red); border: 1px solid var(--red); }
+        .bg-win { background: rgba(251, 191, 36, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box;}
+        .modal-content { background: var(--panel); padding: 20px; border-radius: 10px; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; color: white; position: relative;}
+        .grid-preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #000; padding: 10px; border-radius: 8px; text-align: center; margin: 10px 0;}
+        .grid-preview div { background: var(--border); padding: 8px 0; border-radius: 4px; font-weight: bold; font-family: monospace;}
+        .grid-preview .highlight { background: var(--faded-green); color: black; }
+        .grid-preview.card-closed { outline: 2px solid var(--faded-green); box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15); }
+
+        .tx-tab-btn { background: transparent; color: var(--text-gray); border: 1px solid var(--border); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight:bold; white-space: nowrap;}
+        .tx-tab-btn.active { background: var(--border); color: white;}
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; }
+        
+        #sms-text { font-size: 16px !important; line-height: 1.6; background: #000; padding: 15px; border-radius: 8px; border: 1px solid var(--faded-green); color: white; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; min-height: 80px; }
+        .disabled-input { opacity: 0.4; pointer-events: none; display: none !important; }
+
+        .promoter-header { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 20px; border-radius: 12px; border: 1px solid var(--cyan); margin-bottom: 15px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .promoter-stats { display: flex; justify-content: space-between; background: #000; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .p-stat-box { text-align: center; flex: 1; }
+        .p-stat-title { font-size: 10px; color: var(--text-gray); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .p-stat-val { font-size: 18px; font-weight: 900; color: white; }
+
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; margin: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--faded-green); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        @media (max-width: 768px) {
+            .menu-toggle-btn { display: inline-block; }
+            .sidebar { position: fixed; top: 0; left: -260px; bottom: 0; width: 250px; height: 100vh; height: 100dvh; box-shadow: 2px 0 15px rgba(0,0,0,0.9); overflow-y: auto !important; -webkit-overflow-scrolling: touch; z-index: 10000; }
+            .sidebar.open { left: 0; }
+            .close-sidebar { display: block; }
+            .main-content { padding: 15px; width: 100vw; overflow-x: hidden; }
+            .header-top h2 { font-size: 16px; }
+            .search-container { flex-direction: column; align-items: stretch; }
+            .login-card { padding: 40px 20px; }
+        }
+        /* 🔥 የ Pending Sums ስታይል 🔥 */
+        .summary-box { background: rgba(0,0,0,0.3); border: 1px dashed var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 18px; font-weight: bold; }
+
+        .overlay.active { display: block; }
+        .stats-line { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .stat-pill { flex: 1; min-width: 90px; background: #000; border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center; }
+        .stat-pill span { display: block; color: var(--text-gray); font-size: 11px; }
+        .mini-table { width: 100%; border-collapse: collapse; min-width: 0 !important; }
+        .mini-table th, .mini-table td { font-size: 12px; }
+        #tab-schedules .card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        #tab-schedules .card > div[style*="grid-template-columns: 70px"],
+        #seven-slot-rows { min-width: 680px; }
+        @media (max-width: 768px) {
+            button.action-btn { min-height: 44px; }
+            input, select, textarea { font-size: 16px; }
+            .main-content { padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="login-sec">
+    <div class="login-card">
+        <h2>🛡️ Admin Panel</h2>
+        <input type="password" id="adminPass" placeholder="Enter Password" autocomplete="current-password" onkeyup="if(event.key === 'Enter') login()">
+        <button class="action-btn" id="login-btn" style="width: 100%;" onclick="login()">Access Dashboard</button>
+    </div>
+</div>
+
+<div class="overlay" id="mobile-overlay" onclick="toggleSidebar()" style="z-index: 9999;"></div>
+
+<div id="dash-sec">
+    <div class="sidebar" id="sidebar">
+        <button class="close-sidebar" onclick="toggleSidebar()">✖</button>
+        <div class="sidebar-header">AMAR BINGO<br><span style="font-size:12px; color:var(--text-gray);">Admin Panel</span></div>
+        <button class="nav-btn" onclick="switchTab('tab-schedules', this); loadSchedulesTab();" style="color:var(--gold);"><div>🗓️ Schedules</div></button>
+        <button class="nav-btn active" onclick="switchTab('tab-bots-db', this); loadBotDB();" style="color:var(--faded-green);"><div>🤖 Bot Database & Settings</div></button>
+        <button class="nav-btn" onclick="switchTab('tab-history', this); loadHistoryPage(1);"><div>🏆 Winners History (All Time)</div></button>
+    </div>
+
+    <div class="main-content">
+        <div class="header-top">
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <button class="menu-toggle-btn" onclick="toggleSidebar()" style="margin-right: 0;">☰</button>
+                <h2 id="page-title" style="margin: 0;">🤖 Bot Database & Settings</h2>
+            </div>
+            <button class="action-btn btn-blue btn-sm" onclick="fullRefresh()" style="padding: 8px 12px;">🔄 Refresh Data</button>
+        </div>
+
+        <div id="tab-schedules" class="tab-content">
+            <div class="card" style="border-left: 4px solid var(--gold); margin-bottom: 20px;">
+                <div style="display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap; align-items:center;">
+                    <div>
+                        <h3 style="margin:0; color:var(--gold);">🗓️ Schedules</h3>
+                        <p style="margin:6px 0 0 0; font-size:12px; color:var(--text-gray);">All times below are Ethiopia Time (EAT / UTC+3). The configured ramp applies only when the schedule automatically shifts between slots. Manual bot counts apply immediately.</p>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <div style="background:#000; border:1px solid var(--cyan); border-radius:8px; padding:10px 14px;">
+                            <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase;">Server Time (UTC)</div>
+                            <div id="sched-server-time" style="font-size:20px; font-weight:900; color:var(--cyan); font-family:monospace;">--:--:--</div>
+                        </div>
+                        <div style="background:#000; border:1px solid var(--gold); border-radius:8px; padding:10px 14px;">
+                            <div style="font-size:10px; color:var(--text-gray); text-transform:uppercase;">Ethiopia Time (EAT)</div>
+                            <div id="sched-eat-time" style="font-size:20px; font-weight:900; color:var(--gold); font-family:monospace;">--:--:--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--faded-green); margin-bottom: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <h3 style="margin:0; color:var(--faded-green);">🤖 Bot Traffic Scheduler (7 Slots)</h3>
+                    <label class="switch">
+                        <input type="checkbox" id="sched-bot-toggle" onchange="syncSchedToggleFromSchedules(this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div id="sched-active-banner" style="margin:15px 0; padding:12px; border-radius:8px; background:rgba(74,222,128,0.08); border:1px solid var(--faded-green);">
+                    <b>Control:</b> <span id="sched-control-mode" style="color:var(--cyan);">Manual</span>
+                    <span style="color:var(--text-gray);"> · Active slot:</span> <span id="sched-active-label" style="color:var(--faded-green);">None</span>
+                    <span style="color:var(--text-gray);"> · Injected: </span><span id="sched-injected-count" style="color:var(--orange);">0</span>
+                    <span style="color:var(--text-gray);"> · Configured ramp is used only for automatic slot-to-slot shifts, not for admin manual overrides.</span>
+                </div>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end; margin:0 0 15px 0; padding:12px; border-radius:8px; background:rgba(251,191,36,0.08); border:1px solid var(--gold);">
+                    <div style="min-width:220px;">
+                        <label style="font-size:12px; color:var(--gold); font-weight:bold;">Slot transition ramp (minutes)</label>
+                        <input type="number" id="bot-ramp-minutes" min="1" max="180" value="30" style="margin:6px 0 0 0;">
+                    </div>
+                    <div style="flex:1; min-width:220px; font-size:11px; color:var(--text-gray);">
+                        Bot count ramps up or down to the next slot's exact target within this many minutes.
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 70px 1fr 1fr 1fr 1fr 90px; gap:8px; align-items:center; margin-bottom:8px; color:var(--text-gray); font-size:11px; font-weight:bold;">
+                    <div>Slot</div><div>Start (EAT)</div><div>End (EAT)</div><div>Min Bots</div><div>Max Bots</div><div>Status</div>
+                </div>
+                <div id="seven-slot-rows"></div>
+                <button class="action-btn btn-blue" style="width:100%; margin-top:15px;" onclick="saveBotMasterSettings()">💾 Save Bot Traffic Schedule</button>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--blue);">
+                <h3 style="margin-top:0; color:var(--blue);">📣 Scheduled Announcements / Posts</h3>
+                <p style="font-size:12px; color:var(--text-gray); margin-top:0;">Draft a post and set the EAT publish time. A background worker dispatches it automatically.</p>
+                <textarea id="sched-post-text" rows="4" placeholder="Announcement text..."></textarea>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:160px;"><label style="font-size:11px; color:var(--text-gray);">Date (EAT)</label><input type="date" id="sched-post-date"></div>
+                    <div style="flex:1; min-width:160px;"><label style="font-size:11px; color:var(--text-gray);">Time (EAT)</label><input type="time" id="sched-post-time"></div>
+                </div>
+                <button class="action-btn btn-blue" style="width:100%; margin-top:8px;" onclick="saveScheduledPost()">➕ Queue Announcement</button>
+                <div class="table-responsive" style="margin-top:15px;">
+                    <table>
+                        <thead><tr><th>EAT Time</th><th>Text</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="scheduled-posts-body"><tr><td colspan="4" style="text-align:center; color:gray;">No scheduled posts.</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-bots-db" class="tab-content active">
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+                
+                <div class="card" style="flex: 2; border-left: 4px solid var(--gold); min-width: 300px;">
+                    <h3 style="margin-top:0; color:var(--gold);">🎮 Master Bot Controls</h3>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:center; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:15px;">
+                        <div>
+                            <div style="font-weight:bold; font-size:14px; color:white;">1. Enable Bots (ቦት ማስገባት)</div>
+                            <div style="font-size:11px; color:var(--text-gray);">ON ሲሆን ቦቶች በተራ እየተመረጡ ጌም ይገባሉ</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="bot-master-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:15px;">
+                        <div style="font-weight:bold; font-size:14px; margin-bottom: 10px; color:white;">2. Winner Control (ማን ያሸንፍ?)</div>
+                        <p style="font-size:11px; color:var(--text-gray); margin-top:0;">* የቦት እና የሰው ማሸነፊያ ሎጂክ ይምረጡ</p>
+                        
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <label style="flex:1; padding:10px; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--red); border-radius:6px; cursor:pointer;">
+                                <input type="radio" name="bot-master-winner" value="bots" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
+                                <span style="color:white; font-size:12px; font-weight:bold;">🤖 Bots (100% ቦት)</span>
+                            </label>
+
+                            <label style="flex:1; padding:10px; background: rgba(74, 222, 128, 0.1); border: 1px solid var(--faded-green); border-radius:6px; cursor:pointer;">
+                                <input type="radio" name="bot-master-winner" value="real" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
+                                <span style="color:white; font-size:12px; font-weight:bold;">👤 Real (ሰው ብቻ)</span>
+                            </label>
+
+                            <label style="flex:1; padding:10px; background: rgba(234, 179, 8, 0.1); border: 1px solid var(--gold); border-radius:6px; cursor:pointer;">
+                                <input type="radio" name="bot-master-winner" value="mix" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
+                                <span style="color:white; font-size:12px; font-weight:bold;">🔄 Mix (ሰው+ቦት)</span>
+                            </label>
+                            
+                            <label style="flex:1; padding:10px; background: rgba(168, 85, 247, 0.1); border: 1px solid var(--purple); border-radius:6px; cursor:pointer;">
+                                <input type="radio" name="bot-master-winner" value="mix_real" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
+                                <span style="color:white; font-size:12px; font-weight:bold;">🤝 Mix 4 (ሰው+ሰው)</span>
+                            </label>
+
+                            <label style="flex:1; padding:10px; background: rgba(6, 182, 212, 0.1); border: 1px solid var(--cyan); border-radius:6px; cursor:pointer;">
+                                <input type="radio" name="bot-master-winner" value="mix_dep" style="width:auto; margin-right:5px;" onchange="toggleMixInput()">
+                                <span style="color:white; font-size:12px; font-weight:bold;">💎 Mix Dep</span>
+                            </label>
+
+                            <label style="flex:1; padding:10px; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--blue); border-radius:6px; cursor:pointer; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);">
+                                <input type="radio" name="bot-master-winner" value="ai" style="width:auto; margin-right:5px;" onchange="toggleMixInput()" checked>
+                                <span style="color:white; font-size:12px; font-weight:bold;">🧠 Smart Casino AI</span>
+                            </label>
+                        </div>
+                        
+                        <div id="mix-count-container" style="display:none; margin-top:10px;">
+                            <label style="font-size:11px; color:var(--gold);">ሰው ሲያሸንፍ ስንት ሰው/ቦት አብሮት ያሸንፍ? (Share Count)</label>
+                            <input type="number" id="mix-bot-count" placeholder="e.g. 1" style="width:100%; margin-top:5px; margin-bottom:0;">
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:15px;">
+                        <div style="font-weight:bold; font-size:14px; margin-bottom: 10px; color:white;">3. Ticket Distribution (የቦት ስርጭት)</div>
+                        <p style="font-size:10px; color:var(--text-gray); margin-top:0;">የቦቶች <b style="color:var(--faded-green);">ትክክለኛ ብዛት (Exact Quantity)</b>። When the schedule is off, Save or Inject applies this count immediately (no schedule ramp).</p>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <div style="flex:1; min-width:80px;"><label style="font-size:11px; color:var(--cyan);">1 Card Bots</label><input type="number" id="bot-d1" placeholder="Qty"></div>
+                            <div style="flex:1; min-width:80px;"><label style="font-size:11px; color:var(--faded-green);">2 Card Bots</label><input type="number" id="bot-d2" placeholder="Qty"></div>
+                            <div style="flex:1; min-width:80px;"><label style="font-size:11px; color:var(--gold);">3 Card Bots</label><input type="number" id="bot-d3" placeholder="Qty"></div>
+                            <div style="flex:1; min-width:80px;"><label style="font-size:11px; color:var(--purple);">4 Card Bots</label><input type="number" id="bot-d4" placeholder="Qty"></div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom:15px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                            <div>
+                                <div style="font-weight:bold; font-size:14px; color:white;">4. Auto Bot Schedule (በሰዓት)</div>
+                                <div style="font-size:11px; color:var(--text-gray);">ይህ ከበራ Schedule ብቻ ሰዓት እና ብዛት ይቆጣጠራል (ስርጭት ግን ከላይ ባለው ይሰራል)</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="bot-schedule-toggle" onchange="toggleScheduleDiv()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div id="active-schedule-info" style="background: rgba(74, 222, 128, 0.1); border: 1px solid var(--faded-green); padding: 10px; border-radius: 8px; margin-bottom: 15px; display: none;">
+                            <div style="font-size: 14px; margin-bottom: 5px; font-weight:bold;">🟢 Active Schedule: <b id="sch-active-name" style="color: var(--faded-green);">Loading...</b></div>
+                            <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 3px;">⏱ Time Range: <b id="sch-active-range" style="color: var(--cyan);">-</b> | Current EAT: <b id="sch-current-time" style="color: var(--gold);">-</b></div>
+                            <div style="font-size: 12px; color: var(--text-gray); margin-bottom: 3px;">🤖 Target Range: <b id="sch-active-target" style="color: var(--purple);">-</b> bots</div>
+                            <div style="font-size: 12px; color: var(--text-gray);">🔥 Currently Injected: <b id="sch-active-injected" style="color: var(--orange); font-size:14px;">-</b> bots</div>
+                        </div>
+
+                        <div id="schedule-container" style="display:none;"></div>
+                        <button type="button" class="action-btn btn-gold" style="width:100%;" onclick="openSchedulesTab()">🗓️ Open 7-Slot Schedules</button>
+                    </div>
+
+                    <button class="action-btn btn-blue" style="width: 100%; padding:15px; font-size:15px;" onclick="saveBotMasterSettings()">💾 Save Master Settings</button>
+                </div>
+
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 300px;">
+                    
+                    <div class="card" style="border-left: 4px solid var(--purple); margin: 0;">
+                        <h3 style="margin-top:0; color:var(--purple);">➕ Add Bots (ወደ ዳታቤዝ ጨምር)</h3>
+                        <p style="font-size:11px; color:var(--text-gray); margin-top:0;">ከታች ቁጥር በማስገባት አዳዲስ ቦቶችን ወደ ዳታቤዝ መጨመር ይችላሉ (በኢትዮጵያዊ የወንድ ስም ይፈጠራሉ)።</p>
+                        <div style="display:flex; gap:10px; align-items:center; margin-top:10px;">
+                            <input type="number" id="add-bot-amount" placeholder="ብዛት (e.g. 30)" style="flex:2; margin-bottom:0;">
+                            <button class="action-btn btn-purple" onclick="addCustomBots()" style="flex:1;">🚀 ጨምር</button>
+                        </div>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--faded-green); margin: 0; flex: 1;">
+                        <h3 style="margin-top:0; color:var(--faded-green);">⚡ Live Inject (አሁኑኑ ጌም አስገባ)</h3>
+                        <p style="font-size:11px; color:var(--text-gray); margin-top:0;">ቁጥሩን ሲፅፉ ስርጭቱን እና ጃክፖቱን ያሰላል። ካረጋገጡ በኋላ አስገባን ይጫኑ።</p>
+                        <div style="display:flex; gap:10px; align-items:center; margin-top:10px;">
+                            <input type="number" id="instant-bot-amount" placeholder="ብዛት (e.g. 50)" oninput="previewLiveInject()" style="flex:2; margin-bottom:0;">
+                            <button class="action-btn" onclick="injectLiveBots()" style="flex:1; background:var(--faded-green); color:black;">🔥 አስገባ (Inject)</button>
+                        </div>
+                        <div id="live-inject-preview" style="display:none; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid var(--faded-green); margin-top:10px; font-size:12px; color:white;">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-bar" id="search-bot" oninput="searchBots()" placeholder="🔍 Search Bot Name or Phone...">
+                <input type="number" id="rename-bot-limit" placeholder="ስንት ቦት? (ባዶ = ሁሉንም)" style="width: 150px; background:#000; color:white; border:1px solid var(--orange); padding:8px; border-radius:6px;">
+                <label style="display:flex; align-items:center; gap:4px; color:#ddd; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-at"> @ prefix</label>
+                <label style="display:flex; align-items:center; gap:4px; color:#ddd; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-caps"> ALL CAPS</label>
+                <label style="display:flex; align-items:center; gap:4px; color:#ddd; font-size:12px; white-space:nowrap;"><input type="checkbox" id="bot-style-hyphen"> Hyphen</label>
+                <button class="action-btn btn-orange" onclick="randomizeAllBotNames()">🎲 ስሞችን ቀይር</button>
+            </div>
+            <div class="card">
+                <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                    <table id="table-bots">
+                        <thead style="position: sticky; top: 0; background: var(--panel);">
+                            <tr>
+                                <th>Name (ስም)</th>
+                                <th>Phone (ስልክ)</th>
+                                <th>Status</th>
+                                <th>Cards</th>
+                                <th>Last Played</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bots-body"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pag-bots"></div>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div id="tab-history" class="tab-content">
+            <div class="bulk-action-bar" id="bulk-history">
+                <div><span style="font-weight:bold; color:white;">🏆 Winners History Action: </span><span id="sel-count-history" style="color:var(--red); font-weight:bold; margin-left:10px;">0 Selected</span></div>
+                <button class="action-btn btn-red btn-sm bulk-delete-btn" onclick="bulkDelete('history')">🗑️ Delete Selected History</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-bar" id="search-history" onkeyup="debounceSearch(() => loadHistoryPage(1))" placeholder="🔍 Search Phone, Game ID, or Ticket ID (ካርቴላ ቁጥር)...">
+                <button class="action-btn btn-red" onclick="deleteOldGames()" style="padding: 10px; margin-left: 10px; display:none;">🗑️ የቆዩትን አጥፋ (Delete Older Than 6 Hours)</button>
+            </div>
+            <div class="card">
+                <div class="table-responsive">
+                    <table id="table-winners">
+                        <thead><tr>
+                            <th style="width: 30px;"><input type="checkbox" id="chk-all-history" onchange="toggleSelectAll('history')"></th>
+                            <th>Time</th><th>Game ID</th><th>Winner Name</th><th>Phone</th><th>Ticket ID</th><th>Prize</th><th>Profit</th><th>Action</th>
+                        </tr></thead>
+                        <tbody id="game-history-body"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pag-history"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" id="edit-bot-modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <h3 style="color: var(--cyan); margin-top:0;">🤖 Edit Bot Settings</h3>
+        <input type="hidden" id="eb-id">
+        
+        <label style="color:var(--text-gray); font-size:12px;">Bot Name (ስም)</label>
+        <input type="text" id="eb-name">
+        
+        <label style="color:var(--text-gray); font-size:12px;">Bot Phone (ስልክ)</label>
+        <input type="text" id="eb-phone">
+        
+        <label style="color:var(--gold); font-size:12px; font-weight:bold;">Cards Count (ስንት ካርቴላ ይግዛ?)</label>
+        <input type="number" id="eb-cards" style="border-color:var(--gold);">
+        
+        <label style="display:flex; align-items:center; margin-top:15px; cursor:pointer; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; border:1px solid #334155;">
+            <input type="checkbox" id="eb-active" style="width:20px; height:20px; margin-right:10px; accent-color:var(--faded-green);">
+            <span style="font-weight:bold; color:white;">Is Active (ቦቱ አሁን ይስራ?)</span>
+        </label>
+        
+        <div style="display:flex; gap:10px; margin-top: 20px;">
+            <button class="action-btn btn-blue" style="flex:1;" onclick="saveBotEdit()">💾 Save Bot</button>
+            <button class="action-btn btn-red" style="flex:1;" onclick="document.getElementById('edit-bot-modal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="history-modal">
+    <div class="modal-content" style="text-align: center; max-width: 600px;">
+        <h3 style="color: var(--faded-green); margin-top:0;">🎟️ Winner Cards</h3>
+        <p id="m-called" style="font-size: 13px; color: var(--text-gray); word-wrap: break-word;"></p>
+        <div id="m-grid" style="text-align: left; max-height: 50vh; overflow-y: auto; padding-right: 5px;"></div>
+        <button class="action-btn btn-red" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('history-modal').style.display='none'">Close</button>
+    </div>
+</div>
+
+<div class="modal" id="user-info-modal">
+    <div class="modal-content">
+        <h3 style="color:var(--cyan); margin-top:0;">User</h3>
+        <div class="stats-line">
+            <div class="stat-pill"><span>Name</span><b id="ui-name"></b></div>
+            <div class="stat-pill"><span>Phone</span><b id="ui-phone"></b></div>
+            <div class="stat-pill"><span>Main</span><b id="ui-main"></b></div>
+            <div class="stat-pill"><span>Play</span><b id="ui-play"></b></div>
+        </div>
+        <div class="card" style="border-color:var(--faded-green);">
+            <h3 style="color:var(--faded-green);">Manual Deposit</h3>
+            <div class="stack">
+                <input type="text" id="man-txref" placeholder="ደረሰኝ ቁጥር (TxRef)">
+                <input type="number" id="man-amount" placeholder="ብር መጠን">
+                <select id="man-bank"><option value="TeleBirr">TeleBirr</option><option value="CBEBirr">CBEBirr</option></select>
+                <button class="action-btn" type="button" onclick="submitManualDeposit()">Deposit</button>
+            </div>
+        </div>
+        <div class="stats-line">
+            <div class="stat-pill"><span>Deposited</span><b id="ui-tot-dep">0</b></div>
+            <div class="stat-pill"><span>Withdrawn</span><b id="ui-tot-wit">0</b></div>
+            <div class="stat-pill"><span>Bonus</span><b id="ui-tot-bon">0</b></div>
+            <div class="stat-pill"><span>Won</span><b id="ui-tot-won">0</b></div>
+            <div class="stat-pill"><span>Tickets</span><b id="ui-tot-tix">0</b></div>
+        </div>
+        <div id="ui-live-wrap" style="display:none;">
+            <b>Live Round Cards</b>
+            <p id="ui-live-meta" class="hint"></p>
+            <div id="ui-live-grid"></div>
+        </div>
+        <b>Bet slips</b>
+        <div style="overflow-x:auto; margin:8px 0 14px;">
+            <table class="mini-table"><thead><tr><th>Round</th><th>Cards</th><th>Status</th><th>Outcome</th></tr></thead><tbody id="ui-bets-body"></tbody></table>
+        </div>
+        <b>Recent transactions</b>
+        <div style="overflow-x:auto; margin-top:8px;">
+            <table class="mini-table"><thead><tr><th>Date</th><th>Type</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody id="ui-tx-body"></tbody></table>
+        </div>
+        <button class="action-btn btn-red" type="button" style="margin-top:14px;" onclick="document.getElementById('user-info-modal').style.display='none'">Close</button>
+    </div>
+</div>
+
+<script>
+
+    const PASS_KEY = 'bingo_admin_pass';
+    let pass = '';
+    let sysSettings = null;
+    let isBotInputDirty = false;
+    let p_bots = 1;
+    let p_hist = 1;
+    let historyLimitPerPage = 15;
+    let loadedGames = [];
+    let selHistory = new Set();
+    let searchTimeout = null;
+    let botSearchTimer = null;
+    let pollTimer = null;
+    let scheduleSlotsReady = false;
+    window.activeBotPhones = [];
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        ['bot-d1', 'bot-d2', 'bot-d3', 'bot-d4'].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', updateFromDistribution);
+        });
+        const saved = localStorage.getItem(PASS_KEY);
+        if (!saved) return;
+        pass = saved;
+        document.getElementById('adminPass').value = saved;
+        try {
+            if (await verifyAdminPass()) enterDash();
+            else { pass = ''; localStorage.removeItem(PASS_KEY); }
+        } catch (e) {}
+    });
+
+    function logoutAdmin() {
+        localStorage.removeItem(PASS_KEY);
+        pass = '';
+        location.reload();
+    }
+
+    async function login() {
+        const input = document.getElementById('adminPass').value;
+        if (!input) return;
+        pass = input;
+        const btn = document.getElementById('login-btn');
+        btn.disabled = true;
+        try {
+            if (!(await verifyAdminPass())) {
+                pass = '';
+                alert('Wrong Password!');
+                return;
+            }
+            localStorage.setItem(PASS_KEY, pass);
+            enterDash();
+        } catch (e) {
+            pass = '';
+            alert('Connection Error!');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    async function verifyAdminPass() {
+        const res = await fetch('/api/admin/live-stats', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ adminPass: pass })
+        });
+        if (res.status === 401) return false;
+        const data = await res.json().catch(() => null);
+        if (!res.ok || !data || data.error) return false;
+        applyLiveStats(data);
+        return true;
+    }
+
+    function enterDash() {
+        document.getElementById('login-sec').style.display = 'none';
+        document.getElementById('dash-sec').style.display = 'flex';
+        loadBotDB();
+        if (pollTimer) clearInterval(pollTimer);
+        pollTimer = setInterval(refreshLive, 3000);
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+        const overlay = document.getElementById('mobile-overlay');
+        if (overlay) overlay.classList.toggle('active', sidebar.classList.contains('open'));
+    }
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach((t) => t.classList.remove('active'));
+        const tab = document.getElementById(tabId);
+        if (tab) tab.classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach((b) => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        const title = document.getElementById('page-title');
+        if (title && btn) title.textContent = btn.innerText.replace(/\s+/g, ' ').trim();
+        if (window.innerWidth <= 768 && document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
+    }
+
+    function fullRefresh() {
+        refreshLive();
+        const active = document.querySelector('.tab-content.active');
+        if (!active) return;
+        if (active.id === 'tab-bots-db') loadBotDB();
+        if (active.id === 'tab-history') loadHistoryPage(p_hist || 1);
+        if (active.id === 'tab-schedules') loadSchedulesTab();
+    }
+
+    function openSchedulesTab() {
+        const btn = document.querySelector('[onclick*="tab-schedules"]');
+        switchTab('tab-schedules', btn);
+        loadSchedulesTab();
+    }
+
+    async function refreshLive() {
+        if (!pass) return;
+        try {
+            const res = await fetch('/api/admin/live-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass }) });
+            if (res.status === 401) { logoutAdmin(); return; }
+            const data = await res.json();
+            applyLiveStats(data);
+        } catch (e) {}
+    }
+
+    function applyLiveStats(data) {
+        if (!data) return;
+        if (data.settings) sysSettings = data.settings;
+        window.activeBotPhones = data.activeBotPhones || window.activeBotPhones || [];
+        document.querySelectorAll('#bots-body tr').forEach((row) => {
+            const phoneCell = row.querySelector('.bot-phone-cell');
+            const statusCell = row.querySelector('.bot-status-cell');
+            if (!phoneCell || !statusCell) return;
+            const phone = phoneCell.innerText.trim();
+            if (window.activeBotPhones.includes(phone)) {
+                statusCell.innerHTML = '<span class="badge bg-approved">ON (Active)</span>';
+            } else if (statusCell.getAttribute('data-base-active') === 'true') {
+                statusCell.innerHTML = '<span class="badge" style="background:#475569; color:white;">NO ACTIVE</span>';
+            } else {
+                statusCell.innerHTML = '<span class="badge bg-rejected">OFF (Disabled)</span>';
+            }
+        });
+        const settings = data.settings || {};
+        const master = document.getElementById('bot-master-toggle');
+        if (master && document.activeElement !== master) master.checked = !!settings.isBotSystemActive;
+        const sched = document.getElementById('bot-schedule-toggle');
+        if (sched && document.activeElement !== sched) {
+            sched.checked = !!settings.isBotScheduleActive;
+            toggleScheduleDiv();
+        }
+        const info = document.getElementById('active-schedule-info');
+        if (info && data.scheduleStatus && data.scheduleStatus.active && sched && sched.checked) {
+            info.style.display = 'block';
+            document.getElementById('sch-active-name').innerText = data.scheduleStatus.name || '-';
+            document.getElementById('sch-active-range').innerText = (data.scheduleStatus.min != null) ? (data.scheduleStatus.min + '-' + data.scheduleStatus.max + ' bots') : '-';
+            document.getElementById('sch-current-time').innerText = data.scheduleStatus.time || '-';
+            document.getElementById('sch-active-target').innerText = data.scheduleStatus.min + ' to ' + data.scheduleStatus.max;
+            document.getElementById('sch-active-injected').innerText = data.scheduleStatus.injected != null ? data.scheduleStatus.injected : (data.botPlayersCount || 0);
+        } else if (info && (!sched || !sched.checked)) {
+            info.style.display = 'none';
+        }
+        if (data.scheduleStatus) {
+            const st = data.scheduleStatus;
+            const clock = (id, val) => { const el = document.getElementById(id); if (el && val != null && val !== '') el.innerText = val; };
+            clock('sched-server-time', st.serverTime);
+            clock('sched-eat-time', st.eatTime);
+            clock('sched-active-label', st.name || 'None');
+            const modeEl = document.getElementById('sched-control-mode');
+            if (modeEl) {
+                const mode = st.mode || (st.active ? 'schedule' : 'manual');
+                modeEl.innerText = mode === 'schedule' ? 'Schedule' : 'Manual';
+            }
+            const injected = document.getElementById('sched-injected-count');
+            if (injected) injected.innerText = st.injected != null ? st.injected : (data.botPlayersCount || 0);
+            (st.slots || []).forEach((slot) => {
+                const badge = document.getElementById('s' + slot.index + '-status');
+                const row = document.getElementById('sched-slot-row-' + slot.index);
+                if (badge) badge.innerHTML = slot.isActive ? '<span style="color:var(--faded-green); font-weight:bold;">ACTIVE</span>' : 'Idle';
+                if (row) row.style.borderColor = slot.isActive ? 'var(--faded-green)' : 'var(--border)';
+            });
+        }
+        const ramp = document.getElementById('bot-ramp-minutes');
+        if (ramp && document.activeElement !== ramp && settings.botRampMinutes != null) ramp.value = settings.botRampMinutes;
+        if (!isBotInputDirty && settings) {
+            const b1 = settings.botDist1 !== undefined ? settings.botDist1 : 0;
+            const b2 = settings.botDist2 !== undefined ? settings.botDist2 : 0;
+            const b3 = settings.botDist3 !== undefined ? settings.botDist3 : 0;
+            const b4 = settings.botDist4 !== undefined ? settings.botDist4 : 0;
+            ['bot-d1', 'bot-d2', 'bot-d3', 'bot-d4'].forEach((id, i) => {
+                const el = document.getElementById(id);
+                const val = [b1, b2, b3, b4][i];
+                if (el && document.activeElement !== el) el.value = val;
+            });
+            const amt = document.getElementById('instant-bot-amount');
+            const total = b1 + b2 + b3 + b4;
+            if (amt && document.activeElement !== amt) amt.value = total > 0 ? total : '';
+            const preview = document.getElementById('live-inject-preview');
+            if (preview) {
+                if (total > 0) updatePreviewDisplay(b1, b2, b3, b4);
+                else preview.style.display = 'none';
+            }
+        }
+    }
+
+    function toggleMixInput() {
+        const checked = document.querySelector('input[name="bot-master-winner"]:checked');
+        const box = document.getElementById('mix-count-container');
+        if (!checked || !box) return;
+        box.style.display = (checked.value === 'mix' || checked.value === 'mix_real' || checked.value === 'mix_dep') ? 'block' : 'none';
+    }
+    function syncSchedToggleFromSchedules(on) {
+        const el = document.getElementById('bot-schedule-toggle');
+        if (el) el.checked = !!on;
+        toggleScheduleDiv();
+    }
+    function toggleScheduleDiv() {
+        const primary = document.getElementById('bot-schedule-toggle');
+        const twin = document.getElementById('sched-bot-toggle');
+        const source = primary || twin;
+        const on = source ? source.checked : false;
+        const box = document.getElementById('schedule-container');
+        if (box) box.style.display = on ? 'flex' : 'none';
+        if (twin && primary && twin !== document.activeElement) twin.checked = on;
+        const info = document.getElementById('active-schedule-info');
+        if (info && !on) info.style.display = 'none';
+    }
+    function hourToTimeValue(v) {
+        if (v == null || v === '') return '00:00';
+        if (typeof v === 'string' && v.indexOf(':') !== -1) return v.slice(0, 5);
+        const n = Number(v);
+        if (!Number.isFinite(n)) return '00:00';
+        const h = Math.max(0, Math.min(23, Math.floor(n)));
+        return String(h).padStart(2, '0') + ':00';
+    }
+    function readSlotInputs(i) {
+        return {
+            start: (document.getElementById('s' + i + '-start') || {}).value || '00:00',
+            end: (document.getElementById('s' + i + '-end') || {}).value || '00:00',
+            min: parseInt((document.getElementById('s' + i + '-min') || {}).value, 10) || 0,
+            max: parseInt((document.getElementById('s' + i + '-max') || {}).value, 10) || 0
+        };
+    }
+    function fillSlotInputs(i, slot) {
+        if (!slot) return;
+        const start = document.getElementById('s' + i + '-start');
+        const end = document.getElementById('s' + i + '-end');
+        const min = document.getElementById('s' + i + '-min');
+        const max = document.getElementById('s' + i + '-max');
+        if (start) start.value = hourToTimeValue(slot.start);
+        if (end) end.value = hourToTimeValue(slot.end === 24 ? '24:00' : slot.end);
+        if (end && (slot.end === 24 || slot.end === '24' || slot.end === '24:00')) end.value = '23:59';
+        if (min) min.value = slot.min;
+        if (max) max.value = slot.max;
+    }
+    function renderSevenSlotRows() {
+        const host = document.getElementById('seven-slot-rows');
+        if (!host || host.dataset.ready === '1') return;
+        let html = '';
+        for (let i = 1; i <= 7; i++) {
+            html += `<div class="sched-slot-row" id="sched-slot-row-${i}" style="display:grid; grid-template-columns: 70px 1fr 1fr 1fr 1fr 90px; gap:8px; align-items:center; margin-bottom:8px; padding:8px; border-radius:8px; border:1px solid var(--border);">
+                <div style="font-weight:bold; color:white;">Slot ${i}</div>
+                <input type="time" id="s${i}-start" style="margin:0;">
+                <input type="time" id="s${i}-end" style="margin:0;">
+                <input type="number" id="s${i}-min" placeholder="Min" style="margin:0;">
+                <input type="number" id="s${i}-max" placeholder="Max" style="margin:0;">
+                <div id="s${i}-status" style="font-size:11px; color:var(--text-gray);">Idle</div>
+            </div>`;
+        }
+        host.innerHTML = html;
+        host.dataset.ready = '1';
+    }
+    async function loadSchedulesTab() {
+        renderSevenSlotRows();
+        await loadScheduledPosts();
+        loadBotDB();
+        refreshLive();
+    }
+    async function loadScheduledPosts() {
+        if (!pass) return;
+        try {
+            const res = await fetch('/api/admin/scheduled-posts', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass }) });
+            if (res.status === 401) { logoutAdmin(); return; }
+            const data = await res.json();
+            const body = document.getElementById('scheduled-posts-body');
+            if (!body) return;
+            if (!data.success || !data.posts || !data.posts.length) {
+                body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:gray;">No scheduled posts.</td></tr>';
+                return;
+            }
+            body.innerHTML = data.posts.map((p) => `<tr>
+                <td>${p.eatLabel || (p.eatDate + ' ' + p.eatTime)}</td>
+                <td style="max-width:280px; white-space:pre-wrap;">${(p.text || '').replace(/</g,'&lt;')}</td>
+                <td style="color:${p.status === 'sent' ? 'var(--faded-green)' : 'var(--gold)'};">${p.status}</td>
+                <td>${p.status === 'queued' ? `<button class="btn-sm btn-red" type="button" onclick="deleteScheduledPost('${p.id}')">Delete</button>` : ''}</td>
+            </tr>`).join('');
+        } catch (e) {}
+    }
+    async function saveScheduledPost() {
+        const textEl = document.getElementById('sched-post-text');
+        const dateEl = document.getElementById('sched-post-date');
+        const timeEl = document.getElementById('sched-post-time');
+        if (!textEl || !dateEl || !timeEl) return;
+        try {
+            const res = await fetch('/api/admin/schedule-post', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, text: textEl.value, eatDate: dateEl.value, eatTime: timeEl.value }) });
+            if (res.status === 401) { logoutAdmin(); return; }
+            const data = await res.json();
+            if (data.success) {
+                textEl.value = '';
+                loadScheduledPosts();
+                alert('✅ Announcement queued for ' + (data.post.eatLabel || dateEl.value));
+            } else {
+                alert(data.message || 'Failed to queue post');
+            }
+        } catch (e) { alert('Network error'); }
+    }
+    async function deleteScheduledPost(id) {
+        const res = await fetch('/api/admin/delete-scheduled-post', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, id }) });
+        if (res.status === 401) { logoutAdmin(); return; }
+        loadScheduledPosts();
+    }
+    function debounceSearch(func, delay) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(func, delay || 600);
+    }
+    function searchBots() {
+        clearTimeout(botSearchTimer);
+        botSearchTimer = setTimeout(function () { loadBotDB(1); }, 250);
+    }
+    function escBot(value) {
+        return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    }
+    function jsBotArg(value) {
+        return String(value == null ? '' : value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+    function renderPagination(containerId, totalItems, currentPage, funcName) {
+        const size = funcName === 'loadHistoryPage' ? historyLimitPerPage : 50;
+        const totalPages = Math.ceil(totalItems / size);
+        const cont = document.getElementById(containerId);
+        if (!cont) return;
+        if (totalPages <= 1) { cont.innerHTML = ''; return; }
+        cont.innerHTML = `
+            <button class="page-btn" type="button" onclick="${funcName}(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>
+            <span class="page-info">Page ${currentPage} of ${totalPages}<br>${totalItems} total</span>
+            <button class="page-btn" type="button" onclick="${funcName}(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+        `;
+    }
+
+    async function loadBotDB(page) {
+        if (!pass) return;
+        const refreshSettings = page == null;
+        if (page) p_bots = page;
+        const searchEl = document.getElementById('search-bot');
+        const search = searchEl ? searchEl.value : '';
+        try {
+            const res = await fetch('/api/admin/bots-list', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, page: p_bots, limit: 50, search: search }) });
+            if (res.status === 401) { logoutAdmin(); return; }
+            const data = await res.json();
+            if (data.success) {
+                const html = (data.bots || []).map((b) => {
+                    const d = new Date(b.lastPlayed || 0);
+                    const dp = d.getTime() === 0 ? 'Never Played' : d.toLocaleString();
+                    const safeName = escBot(b.name || 'Unknown');
+                    const safePhone = escBot(b.phone);
+                    const argName = jsBotArg(b.name || 'Unknown');
+                    const argPhone = jsBotArg(b.phone);
+                    const safeId = jsBotArg(b._id);
+                    const isLive = (window.activeBotPhones || []).includes(b.phone);
+                    let statusBadge = '';
+                    if (isLive) statusBadge = '<span class="badge bg-approved">ON (Active)</span>';
+                    else if (b.isActive !== false) statusBadge = '<span class="badge" style="background:#475569; color:white;">NO ACTIVE</span>';
+                    else statusBadge = '<span class="badge bg-rejected">OFF (Disabled)</span>';
+                    return `<tr>
+                        <td style="font-weight:800; color:var(--cyan);">${safeName}</td>
+                        <td class="bot-phone-cell" style="font-family:monospace;">${safePhone}</td>
+                        <td class="bot-status-cell" data-base-active="${b.isActive !== false}">${statusBadge}</td>
+                        <td style="font-weight:800; color:var(--gold);">${b.cardsCount || 1} Cards</td>
+                        <td>${dp}</td>
+                        <td>
+                            <button class="btn-sm btn-blue" type="button" onclick="openEditBotModal('${safeId}', '${argName}', '${argPhone}', ${b.cardsCount || 1}, ${b.isActive !== false})">Edit</button>
+                            <button class="btn-sm btn-red" type="button" onclick="deleteBot('${safeId}')">Delete</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+                document.getElementById('bots-body').innerHTML = html || '<tr><td colspan="6">No bots on this page.</td></tr>';
+                renderPagination('pag-bots', data.total || 0, data.page || p_bots, 'loadBotDB');
+            }
+            if (data.success && refreshSettings && data.settings) {
+                const master = document.getElementById('bot-master-toggle');
+                if (master) master.checked = data.settings.isBotSystemActive;
+                const radios = document.getElementsByName('bot-master-winner');
+                for (const r of radios) { if (r.value === data.settings.botWinnerForce) r.checked = true; }
+                const mixCount = document.getElementById('mix-bot-count');
+                if (mixCount) mixCount.value = data.settings.mixBotCount || 1;
+                toggleMixInput();
+                const scheduleToggle = document.getElementById('bot-schedule-toggle') || document.getElementById('sched-bot-toggle');
+                if (scheduleToggle && document.activeElement !== scheduleToggle) scheduleToggle.checked = !!data.settings.isBotScheduleActive;
+                toggleScheduleDiv();
+                renderSevenSlotRows();
+                for (let i = 1; i <= 7; i++) fillSlotInputs(i, data.settings['botSchedule' + i]);
+                const rampInput = document.getElementById('bot-ramp-minutes');
+                if (rampInput && document.activeElement !== rampInput) rampInput.value = data.settings.botRampMinutes != null ? data.settings.botRampMinutes : 30;
+                scheduleSlotsReady = true;
+            }
+        } catch (e) { console.log(e); }
+    }
+
+    async function saveBotMasterSettings() {
+        let isActive = document.getElementById('bot-master-toggle').checked;
+        let force = 'bots';
+        const radios = document.getElementsByName('bot-master-winner');
+        for (const r of radios) { if (r.checked) force = r.value; }
+        const mixCount = parseInt(document.getElementById('mix-bot-count').value, 10) || 1;
+        let d1 = parseInt(document.getElementById('bot-d1').value, 10) || 0;
+        let d2 = parseInt(document.getElementById('bot-d2').value, 10) || 0;
+        let d3 = parseInt(document.getElementById('bot-d3').value, 10) || 0;
+        let d4 = parseInt(document.getElementById('bot-d4').value, 10) || 0;
+        if (d1 === 0 && d2 === 0 && d3 === 0 && d4 === 0) { d1 = 5; d2 = 4; d3 = 3; d4 = 3; }
+        renderSevenSlotRows();
+        const scheduleToggle = document.getElementById('bot-schedule-toggle') || document.getElementById('sched-bot-toggle');
+        const slots = {};
+        if (scheduleSlotsReady && document.getElementById('s1-start')) {
+            for (let i = 1; i <= 7; i++) slots['botSchedule' + i] = readSlotInputs(i);
+        }
+        const rampEl = document.getElementById('bot-ramp-minutes');
+        const payload = {
+            adminPass: pass,
+            isBotSystemActive: isActive,
+            botWinnerForce: force,
+            mixBotCount: mixCount,
+            botDist1: d1,
+            botDist2: d2,
+            botDist3: d3,
+            botDist4: d4,
+            isBotScheduleActive: scheduleToggle ? !!scheduleToggle.checked : !!(sysSettings && sysSettings.isBotScheduleActive),
+            ...slots
+        };
+        if (rampEl && scheduleSlotsReady) payload.botRampMinutes = Math.max(1, Math.min(180, parseInt(rampEl.value, 10) || 30));
+        try {
+            const res = await fetch('/api/admin/bot-master-update-v2', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(payload)
+            });
+            if (res.status === 401) { logoutAdmin(); return; }
+            const data = await res.json();
+            if (data.success) {
+                isBotInputDirty = false;
+                alert('✅ Bot Master Settings & Schedule Saved!');
+                loadBotDB();
+                refreshLive();
+            } else alert('❌ Error saving bot settings');
+        } catch (e) { alert('Network Error'); }
+    }
+
+    function openEditBotModal(id, name, phone, cards, isActive) {
+        document.getElementById('eb-id').value = id;
+        document.getElementById('eb-name').value = name;
+        document.getElementById('eb-phone').value = phone;
+        document.getElementById('eb-cards').value = cards;
+        document.getElementById('eb-active').checked = isActive;
+        document.getElementById('edit-bot-modal').style.display = 'flex';
+    }
+    async function saveBotEdit() {
+        const payload = {
+            adminPass: pass,
+            botId: document.getElementById('eb-id').value,
+            name: document.getElementById('eb-name').value,
+            phone: document.getElementById('eb-phone').value,
+            cardsCount: Number(document.getElementById('eb-cards').value),
+            isActive: document.getElementById('eb-active').checked
+        };
+        try {
+            const res = await fetch('/api/admin/bot-edit', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('edit-bot-modal').style.display = 'none';
+                loadBotDB();
+            } else alert('❌ ' + data.message);
+        } catch (e) { alert('Error saving bot.'); }
+    }
+    async function addCustomBots() {
+        const amt = document.getElementById('add-bot-amount').value;
+        if (!amt || amt <= 0) return alert('እባክዎ ትክክለኛ ቁጥር ያስገቡ!');
+        if (!confirm(`እርግጠኛ ነዎት ${amt} አዲስ ቦቶችን መጨመር ይፈልጋሉ?`)) return;
+        try {
+            const res = await fetch('/api/admin/bot-add-custom', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, amount: Number(amt) }) });
+            const data = await res.json();
+            if (data.success) {
+                alert('✅ ' + data.message);
+                document.getElementById('add-bot-amount').value = '';
+                loadBotDB();
+            } else alert('❌ ስህተት አጋጥሟል!');
+        } catch (e) { alert('Network Error.'); }
+    }
+    async function randomizeAllBotNames() {
+        const limitInput = document.getElementById('rename-bot-limit').value;
+        const search = (document.getElementById('search-bot') || {}).value || '';
+        const styleAt = !!document.getElementById('bot-style-at').checked;
+        const styleCaps = !!document.getElementById('bot-style-caps').checked;
+        const styleHyphen = !!document.getElementById('bot-style-hyphen').checked;
+        const styleNote = (styleAt || styleCaps || styleHyphen) ? ' About 10% of those names use the selected style (@ prefix, ALL CAPS, or Hyphen).' : '';
+        const msg = limitInput
+            ? `⚠️ The first ${limitInput} bots on this list will each get a different inactive user name. No name is reused. Player accounts are not changed.${styleNote}`
+            : `⚠️ Each bot on this list will get a different inactive user name. No name is reused. Player accounts are not changed.${styleNote}`;
+        if (!confirm(msg)) return;
+        try {
+            const res = await fetch('/api/admin/bots-rename-all', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ adminPass: pass, limit: Number(limitInput) || 0, search: search, styleAt: styleAt, styleCaps: styleCaps, styleHyphen: styleHyphen })
+            });
+            const data = await res.json();
+            if (data.success) { await loadBotDB(1); alert(data.message); }
+            else alert('❌ ስህተት ተፈጥሯል!');
+        } catch (e) { alert('Network Error'); }
+    }
+    async function deleteBot(id) {
+        if (!confirm('⚠️ እርግጠኛ ነዎት ይህን ቦት ማጥፋት ይፈልጋሉ?')) return;
+        try {
+            const res = await fetch('/api/admin/delete-bot', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, id: id }) });
+            const data = await res.json();
+            if (data.success) loadBotDB();
+            else alert('❌ ማጥፋት አልተቻለም!');
+        } catch (e) { alert('Network Error'); }
+    }
+    function previewLiveInject() {
+        isBotInputDirty = true;
+        const amt = parseInt(document.getElementById('instant-bot-amount').value, 10);
+        const previewBox = document.getElementById('live-inject-preview');
+        if (!amt || amt <= 0) {
+            document.getElementById('bot-d1').value = 0;
+            document.getElementById('bot-d2').value = 0;
+            document.getElementById('bot-d3').value = 0;
+            document.getElementById('bot-d4').value = 0;
+            previewBox.style.display = 'none';
+            return;
+        }
+        let base1 = parseInt(document.getElementById('bot-d1').value, 10) || 0;
+        let base2 = parseInt(document.getElementById('bot-d2').value, 10) || 0;
+        let base3 = parseInt(document.getElementById('bot-d3').value, 10) || 0;
+        let base4 = parseInt(document.getElementById('bot-d4').value, 10) || 0;
+        let totalRatio = base1 + base2 + base3 + base4;
+        if (totalRatio === 0) {
+            base1 = (sysSettings && sysSettings.botDist1 !== undefined) ? sysSettings.botDist1 : 0;
+            base2 = (sysSettings && sysSettings.botDist2 !== undefined) ? sysSettings.botDist2 : 0;
+            base3 = (sysSettings && sysSettings.botDist3 !== undefined) ? sysSettings.botDist3 : 0;
+            base4 = (sysSettings && sysSettings.botDist4 !== undefined) ? sysSettings.botDist4 : 0;
+            totalRatio = base1 + base2 + base3 + base4;
+        }
+        if (totalRatio === 0) { base1 = 5; base2 = 4; base3 = 3; base4 = 3; totalRatio = 15; }
+        const c1 = Math.round((base1 / totalRatio) * amt);
+        const c2 = Math.round((base2 / totalRatio) * amt);
+        const c3 = Math.round((base3 / totalRatio) * amt);
+        const c4 = Math.max(0, amt - (c1 + c2 + c3));
+        document.getElementById('bot-d1').value = Math.max(0, c1);
+        document.getElementById('bot-d2').value = Math.max(0, c2);
+        document.getElementById('bot-d3').value = Math.max(0, c3);
+        document.getElementById('bot-d4').value = Math.max(0, c4);
+        updatePreviewDisplay(c1, c2, c3, c4);
+    }
+    function updateFromDistribution() {
+        isBotInputDirty = true;
+        const c1 = parseInt(document.getElementById('bot-d1').value, 10) || 0;
+        const c2 = parseInt(document.getElementById('bot-d2').value, 10) || 0;
+        const c3 = parseInt(document.getElementById('bot-d3').value, 10) || 0;
+        const c4 = parseInt(document.getElementById('bot-d4').value, 10) || 0;
+        const totalBots = c1 + c2 + c3 + c4;
+        const amtInput = document.getElementById('instant-bot-amount');
+        if (document.activeElement !== amtInput) amtInput.value = totalBots > 0 ? totalBots : '';
+        if (totalBots > 0) updatePreviewDisplay(c1, c2, c3, c4);
+        else document.getElementById('live-inject-preview').style.display = 'none';
+    }
+    function updatePreviewDisplay(c1, c2, c3, c4) {
+        const previewBox = document.getElementById('live-inject-preview');
+        const totalTix = (c1 * 1) + (c2 * 2) + (c3 * 3) + (c4 * 4);
+        const tixPrice = sysSettings ? sysSettings.ticketPrice : 10;
+        const profitPerc = sysSettings ? sysSettings.adminProfitPercent : 15;
+        const totalBet = totalTix * tixPrice;
+        const jackpotGen = totalBet * ((100 - profitPerc) / 100);
+        previewBox.innerHTML = `
+            <div style="color:var(--gold); font-weight:800; margin-bottom:5px;">አጠቃላይ የገንዘብ እና ካርቴላ ስሌት</div>
+            • የሚገቡ ቦቶች: <b>${c1 + c2 + c3 + c4}</b><br>
+            • አጠቃላይ ካርቴላ: <b>${totalTix}</b><br>
+            • አጠቃላይ የገንዘብ መጠን: <b style="color:var(--cyan);">${totalBet.toLocaleString()} ETB</b><br>
+            • ለጌሙ የሚጨምረው ጃክፖት: <b style="color:var(--faded-green);">+${jackpotGen.toLocaleString()} ETB</b>`;
+        previewBox.style.display = 'block';
+    }
+    async function injectLiveBots() {
+        const d1 = parseInt(document.getElementById('bot-d1').value, 10) || 0;
+        const d2 = parseInt(document.getElementById('bot-d2').value, 10) || 0;
+        const d3 = parseInt(document.getElementById('bot-d3').value, 10) || 0;
+        const d4 = parseInt(document.getElementById('bot-d4').value, 10) || 0;
+        const total = d1 + d2 + d3 + d4;
+        if (total <= 0) return alert('እባክዎ ትክክለኛ የቦት ብዛት ያስገቡ (ከ 0 በላይ)!');
+        if (!confirm(`⚠️ እርግጠኛ ነዎት ${total} ቦቶችን አሁን እየቆጠረ ወዳለው ጌም ማስገባት ይፈልጋሉ?`)) return;
+        try {
+            const res = await fetch('/api/admin/inject-live-bots', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ adminPass: pass, amount: total, dist1: d1, dist2: d2, dist3: d3, dist4: d4 })
+            });
+            const data = await res.json();
+            alert(data.message || 'Done');
+            if (data.success) { isBotInputDirty = false; refreshLive(); }
+        } catch (e) { alert('❌ የኔትወርክ ስህተት (Network Error).'); }
+    }
+
+    function handleRowClick(e, type, val) {
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('button') || e.target.closest('a')) return;
+        if (e.ctrlKey) {
+            e.preventDefault();
+            const cb = document.querySelector(`.chk-${type}[value="${val}"]`);
+            if (cb) { cb.checked = !cb.checked; toggleIndiv(cb, type); }
+        }
+    }
+    function toggleSelectAll(type) {
+        const isChecked = document.getElementById('chk-all-' + type).checked;
+        document.querySelectorAll('.chk-' + type).forEach((cb) => {
+            cb.checked = isChecked;
+            if (isChecked) selHistory.add(cb.value); else selHistory.delete(cb.value);
+            const row = cb.closest('tr');
+            if (row) row.classList.toggle('selected', isChecked);
+        });
+        updateBulkUI();
+    }
+    function toggleIndiv(cb) {
+        const row = cb.closest('tr');
+        if (cb.checked) { selHistory.add(cb.value); if (row) row.classList.add('selected'); }
+        else { selHistory.delete(cb.value); if (row) row.classList.remove('selected'); }
+        updateBulkUI();
+    }
+    function updateBulkUI() {
+        const bar = document.getElementById('bulk-history');
+        const cnt = document.getElementById('sel-count-history');
+        if (!bar || !cnt) return;
+        if (selHistory.size > 0) { bar.style.display = 'flex'; cnt.innerText = selHistory.size + ' Selected'; }
+        else bar.style.display = 'none';
+    }
+    async function loadHistoryPage(page) {
+        if (!pass) return;
+        p_hist = page;
+        const searchEl = document.getElementById('search-history');
+        const search = searchEl ? searchEl.value.trim() : '';
+        const res = await fetch('/api/admin/history', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, page: p_hist, limit: historyLimitPerPage, search: search }) });
+        if (res.status === 401) { logoutAdmin(); return; }
+        const data = await res.json();
+        if (!data.success) return;
+        loadedGames = data.history;
+        selHistory.clear();
+        let html = '';
+        let lastDateStr = '';
+        data.history.forEach((h, idx) => {
+            const isChecked = selHistory.has(h._id) ? 'checked' : '';
+            const rowClass = isChecked ? 'selectable-row selected' : 'selectable-row';
+            const d = new Date(h.date);
+            const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            if (dateStr !== lastDateStr) {
+                html += `<tr style="pointer-events:none;"><td colspan="9" style="background: rgba(6, 182, 212, 0.15); color: var(--cyan); text-align: center; font-weight: 900; font-size: 14px;">📅 ${dateStr}</td></tr>`;
+                lastDateStr = dateStr;
+            }
+            const phonesArr = (h.winnerPhone || '').toString().split(',').map((p) => p.trim()).filter((p) => p);
+            const phonesLinks = phonesArr.map((p) => {
+                const pData = h.playersData ? h.playersData.find((pd) => pd.phone === p) : null;
+                if (pData && pData.isBot) return `<span style="color:gray; font-style:italic; display:block; padding: 2px 0;">🤖 Bot (${p})</span>`;
+                return `<a href="#" style="color:var(--cyan); text-decoration:none; font-weight:bold; display:block; padding: 2px 0;" onclick="fetchAndShowUserInfo('${p}'); return false;">${p}</a>`;
+            }).join('');
+            const txButtons = phonesArr.map((p) => {
+                const pData = h.playersData ? h.playersData.find((pd) => pd.phone === p) : null;
+                if (!pData || !pData.isBot) return `<button class="btn-sm btn-purple" type="button" onclick="fetchAndShowUserInfo('${p}')">TXs (${p})</button>`;
+                return '';
+            }).join('');
+            html += `<tr class="${rowClass}" onclick="handleRowClick(event, 'history', '${h._id}')">
+                <td><input type="checkbox" class="chk-history" value="${h._id}" ${isChecked} onchange="toggleIndiv(this, 'history')"></td>
+                <td>${d.toLocaleTimeString()}</td>
+                <td style="color:var(--purple); font-weight:bold;">#${h.gameId}</td>
+                <td>${escBot(h.winnerName)}</td>
+                <td>${phonesLinks}</td>
+                <td style="color:var(--cyan); font-weight:bold;">#${escBot(h.ticketId || 'N/A')}</td>
+                <td style="color:var(--faded-green); font-weight:bold;">+${Number(h.prize).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td style="color:var(--blue); font-weight:bold;">+${Number(h.adminProfit || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;">${txButtons}</div>
+                    <button class="btn-sm btn-blue" type="button" onclick="viewHistory(${idx})">Cards</button>
+                    <button class="btn-sm btn-red" type="button" onclick="singleDelete('history', '${h._id}')">Delete</button>
+                </td>
+            </tr>`;
+        });
+        document.getElementById('game-history-body').innerHTML = html || '<tr><td colspan="9">No history found.</td></tr>';
+        const chk = document.getElementById('chk-all-history');
+        if (chk) chk.checked = false;
+        renderPagination('pag-history', data.total, p_hist, 'loadHistoryPage');
+        updateBulkUI();
+    }
+    async function singleDelete(type, id) {
+        if (type !== 'history') return;
+        if (!confirm('Are you sure you want to delete this record?')) return;
+        await fetch('/api/admin/delete-history', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, ids: [id] }) });
+        loadHistoryPage(p_hist);
+    }
+    async function bulkDelete(type) {
+        if (type !== 'history' || selHistory.size === 0) return;
+        if (!confirm(`⚠️ Are you sure you want to delete ${selHistory.size} records? This cannot be undone.`)) return;
+        const bulkBtn = document.querySelector('#bulk-history .bulk-delete-btn');
+        if (bulkBtn) bulkBtn.innerText = 'Deleting...';
+        await fetch('/api/admin/delete-history', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, ids: Array.from(selHistory) }) });
+        if (bulkBtn) bulkBtn.innerText = 'Delete selected';
+        loadHistoryPage(p_hist);
+    }
+    async function deleteOldGames() {
+        if (!confirm('⚠️ እርግጠኛ ነዎት ከ 6 ሰዓት በፊት የተጫወቱትን ጌሞች ከዳታቤዝ ላይ ሙሉ በሙሉ ማጥፋት ይፈልጋሉ? (የቅርብ 6 ሰዓቶቹ አይጠፉም)')) return;
+        try {
+            await fetch('/api/admin/delete-old-history', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass }) });
+            alert('✅ ከ 6 ሰዓት በፊት የነበሩ ጌሞች በተሳካ ሁኔታ ጠፍተዋል።');
+            loadHistoryPage(1);
+        } catch (e) { alert('❌ ማጥፋት አልተቻለም።'); }
+    }
+
+    function calledHasNumber(called, val) {
+        if (val === 'FREE' || val === 'free') return true;
+        const n = Number(val);
+        return (called || []).some((x) => Number(x) === n);
+    }
+    function adminCellMarked(ticket, c, r, called) {
+        if (c === 2 && r === 2) return true;
+        const marks = ticket && (ticket.marks || ticket.marksObj);
+        if (marks && marks[c] && Number(marks[c][r])) return true;
+        const val = ticket && ticket.grid && ticket.grid[c] ? ticket.grid[c][r] : null;
+        return calledHasNumber(called, val);
+    }
+    function adminTicketClosed(ticket, winningIds) {
+        if (!ticket) return false;
+        if (ticket.isClosed || ticket.status === 'won' || ticket.status === 'closed') return true;
+        const id = ticket.id != null ? String(ticket.id) : '';
+        return !!(winningIds || []).some((winId) => String(winId) === id);
+    }
+    function renderAdminTicketCard(ticket, called, winningIds, heading) {
+        const closed = adminTicketClosed(ticket, winningIds);
+        const ready = !closed && ticket && ticket.patternComplete;
+        const badge = closed
+            ? '<span class="badge bg-win" style="margin-left:8px;">CLOSED / WON</span>'
+            : (ready ? '<span class="badge bg-pending" style="margin-left:8px;">LIVE PATTERN</span>' : '<span class="badge bg-pending" style="margin-left:8px;">OPEN</span>');
+        let html = `<h4 style="margin:10px 0 5px 0; color:${heading && heading.color ? heading.color : 'var(--purple)'}; font-size:${heading && heading.size ? heading.size : '16px'};">${heading && heading.text ? heading.text : ('Ticket #' + (ticket.id || ''))} ${badge}</h4>`;
+        html += `<div class="grid-preview${closed ? ' card-closed' : ''}">`;
+        const grid = ticket.grid || [];
+        for (let r = 0; r < 5; r++) {
+            for (let c = 0; c < 5; c++) {
+                const num = grid[c] ? grid[c][r] : '';
+                const marked = adminCellMarked(ticket, c, r, called);
+                html += `<div class="${marked ? 'highlight' : ''}">${(c === 2 && r === 2) ? 'FREE' : num}</div>`;
+            }
+        }
+        html += '</div>';
+        return html;
+    }
+    function renderLiveRoundCards(live) {
+        const wrap = document.getElementById('ui-live-wrap');
+        const grid = document.getElementById('ui-live-grid');
+        const meta = document.getElementById('ui-live-meta');
+        if (!wrap || !grid) return;
+        const cards = live && live.cards ? live.cards : [];
+        if (!live || !cards.length) { wrap.style.display = 'none'; grid.innerHTML = ''; if (meta) meta.innerText = ''; return; }
+        const nums = live.calledNumbers || [];
+        const tail = nums.slice(-8).join(', ');
+        if (meta) meta.innerText = 'Round #' + (live.gameId || '') + ' · ' + (live.gameState || '') + ' · ' + nums.length + ' called' + (tail ? ' · latest ' + tail : '');
+        grid.innerHTML = cards.map((ticket) => renderAdminTicketCard(ticket, nums, [], { text: 'Live Ticket #' + (ticket && ticket.id ? ticket.id : ''), color: 'var(--gold)' })).join('');
+        wrap.style.display = 'block';
+    }
+    async function viewHistory(index) {
+        let h = loadedGames[index];
+        if (h && h._id && (!h.calledNumbers || !h.playersData)) {
+            try {
+                const res = await fetch('/api/admin/history-detail', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, id: h._id }) });
+                const data = await res.json();
+                if (data.success && data.game) { loadedGames[index] = data.game; h = data.game; }
+            } catch (e) {}
+        }
+        const called = h.calledNumbers || [];
+        const ticketIds = (h.ticketId || '').toString().split(',').map((id) => id.trim());
+        const grids = [];
+        const cardById = {};
+        (h.cards || []).forEach((c) => { if (c && c.id != null) cardById[String(c.id)] = c; });
+        if (h.playersData && h.playersData.length > 0) {
+            h.playersData.forEach((p) => {
+                if (!p.ticketsData) return;
+                p.ticketsData.forEach((t) => {
+                    if (ticketIds.includes(t.id.toString())) {
+                        const snap = cardById[String(t.id)];
+                        grids.push({
+                            id: t.id,
+                            grid: (snap && snap.grid) || t.grid,
+                            marks: t.marks || t.marksObj || (snap && (snap.marks || snap.marksObj)),
+                            marksObj: t.marksObj || t.marks || (snap && (snap.marksObj || snap.marks)),
+                            isClosed: !!(t.isClosed || (snap && snap.isClosed)),
+                            status: t.status || (snap && snap.status) || '',
+                            name: p.name,
+                            phone: p.phone
+                        });
+                    }
+                });
+            });
+        }
+        if (grids.length === 0 && h.winningGrid && h.winningGrid.length > 0) grids.push({ id: ticketIds[0] || 'N/A', grid: h.winningGrid, name: h.winnerName, phone: h.winnerPhone });
+        document.getElementById('m-called').innerText = '✅ Called: ' + called.join(', ');
+        let fullHtml = '';
+        grids.forEach((gObj, i) => {
+            fullHtml += renderAdminTicketCard(gObj, called, ticketIds, { text: `🏆 ${gObj.name} (Card #${gObj.id})`, color: 'var(--gold)', size: '14px' });
+            if (i !== grids.length - 1) fullHtml += '<hr style="border-color: var(--border); margin:15px 0;">';
+        });
+        document.getElementById('m-grid').innerHTML = fullHtml;
+        document.getElementById('history-modal').style.display = 'flex';
+    }
+    function actualWonAmount(u, aggWin) {
+        const recorded = Math.max(0, Number(u && u.totalWon) || 0);
+        const txWon = Number(aggWin);
+        if (Number.isFinite(txWon)) return Math.max(recorded, txWon);
+        return recorded;
+    }
+    function actualTicketCount(u) {
+        if (!u) return 0;
+        return Math.max(0, Number(u.totalTicketsBought) || 0);
+    }
+    async function fetchAndShowUserInfo(phone) {
+        renderLiveRoundCards(null);
+        try {
+            const uRes = await fetch('/api/getUser/' + phone);
+            const uData = await uRes.json();
+            if (!uData.success) return alert('User not found.');
+            const u = uData.user;
+            document.getElementById('ui-name').innerText = u.name;
+            document.getElementById('ui-phone').innerText = u.phone;
+            document.getElementById('ui-main').innerText = Number(u.mainBalance).toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('ui-play').innerText = Number(u.playBalance).toLocaleString('en-US', {minimumFractionDigits: 2});
+            const tRes = await fetch('/api/admin/user-details', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ adminPass: pass, phone }) });
+            const tData = await tRes.json();
+            if (tData.success) {
+                document.getElementById('ui-tot-dep').innerText = Number(tData.aggDep || u.totalDeposited || 0).toLocaleString();
+                document.getElementById('ui-tot-wit').innerText = Number(tData.aggWit || u.totalWithdrawn || 0).toLocaleString();
+                document.getElementById('ui-tot-bon').innerText = Number((tData.aggBonus || 0) + (u.inviteBonusEarned || 0)).toLocaleString();
+                document.getElementById('ui-tot-won').innerText = actualWonAmount(u, tData.aggWin).toLocaleString('en-US', {minimumFractionDigits: 2});
+                document.getElementById('ui-tot-tix').innerText = actualTicketCount(u).toLocaleString('en-US');
+                const generalTxs = (tData.txs || []).filter((t) => {
+                    const kind = String(t.type || '').toLowerCase().replace(/[\s-]+/g, '_');
+                    return kind === 'deposit' || kind === 'withdraw' || kind === 'win';
+                });
+                document.getElementById('ui-tx-body').innerHTML = generalTxs.map((t) => {
+                    const statusColor = t.status === 'Approved' ? 'color:var(--faded-green);' : (t.status === 'Pending' ? 'color:var(--orange);' : 'color:var(--red);');
+                    const bonusDis = (t.bonusGiven && t.bonusGiven > 0) ? `<br><span style="color:var(--gold); font-size:10px;">+${t.bonusGiven} Bonus</span>` : '';
+                    const typeDisplay = t.type === 'win' ? '<span class="badge bg-win">WIN</span>' : String(t.type || '').toUpperCase();
+                    return `<tr><td>${new Date(t.date).toLocaleString()}</td><td>${typeDisplay}</td><td>${t.method}</td><td>${Number(t.amount).toLocaleString('en-US', {minimumFractionDigits: 2})} ${bonusDis}</td><td style="${statusColor}">${t.status}</td></tr>`;
+                }).join('') || '<tr><td colspan="5">No transactions found.</td></tr>';
+                const bets = [];
+                (tData.bets && tData.bets.active ? tData.bets.active : []).forEach((b) => bets.push(b));
+                (tData.bets && tData.bets.completed ? tData.bets.completed : []).forEach((b) => bets.push(b));
+                renderLiveRoundCards(tData.liveRound);
+                document.getElementById('ui-bets-body').innerHTML = bets.length ? bets.map((b) => {
+                    const outcome = (b.status === 'locked' || b.status === 'active') ? ('Active / Locked' + (b.live ? ' · live grid' : '')) : (b.won ? `Won ${Number(b.payout || 0).toLocaleString()} ETB` : 'Lost');
+                    return `<tr><td>#${b.gameId}</td><td>${(b.cardIds || []).join(', ') || '-'}</td><td>${b.status}</td><td>${outcome}</td></tr>`;
+                }).join('') : '<tr><td colspan="4">No bet slips found.</td></tr>';
+            }
+            document.getElementById('user-info-modal').style.display = 'flex';
+        } catch (e) { alert('Error fetching user data.'); }
+    }
+    async function submitManualDeposit() {
+        const phone = document.getElementById('ui-phone').innerText;
+        const txRef = document.getElementById('man-txref').value.trim();
+        const amount = document.getElementById('man-amount').value;
+        const bank = document.getElementById('man-bank').value;
+        if (!txRef || !amount) return alert('❌ እባክዎ ደረሰኝ ቁጥር እና የብር መጠን ያስገቡ!');
+        if (!confirm(`እርግጠኛ ነዎት ለስልክ ${phone} በደረሰኝ ቁጥር ${txRef} የ ${amount} ብር መሙላት ይፈልጋሉ?`)) return;
+        try {
+            const res = await fetch('/api/admin/manual-receipt-deposit', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ adminPass: pass, phone: phone, txRef: txRef, amount: amount, bank: bank })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('✅ ' + data.message);
+                document.getElementById('man-txref').value = '';
+                document.getElementById('man-amount').value = '';
+                fetchAndShowUserInfo(phone);
+            } else alert('❌ ' + data.message);
+        } catch (e) { alert('❌ የኔትወርክ ስህተት አጋጥሟል!'); }
+    }
+</script>
+</body>
+</html>

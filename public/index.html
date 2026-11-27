@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AMAR BINGO - LIVE ULTIMATE</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --bg-dark: #0a0f18; --panel: #111827; --faded-green: #4ade80; --border-color: #1e293b; --orange: #ea580c; --text-gray: #94a3b8; --white: #ffffff; --blue: #3b82f6; --cyan: #38bdf8; --gold: #fbbf24; --purple: #a855f7; --red: #ef4444;}
+        body { background-color: var(--bg-dark); color: var(--white); font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
+        .page { display: none; padding: 10px; animation: fadeIn 0.3s; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Auth Modernized */
+        #auth-page.active-page { display: flex !important; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 0; margin: 0; box-sizing: border-box; }
+        .auth-card { background: rgba(10, 15, 24, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 35px 25px; border-radius: 25px; width: 90%; max-width: 360px; text-align: center; border: 1px solid rgba(74, 222, 128, 0.15); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(74, 222, 128, 0.05); }
+        .input-group { margin-bottom: 12px; position: relative; }
+        .auth-input { width: 100%; padding: 14px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.5); color: white; box-sizing: border-box; font-family: inherit; font-size: 14px; transition: 0.3s; }
+        .auth-input:focus { border-color: var(--faded-green); outline: none; box-shadow: 0 0 8px rgba(74,222,128,0.3); background: rgba(0,0,0,0.8); }
+        .ref-input { background: rgba(74, 222, 128, 0.05); border-color: rgba(74, 222, 128, 0.2); }
+        .ref-input::placeholder { color: #6ee7b7; opacity: 0.7; }
+        .auth-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--faded-green), #059669); color: #000; border: none; border-radius: 12px; font-weight: 900; font-size: 15px; cursor: pointer; text-transform: uppercase; transition: 0.2s; box-shadow: 0 4px 15px rgba(74,222,128,0.4);}
+        .auth-btn:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; background: #334155; color: #94a3b8;}
+        .eye-icon { position: absolute; right: 15px; top: 14px; cursor: pointer; font-size: 16px; opacity: 0.7; transition: 0.2s; }
+        .eye-icon:hover { opacity: 1; }
+        
+        /* HIDE NAV & HEADER ON AUTH PAGE */
+        body:has(#auth-page.active-page) #global-header, body:has(#auth-page.active-page) #navbar { display: none !important; }
+
+        /* Header */
+        .top-balance { position: relative; background: transparent; padding: 10px 10px 5px 10px; display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+        .hdr-user-sec { display: flex; align-items: center; gap: 8px; }
+        .hdr-user-sec .icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--blue), var(--purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+        .hdr-user-sec .name { font-size: 12px; font-weight: bold; margin-bottom: 2px; }
+        .hdr-user-sec .phone { font-size: 9px; color: var(--text-gray); }
+        .hdr-wallets-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+        .pill-wallet { background: #0b111a; border: 1px solid #1e293b; border-radius: 12px; padding: 3px 10px; display: flex; justify-content: space-between; align-items: center; min-width: 125px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); box-sizing: border-box;}
+        .pill-wallet span.title { font-size: 8px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;}
+        .pill-wallet span.title.play { color: var(--faded-green); }
+        .pill-wallet span.title.main { color: var(--gold); }
+        .pill-wallet span.amt { color: white; font-size: 11px; font-weight: 900; font-family: monospace;}
+
+        /* Timer Box */
+        .new-timer-box { background: #111521; border: 1px solid rgba(74, 222, 128, 0.4); border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(74, 222, 128, 0.05); }
+        .nt-status { color: #94a3b8; font-size: 10px; font-weight: bold; letter-spacing: 0.5px; }
+        .nt-value { color: white; font-size: 20px; font-weight: 900; font-family: 'Arial Black', sans-serif; letter-spacing: 1px;}
+        #timer { color: #ffffff; text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.4); font-size: 26px; }
+
+        @keyframes pulseClaimFloat {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(251, 191, 36, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); }
+        }
+
+        @keyframes goldPulseBox {
+            0% { box-shadow: 0 0 5px rgba(251, 191, 36, 0.2); border-color: rgba(251, 191, 36, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.8); border-color: rgba(251, 191, 36, 1); transform: scale(1.03); }
+            100% { box-shadow: 0 0 5px rgba(251, 191, 36, 0.2); border-color: rgba(251, 191, 36, 0.4); }
+        }
+        .pulse-bonus-box {
+            animation: goldPulseBox 1.5s infinite alternate;
+            z-index: 2;
+        }
+
+        @keyframes hourglassRock {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-20deg); }
+        }
+        .waiting-hourglass {
+            display: inline-block;
+            animation: hourglassRock 1.2s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        /* Game & Home Page Badge */
+        .live-circle-badge { width: 75px; height: 75px; border-radius: 50%; background: linear-gradient(135deg, #0f172a, rgba(14, 165, 233, 0.2)); border: 2px solid rgba(56, 189, 248, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.6), inset 0 0 15px rgba(56, 189, 248, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .live-indicator { color: #ef4444; font-size: 10px; font-weight: 900; display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+        .live-indicator .dot { width: 6px; height: 6px; background: #ef4444; border-radius: 50%; animation: pulseRed 1.2s infinite; }
+        .jp-amount { color: #38bdf8; font-size: 13px; font-weight: 900; font-family: 'Arial Black', sans-serif; margin-top: 1px;}
+        #game-page .live-circle-badge { width: 90px !important; height: 90px !important; margin: 0 auto; position: relative !important; border-width: 3px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+        #game-page .jp-amount { font-size: 16px !important; }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        .grid-subtitle-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 5px; margin-bottom: 10px; }
+        .gs-left { color: white; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; }
+        .gs-right { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; font-weight: 900; color: var(--faded-green); }
+        .gs-right span.slash { color: #64748b; font-weight: bold; font-size: 13px; margin-left: 3px; }
+        .sel-slot { white-space: nowrap; }
+        .occupied-cards-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.55); color: #7dd3fc; font-size: 11px; font-weight: 800; letter-spacing: 0.2px; white-space: nowrap; line-height: 1.2; }
+        .occupied-cards-pill b { color: #fff; font-size: 13px; font-variant-numeric: tabular-nums; min-width: 1ch; }
+        .occupied-cards-pill.bump b { animation: occupiedBump 0.35s ease; }
+        @keyframes occupiedBump { 0% { transform: scale(1); color: #fff; } 40% { transform: scale(1.28); color: var(--gold); } 100% { transform: scale(1); color: #fff; } }
+        
+        .num-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin: 0 auto; width: fit-content; padding-bottom: 200px; } 
+        .num-btn { width: 30px; height: 30px; background: #0d1117; border: 1px solid var(--border-color); color: var(--text-gray); display: flex; align-items: center; justify-content: center; font-size: 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;}
+        
+        .num-btn.bought-by-me { background: #059669; color: white; border-color: #4ade80; font-weight: bold; box-shadow: 0 0 10px rgba(16,185,129,0.8); }
+        .num-btn.taken { opacity: 0.3; filter: blur(1.5px); background: rgba(255,255,255,0.05); color: #475569; pointer-events: none !important; border-color: transparent;}
+
+        .bet-slip-popup { position: fixed; bottom: 58px; left: 50%; transform: translate(-50%, 150%); width: 100%; max-width: 600px; background: rgba(11, 18, 31, 0.98); backdrop-filter: blur(10px); border-top: 2px solid var(--faded-green); border-radius: 12px 12px 0 0; padding: 8px 12px 10px 12px; box-shadow: 0 -10px 40px rgba(0,0,0,0.9); z-index: 2000; display: flex; flex-direction: column; align-items: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1); box-sizing: border-box; opacity: 0; visibility: hidden; pointer-events: none; }
+        .bet-slip-popup.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; pointer-events: auto; } 
+        
+        .preview-tickets-wrapper { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; margin-bottom: 8px; width: 100%; scrollbar-width: none; min-height: 48px; padding-bottom: 4px; }
+        .preview-tickets-wrapper::-webkit-scrollbar { display: none; }
+        .preview-t-card { background: white; min-width: 85px; flex: 0 0 auto; border-radius: 12px; overflow: hidden; border: 1px solid #cbd5e1; padding: 1px;}
+        .preview-t-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #94a3b8; border: 1px solid #94a3b8;}
+        .preview-t-head { color: white; height: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 7px;}
+        .preview-t-cell { background: #fff; height: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 8px; color: #000;}
+
+        /* Game Page Top Info */
+        .top-info-wrapper { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 5px; flex-shrink: 0; overflow-x: auto; scrollbar-width: none;}
+        .top-info-wrapper::-webkit-scrollbar { display: none; }
+        .top-info-box { flex: 1; min-width: 60px; background: var(--panel); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 4px; text-align: center; }
+        .info-title { color: var(--text-gray); font-size: 10px; margin-bottom: 2px; font-weight: bold;}
+        .info-val { color: white; font-weight: bold; font-size: 14px; }
+        .top-info-box.prize-box { border-color: var(--cyan); box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.2);}
+        .info-title.prize-title { color: var(--cyan); text-shadow: 0 0 5px rgba(56, 189, 248, 0.4); }
+        .info-val.highlight { color: var(--cyan); text-shadow: 0 0 8px rgba(56, 189, 248, 0.8); animation: shineCyan 1.5s infinite alternate; }
+        @keyframes shineCyan { from { text-shadow: 0 0 5px rgba(56, 189, 248, 0.4); } to { text-shadow: 0 0 15px rgba(56, 189, 248, 1), 0 0 25px rgba(255, 255, 255, 0.5); transform: scale(1.02); } }
+
+        /* 🟢 GAME PAGE STYLES 🟢 */
+        #game-page.active-page { display: flex !important; flex-direction: column; height: calc(100svh - 65px); overflow: hidden; padding: 5px; box-sizing: border-box; margin: 0; max-width: 100%; }
+        #game-page .game-layout-container { flex-grow: 1; display: flex; min-height: 0; align-items: stretch; gap: 2%; }
+        
+        .master-board-wrapper { width: 45%; flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; min-height: 0;}
+        .mb-board { height: 100%; display: grid; grid-template-rows: auto repeat(15, minmax(0, 1fr)); grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #1e293b; border: 1px solid #1e293b; border-radius: 4px; width: 100%; }
+        .mb-head { background: var(--faded-green); color: black; display: flex; align-items: center; justify-content: center; font-size: 2vh; font-weight: 900;}
+        .mb-cell { background: #111827; display: flex; align-items: center; justify-content: center; font-size: 2vh; font-weight: bold; transition: 0.2s; min-height: 0; overflow: hidden;}
+        
+        .mb-cell.called { background: #22c55e !important; color: #ffffff !important; font-weight: 900; border: 1px solid #16a34a; box-shadow: inset 0 0 5px rgba(0,0,0,0.3);}
+        .mb-cell.current { background: #059669 !important; color: white !important; font-weight: 900; z-index: 2; transform: scale(1.05); box-shadow: 0 0 15px #10b981; border: 2px solid white;}
+        
+        #game-page .right-panel-stack { width: 53%; flex: 0 0 53%; display: flex; flex-direction: column; height: 100%; justify-content: space-between; gap: 5px; position: relative;}
+        .caller-box { height: 15%; min-height: 65px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #111827, #0f172a); border-radius: 8px; border: 1px solid rgba(74, 222, 128, 0.4); flex-shrink: 0; position: relative;}
+        .caller-ball { width: 8.5vh; height: 8.5vh; border-radius: 50%; background: #fff; color: #000; display: flex; align-items: center; justify-content: center; font-size: 3vh; font-weight: 900; border: 5px solid var(--faded-green); box-shadow: 0 0 25px rgba(74, 222, 128, 0.7), inset 0 0 10px rgba(74, 222, 128, 0.4);}
+        
+        #game-page .tickets-history-box { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; padding: 5px; background: var(--panel); border: 1px solid var(--border-color); border-radius: 8px; min-height: 0; }
+        
+        #game-page .game-mini-tickets { flex-grow: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; overflow: hidden; align-content: stretch; min-height: 0; padding-bottom: 2px; }
+        .mini-t-card { background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px; display: flex; flex-direction: column; box-sizing: border-box; height: 100%; min-height: 0; }
+        
+        .t-id-badge { text-align: center; font-size: 11px; font-weight: 900; color: #1e293b; margin-bottom: 2px; flex-shrink: 0; }
+        .mini-t-id-badge { text-align: center; font-size: 10px; font-weight: 900; color: #1e293b; margin-bottom: 2px; flex-shrink: 0; }
+        .t-grid-wrapper { display: flex; flex-grow: 1; min-height: 0; align-items: stretch; }
+        
+        .t-side-text { writing-mode: vertical-rl; transform: rotate(180deg); color: #94a3b8; opacity: 0.5; font-weight: normal; font-size: 4px !important; margin-right: 2px; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+        .mini-t-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 1px; background: #e2e8f0; flex-grow: 1; min-height: 0;}
+        .mini-t-head { color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(7px, 1.5vh, 12px); padding: 2px 0; min-height: 0;}
+        .mini-t-cell { background: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(7px, 1.5vh, 12px); color: #000; min-height: 0;}
+        .mini-t-cell.marked { background: #000 !important; color: #fff !important; }
+
+        .history-top-bar { display: flex; gap: 8px; overflow-x: auto; padding: 8px 10px; background: linear-gradient(135deg, #111827, #0f172a); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); align-items: center; scrollbar-width: none; flex-shrink: 0; min-height: 45px;}
+        .history-top-bar::-webkit-scrollbar { display: none; }
+        .hist-top-ball { min-width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--faded-green); background: rgba(74, 222, 128, 0.1); color: var(--faded-green); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; box-shadow: 0 0 8px rgba(74, 222, 128, 0.4); flex-shrink: 0;}
+
+        /* 🟢 TICKETS PAGE STYLES 🟢 */
+        #ticket-page.active-page { display: flex !important; flex-direction: column; height: calc(100svh - 60px); overflow: hidden; padding: 8px; box-sizing: border-box; }
+        
+        .ticket-top-section { flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px; position: relative;}
+        
+        .t-page-badges-container { position: absolute; top: 0; right: 5px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; z-index: 10; }
+        .t-badge-box { background: transparent; display: flex; align-items: center; gap: 5px; }
+        .t-badge-box span { font-size: 9px; color: var(--text-gray); font-weight: bold; text-transform: uppercase; }
+        .t-badge-box b { font-size: 12px; color: var(--white); font-family: monospace; }
+        .t-badge-box.prize-b { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 4px; padding: 2px 6px; box-shadow: inset 0 0 5px rgba(56, 189, 248, 0.2); }
+        .t-badge-box.prize-b b { color: var(--cyan); }
+
+        #ticket-mb-container { display: none; width: 85%; max-width: 320px; margin: 0 auto 6px auto; flex: 0 0 24vh; min-height: 0; }
+        #ticket-page.show-mb #ticket-mb-container { display: flex; flex-direction: column; }
+        
+        #ticket-master-board { height: 100%; }
+        #ticket-master-board .mb-head { font-size: 1.2vh; padding: 1px 0; min-height: 0;}
+        #ticket-master-board .mb-cell { font-size: 1.4vh; line-height: 1; min-height: 0; padding: 0;}
+        
+        #ticket-list { flex-grow: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; box-sizing: border-box; overflow: hidden; align-content: start; min-height: 0; padding-bottom: 4px; padding-top: 4px;}
+        #ticket-page.show-mb #ticket-list { grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; } 
+
+        .t-card { background: #fff; color: #000; border-radius: 8px; padding: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #ddd; display: flex; flex-direction: column; box-sizing: border-box; min-height: 0; height: 100%;}
+        #ticket-page.show-mb .t-card { padding: 3px; border-radius: 6px; border-width: 1px;}
+
+        .t-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 1px; background: #000; flex-grow: 1; min-height: 0;}
+        .t-cell { background: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: clamp(8px, 1.8vh, 16px); min-height: 0;}
+        #ticket-page.show-mb .t-cell { font-size: clamp(7px, 1.5vh, 12px); }
+        
+        .t-cell.marked { background: #000 !important; color: white !important;}
+
+        /* Bingo Winner Overlay */
+        .bingo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 24, 0.95); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; backdrop-filter: blur(8px);}
+        .bling-text { font-size: 14px; font-weight: bold; color: white; margin-bottom: 15px; animation: blinker 1s linear infinite; text-shadow: 0 0 10px white; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
+        .bingo-text { font-size: 50px; font-weight: 900; color: #ffffff; margin: 0; text-shadow: 0 0 15px #ffffff, 0 0 30px rgba(255,255,255,0.8); animation: pulseWin 0.8s infinite alternate; letter-spacing: 5px; font-family: 'Arial Black', sans-serif;}
+        @keyframes pulseWin { from { transform: scale(1); text-shadow: 0 0 15px #ffffff; } to { transform: scale(1.05); text-shadow: 0 0 25px #ffffff, 0 0 40px rgba(255,255,255,0.9); } }
+        .winner-card { background: transparent; padding: 10px; width: 90%; max-width: 450px;}
+        #win-ticket-display { margin: 15px auto; width: 100%; display: flex; justify-content: center;}
+
+        /* Ranks */
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 6px; margin-bottom: 20px; padding-top: 30px; }
+        .podium-box { display: flex; flex-direction: column; align-items: center; background: linear-gradient(180deg, #1e293b, #0f172a); border-radius: 8px; padding: 10px 4px; width: 28%; text-align: center; position: relative; border: 1px solid #334155; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+        .podium-1 { border-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); transform: scale(1.1); z-index: 2; height: 90px; justify-content: flex-end;}
+        .podium-2 { border-color: #C0C0C0; height: 75px; justify-content: flex-end;}
+        .podium-3 { border-color: #CD7F32; height: 65px; justify-content: flex-end;}
+        .podium-avatar { width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: 900; margin-bottom: 5px; color: #000; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5); position: absolute; top: -18px;}
+        .p-1-ava { background: linear-gradient(135deg, #FFDF00, #DAA520); width: 45px; height: 45px; font-size: 18px; top: -25px;}
+        .p-2-ava { background: linear-gradient(135deg, #E0E0E0, #9E9E9E); }
+        .p-3-ava { background: linear-gradient(135deg, #E6A15C, #8B4513); }
+        .podium-name { font-size: 9px; color: white; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; margin-bottom: 3px; }
+        .podium-prize { font-size: 9px; color: var(--gold); font-weight: 900; background: rgba(0,0,0,0.6); padding: 2px 5px; border-radius: 4px;}
+        .crown-icon { position: absolute; top: -45px; font-size: 22px; animation: floatCrown 2s infinite ease-in-out; text-shadow: 0 4px 8px rgba(255,215,0,0.5);}
+        .rank-card { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9)); padding: 12px 15px; border-radius: 10px; border-left: 4px solid var(--faded-green); margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); transition: 0.3s; }
+        .rank-badge { width: 26px; height: 26px; border-radius: 50%; background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; margin-right: 12px; border: 1px solid var(--faded-green); box-shadow: inset 0 0 5px rgba(74,222,128,0.5);}
+        #rank-page { padding-bottom: 92px; }
+        #my-rank-banner { display: none; position: fixed; left: 10px; right: 10px; bottom: 68px; z-index: 2600; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 14px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(8, 47, 73, 0.96)); border: 1px solid rgba(251, 191, 36, 0.75); box-shadow: 0 10px 30px rgba(0,0,0,0.55), 0 0 18px rgba(251, 191, 36, 0.2); pointer-events: none; }
+        #rank-page.active-page #my-rank-banner.show { display: flex; }
+        .my-rank-line { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+        .my-rank-kicker { font-size: 13px; color: #fde68a; font-weight: 800; }
+        .my-rank-value { font-size: 22px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 0 12px rgba(251, 191, 36, 0.35); }
+        .my-rank-cards { font-size: 13px; font-weight: 900; color: var(--faded-green); white-space: nowrap; background: rgba(0,0,0,0.35); border: 1px solid rgba(74, 222, 128, 0.35); border-radius: 999px; padding: 6px 10px; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 58px; background: #0d1117; display: flex; padding: 6px 0; border-top: 1px solid var(--border-color); z-index: 3000; justify-content: space-around; box-sizing: border-box; }
+        .nav-item { text-align: center; color: var(--text-gray); font-size: 11px; cursor: pointer; flex: 1; transition: 0.2s; font-weight: bold; position: relative;}
+        .nav-item.active { color: var(--faded-green); text-shadow: 0 0 10px rgba(74,222,128,0.5);}
+        .nav-icon { font-size: 20px; margin-bottom: 2px; display: block;}
+
+        @keyframes bounceBlinkArrow { 0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; } 50% { transform: translateX(-50%) translateY(-6px); opacity: 0.2; } } 
+        .ticket-alert-arrow { display: none; position: absolute; top: -16px; left: 50%; color: #ef4444; font-size: 18px; animation: bounceBlinkArrow 0.7s infinite; text-shadow: 0 0 10px rgba(239, 68, 68, 0.9); z-index: 4000; pointer-events: none; }
+
+        .profile-stat-box { background: var(--panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; text-align: center; margin-bottom: 10px;}
+        .week-stat-badge { display: inline-block; margin-left: 4px; padding: 1px 6px; border-radius: 999px; font-size: 8px; font-weight: 700; letter-spacing: 0.2px; color: var(--text-gray); background: rgba(148, 163, 184, 0.16); border: 1px solid rgba(148, 163, 184, 0.35); vertical-align: middle; }
+        .prof-tabs { display:flex; gap:8px; margin-bottom:12px; }
+        .prof-tab-btn { flex:1; display:block; background:#111827; color:#e2e8f0; border:1px solid #fbbf24; border-radius:8px; padding:12px 6px; font-size:13px; font-weight:900; cursor:pointer; }
+        .prof-tab-btn.active { color:#0b111a; background:var(--faded-green); border-color:var(--faded-green); }
+        .hist-round-card { background:linear-gradient(180deg,#111827,#0b111a); border:1px solid var(--border-color); border-radius:12px; padding:12px; margin-bottom:10px; text-align:left; }
+        .hist-won-badge { text-align:right; line-height:1.15; flex-shrink:0; }
+        .hist-won-amount { display:block; color:#4ade80; font-weight:900; font-size:13px; }
+        .hist-won-split { display:block; margin-top:3px; font-size:10px; color:#94a3b8; font-weight:700; }
+        .hist-lost-badge { text-align:right; line-height:1.15; flex-shrink:0; }
+        .hist-lost-label { display:block; color:#f87171; font-weight:900; font-size:13px; }
+        .hist-lines-needed { display:block; margin-top:3px; font-size:10px; color:#fca5a5; font-weight:700; }
+        .hist-round-time { margin-top:6px; font-size:11px; color:#e2e8f0; font-weight:700; letter-spacing:0.2px; }
+        .hist-num { display:inline-flex; min-width:22px; height:22px; align-items:center; justify-content:center; border-radius:50%; font-size:10px; font-weight:800; margin:2px; background:#1e293b; color:#cbd5e1; }
+        .hist-num.match { background:#16a34a; color:white; box-shadow:0 0 8px rgba(34,197,94,.6); }
+        .prof-avatar-circle { width: 50px; height: 50px; background: linear-gradient(135deg, var(--faded-green), #059669); border-radius: 50%; margin: 0 auto 8px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #000; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);}
+        .prof-list-btn { background: var(--panel); border: 1px solid var(--border-color); color: white; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: bold; width: 100%; box-sizing: border-box;}
+        
+        /* Modals */
+        .trx-modal-overlay, .pw-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 9999; display: none; flex-direction: column; justify-content: flex-end; }
+        .pw-modal-overlay { justify-content: center; align-items: center; }
+        .trx-modal { background: #0f172a; width: 100%; border-radius: 25px 25px 0 0; padding: 20px 20px 30px 20px; box-sizing: border-box; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1); max-height: 90vh; overflow-y: auto;}
+        .trx-modal.show { transform: translateY(0); }
+        .trx-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .trx-title { color: white; font-size: 18px; font-weight: 900; margin: 0; }
+        .trx-close { color: #64748b; font-size: 14px; cursor: pointer; font-weight: bold; background: none; border: none;}
+        .dep-banner { background: linear-gradient(90deg, rgba(217, 119, 6, 0.15), rgba(180, 83, 9, 0.15)); border: 1px solid rgba(217, 119, 6, 0.4); border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; }
+        .bank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .bank-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #1e293b; color: white; border: 1px solid #334155; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.3s;}
+        .bank-btn.active { background: white; color: black; border-color: white; transform: scale(1.05); }
+        .bank-logo { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; }
+        .logo-tb { background: #00b0f0; color: white; } .logo-cbe { background: #502179; color: #fdb913; font-size: 9px;}
+        .trx-copy-box { background: #020617; border: 1px solid #1e293b; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none; justify-content: space-between; align-items: center;}
+        .trx-copy-box.show { display: flex; }
+        @keyframes popIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .pop-anim { animation: popIn 0.3s ease-out; }
+        
+        .trx-input, .pw-input { width: 100%; background: #020617; border: 1px solid #1e293b; color: white; padding: 15px; border-radius: 10px; box-sizing: border-box; margin-bottom: 4px; font-size: 14px;}
+        .trx-submit-btn { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; font-weight: 900; width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 18px; cursor: pointer;}
+        .trx-submit-btn.red-btn { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+        .pw-modal { background: #131b2f; border-radius: 20px; padding: 30px 25px; width: 85%; max-width: 350px; border: 1px solid #1e293b;}
+        .pw-btn-row { display: flex; gap: 15px; margin-top: 10px; }
+        .pw-btn { flex: 1; padding: 14px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; }
+
+        /* 🔥 STRICT NUMBER BLURRING FOR MAINTENANCE MODE 🔥 */
+        body.paused-mode .mb-cell,
+        body.paused-mode .num-btn,
+        body.paused-mode .t-cell,
+        body.paused-mode .mini-t-cell,
+        body.paused-mode .caller-ball,
+        body.paused-mode .hist-top-ball {
+            filter: blur(15px) grayscale(100%) !important;
+            opacity: 0.1 !important;
+            pointer-events: none !important;
+            transition: all 0.3s ease;
+        }
+
+        /* 🔥 አዲሱ የመመሪያ (Guide) Modal ዲዛይን 🔥 */
+        .guide-section { background: rgba(0,0,0,0.3); border: 1px solid #334155; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; }
+        .chance-alert { background: rgba(234, 88, 12, 0.15); border: 1px solid #ea580c; border-left: 4px solid #ea580c; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: #fed7aa; text-align: left; line-height: 1.5; }
+        
+        /* 🔥 የመመሪያ (Pattern) ዲዛይን (አዲስ የተጨመረ) 🔥 */
+        .pat-wrap { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 10px; }
+        .pat-box { text-align: center; }
+        .pat-title { font-size: 10px; color: white; margin-bottom: 5px; font-weight: bold;}
+        .pat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width: 70px; margin: 0 auto; }
+        .pc { height: 12px; border-radius: 2px; background: #1e293b; }
+        .pc.hl { background: #4ade80; box-shadow: 0 0 5px #4ade80; }
+
+        /* 🔥 INTERNET LOST ALERT 🔥 */
+        #offline-alert {
+            position: fixed; top: 0; left: 50%; 
+            transform: translate(-50%, -150%);
+            background: rgba(239, 68, 68, 0.95); color: white; padding: 12px 25px;
+            border-radius: 8px; font-weight: 900; font-size: 14px; z-index: 10000;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6); display: flex;
+            align-items: center; gap: 10px; pointer-events: none; letter-spacing: 0.5px;
+            opacity: 0; visibility: hidden; /* እንዳይታይ ይደብቀዋል */
+        }
+        #offline-alert.show { 
+            transform: translate(-50%, 20px); 
+            opacity: 1; visibility: visible; /* ሲጠራ ብቻ ያሳየዋል */
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔥 አዲሱ ኢንተርኔት መጥፋት ማሳወቂያ 🔥 -->
+<div id="offline-alert">❌ ኢንተርኔት ተቋርጧል! (Internet is lost)</div>
+
+<!-- 🔥 አዲሱ የቦነስ መውሰጃ በተን (Floating Claim Button) 🔥 -->
+<div id="promo-claim-float" onclick="claimWebPromo()" style="display:none; position:fixed; top: 120px; right: 10px; z-index: 5000; background: linear-gradient(135deg, #fbbf24, #f59e0b); border: 2px solid #fff; border-radius: 12px; padding: 10px 15px; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.6); text-align: center; cursor: pointer; animation: pulseClaimFloat 1.2s infinite;">
+    <div style="font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));">🎁</div>
+    <div style="font-size: 11px; font-weight: 900; color: #000; margin-top: 3px; line-height: 1.2; text-transform: uppercase;">
+        ቦነስ ይውሰዱ<br><span id="promo-float-amt" style="font-size: 16px;">0</span> ETB
+    </div>
+</div>
+
+<div id="bingo-overlay" class="bingo-overlay">
+    <div class="bling-text">✨ ሽልማት ገቢ እየተደረገ ነው... ✨</div>
+    <div class="winner-card" id="winner-card-container"></div>
+</div>
+
+<div id="dep-modal-overlay" class="trx-modal-overlay" onclick="closeDepositModal(event)">
+    <div id="dep-modal" class="trx-modal" onclick="event.stopPropagation()">
+        <div class="trx-header"><button class="trx-close" onclick="closeDepositModal()">Close</button><h3 class="trx-title" id="dep-title">Deposit Funds</h3><span style="width:40px;"></span></div>
+        <div class="dep-banner">
+            <div class="dep-banner-icon">🔥</div>
+            <div class="dep-banner-text" id="dynamic-dep-banner">ልዩ ስጦታ<br>ከ 100 ብር ጀምሮ ገቢ ሲያደርጉ ተጨማሪ 20% ጉርሻ ያግኙ!</div>
+        </div>
+        
+        <div id="static-dep-warning" style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.4); border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 11px; color: #fde047; text-align: center;">
+            ⚠️ <b>ማሳሰቢያ:</b> ገንዘብ ገቢ ማድረግ እሚቻለዉ ከቴሌብር ወደ ቴሌብር እንዲሁም ከሲቢኢ ወደ ሲቢኢ ነዉ </b> ብቻ ነው።
+        </div>
+
+        <span class="trx-label">ባንክ ይምረጡ</span>
+        <div class="bank-grid" id="dep-bank-grid">
+            <div class="bank-btn active" data-bankname="telebirr" onclick="selectBank('telebirr', this, 'dep')"><div class="bank-logo logo-tb">t</div> TeleBirr</div>
+            <div class="bank-btn" data-bankname="cbe" onclick="selectBank('cbe', this, 'dep')"><div class="bank-logo logo-cbe">CBE</div> CBE Birr</div>
+        </div>
+        <div id="dep-copy-box" class="trx-copy-box show">
+            <div>
+                <small style="color:#64748b; font-size:10px;">Account Name:</small><br><b id="m-dep-name" style="font-size:13px; color:white;">YOUR_ACCOUNT_NAME</b><br>
+                <b id="m-dep-acc" style="font-size:18px; color:var(--cyan); font-family:monospace; margin-top:3px; display:block;">YOUR_PHONE_NUMBER</b>
+            </div>
+            <button style="background: #1e293b; border: none; color: white; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer;" onclick="copyModalNumber('m-dep-acc')">Copy</button>
+        </div>
+        <span class="trx-label">መጠን (ብር)</span>
+        <input type="number" id="m-dep-amt" class="trx-input" placeholder="">
+        <span style="color: #475569; font-size: 10px; display: block; margin-bottom: 20px;">Min: 50 ETB | Max: 100,000 ETB</span>
+        
+        <span class="trx-label" id="lbl-dep-sms">የከፈሉበት ማረጋገጫ (SMS)</span>
+        <textarea id="m-dep-sms" class="trx-input" style="height: 60px; resize: none; margin-bottom: 5px;" placeholder="ከባንክ የተላከሎትን SMS በሙሉ እዚህ Paste ያድርጉ (ትክክለኛ የከፈሉበትን ደረሰኝ)"></textarea>
+        <div id="dep-sms-hint" style="font-size: 10px; color: var(--gold); margin-bottom: 20px; line-height: 1.4;">💡 <b>ማሳሰቢያ:</b> ከባንክ የተላከሎትን SMS <b>ሙሉውን</b> ኮፒ በማድረግ እዚህ ይለጥፉ። በተለይ በ <b>CBE Birr</b> ሲያስገቡ የባንኩን ሙሉ ደረሰኝ (SMS) ማካተትዎን አይርሱ።</div>
+        
+        <button class="trx-submit-btn" onclick="processNewDeposit()" id="m-dep-btn">ላክ</button>
+    </div>
+</div>
+
+<div id="wit-modal-overlay" class="trx-modal-overlay" onclick="closeWithdrawModal(event)">
+    <div id="wit-modal" class="trx-modal" onclick="event.stopPropagation()">
+        <div class="trx-header"><button class="trx-close" onclick="closeWithdrawModal()">Close</button><h3 class="trx-title" id="wit-title">Withdraw Funds</h3><span style="width:40px;"></span></div>
+        <span class="trx-label">ወጪ ማድረጊያ ባንክ</span>
+        <div class="bank-grid" id="wit-bank-grid">
+            <div class="bank-btn active" data-bankname="telebirr" onclick="selectBank('telebirr', this, 'wit')"><div class="bank-logo logo-tb">t</div> TeleBirr</div>
+            <div class="bank-btn" data-bankname="cbe" onclick="selectBank('cbe', this, 'wit')"><div class="bank-logo logo-cbe">CBE</div> CBE Birr</div>
+        </div>
+        
+        <span class="trx-label">ወጪ የሚደረግበት ስልክ ቁጥር (የተመዘገቡበት)</span>
+        <div id="dynamic-wit-banner" style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.4); border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 11px; color: #fde047; text-align: center;">
+            ⚠️ <b>ማሳሰቢያ:</b> ለደህንነት ሲባል ገንዘብ ወጪ ማድረግ የሚቻለው <b>ሲመዘገቡ በተጠቀሙበት ስልክ ቁጥር</b> ብቻ ነው።
+        </div>
+
+        <input type="tel" id="m-wit-phone" class="trx-input disabled-input" readonly style="opacity:0.6; pointer-events:none; background: #111827;">
+        
+        <span style="display: block; margin-bottom: 10px;">&nbsp;</span>
+        <span class="trx-label">መጠን (ብር)</span>
+        <input type="number" id="m-wit-amt" class="trx-input" placeholder="">
+        <span style="color: #475569; font-size: 10px; display: block; margin-bottom: 25px;">Min: 50 ETB | Max: 300,000 ETB</span>
+        <button class="trx-submit-btn red-btn" onclick="processNewWithdraw()" id="m-wit-btn">ላክ</button>
+    </div>
+</div>
+
+<div id="pw-modal-overlay" class="pw-modal-overlay">
+    <div class="pw-modal">
+        <h3 style="color: white; font-size: 18px; font-weight: 900; margin: 0 0 25px 0;">CHANGE PASSWORD</h3>
+        <input type="password" id="pw-old" class="pw-input" placeholder="Old Password">
+        <input type="password" id="pw-new" class="pw-input" placeholder="New Password (min 4)">
+        <input type="password" id="pw-conf" class="pw-input" placeholder="Confirm New Password">
+        <div class="pw-btn-row">
+            <button class="pw-btn cancel" style="background:#1e293b; color:#94a3b8;" onclick="document.getElementById('pw-modal-overlay').style.display='none'">CANCEL</button>
+            <button class="pw-btn save" style="background:var(--faded-green); color:#000;" onclick="savePassword()">SAVE</button>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 አዲሱ የጨዋታ መመሪያ እና ደንብ (Guide) Modal 🔥 -->
+<div id="guide-modal-overlay" class="trx-modal-overlay" onclick="closeGuideModal(event)">
+    <div id="guide-modal" class="trx-modal" onclick="event.stopPropagation()">
+        <div class="trx-header">
+            <button class="trx-close" onclick="closeGuideModal()">Close</button>
+            <h3 class="trx-title" id="guide-title">የጨዋታው መመሪያ እና ደንብ</h3>
+            <span style="width:40px;"></span>
+        </div>
+        <div style="max-height: 70vh; overflow-y: auto; padding-bottom: 20px;">
+            <div class="chance-alert" id="guide-chance-text" style="display:none;"></div>
+            
+            <div class="guide-section" id="guide-rules-text" style="line-height:1.65; font-size:13px;">
+                <div style="font-size:15px; font-weight:800; margin-bottom:8px;">አማር ቢንጎ — የተጠቃሚ መመሪያ እና የስምምነት ውል</div>
+                <p style="margin:0 0 12px 0;">እንኳን ወደ አማር ቢንጎ ቤተሰብ በደህና መጡ! መዝናናትዎ እና ደህንነትዎ ቅድሚያ የምንሰጣቸው ጉዳዮች ናቸው። መጫወት ከመጀመርዎ በፊት እነዚህን መመሪያዎች በጥንቃቄ አንብበው እንዲከተሉ በትህትና እንጠይቃለን።</p>
+                <div style="font-weight:800; color:var(--faded-green); margin:0 0 6px 0;">1. የጨዋታው ባህሪ እና አሠራር</div>
+                <ul style="margin:0 0 12px 0; padding-left:18px;">
+                    <li style="margin-bottom:8px;"><b>ሙሉ በሙሉ የዕድል ጨዋታ፦</b> የአማር ቢንጎ ውጤቶች ሙሉ በሙሉ በዕጣ እና በዕድል ይወሰናሉ። ስለዚህ ማንኛውንም ዙር እንደሚያሸንፉ ዋስትና ወይም አስቀድሞ የተወሰነ ውጤት የለም።</li>
+                    <li style="margin-bottom:8px;"><b>እያንዳንዱ ዙር ለብቻው ነው፦</b> እያንዳንዱ ዙር ሙሉ በሙሉ የተለየ ክስተት ነው፤ ካለፉ ጨዋታዎች ጋር ቀጥተኛ ግንኙነት የለውም። መሸነፍ ወደፊት ድል እንደሚያረጋግጥ ማመን ስህተት ነው፤ ምንም ቀመር ወይም ሳይንሳዊ እርግጠኝነት የለም። ተከታታይ መሸነፍ ሊከሰት እንደሚችል በመገንዘብ በኃላፊነት ይጫወቱ።</li>
+                    <li><b>ለመዝናኛ ብቻ፦</b> ይህ መድረክ የተዘጋጀው በትርፍ ጊዜዎ ለመዝናናት እና ለማረፍ ብቻ ነው። ቢጠፋ የዕለት ተዕለት ኑሮዎን ወይም የገንዘብ ደህንነትዎን የማይነካ፣ መለየት የሚችሉትን ገንዘብ ብቻ እንድትጫወቱ አጥብቀን እንመክራለን።</li>
+                </ul>
+                <div style="font-weight:800; color:var(--faded-green); margin:0 0 6px 0;">2. የአካውንት እና የክፍያ አስተዳደር</div>
+                <ul style="margin:0; padding-left:18px;">
+                    <li><b>ተመላሽ የማይደረግ ገቢ፦</b> ወደ አማር ቢንጎ ሂሳብዎ የገባ ማንኛውም ገንዘብ በቀጥታ ለጨዋታ ተሳትፎ የተመደበ ነው። አንዴ ከተሞላ በኋላ ገቢው በፍጹም ተመላሽ አይደረግም።</li>
+                </ul>
+            </div>
+            
+            <div class="guide-section" id="guide-win-text">
+                <b style="color:var(--cyan); font-size:15px;" id="gw-title">🏆 ማሸነፊያ መንገዶች</b><br>
+                <span style="font-size:11px; color:var(--text-gray);" id="gw-desc">ከታች ባሉት አራት ቅርፆች መሰረት አምስት ቁጥሮችን ካገኙ BINGO ብለው ያሸንፋሉ።</span>
+                
+                <div class="pat-wrap">
+                    <!-- 1. Horizontal -->
+                    <div class="pat-box">
+                        <div class="pat-title" id="pt-1">1. በአግድም</div>
+                        <div class="pat-grid">
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc hl"></div><div class="pc hl"></div><div class="pc hl"></div><div class="pc hl"></div><div class="pc hl"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                        </div>
+                    </div>
+                    <!-- 2. Vertical -->
+                    <div class="pat-box">
+                        <div class="pat-title" id="pt-2">2. ወደ ታች</div>
+                        <div class="pat-grid">
+                            <div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div>
+                        </div>
+                    </div>
+                    <!-- 3. Diagonal -->
+                    <div class="pat-box">
+                        <div class="pat-title" id="pt-3">3. በማዕዘን</div>
+                        <div class="pat-grid">
+                            <div class="pc hl"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc hl"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc hl"></div>
+                        </div>
+                    </div>
+                    <!-- 4. Corners -->
+                    <div class="pat-box">
+                        <div class="pat-title" id="pt-4">4. አራቱ ጥግ</div>
+                        <div class="pat-grid">
+                            <div class="pc hl"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc hl"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                            <div class="pc hl"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc hl"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="trx-submit-btn" onclick="closeGuideModal()" id="guide-close-btn">ተረዳሁ</button>
+    </div>
+</div>
+
+<!-- 1. AUTH PAGE -->
+<div id="auth-page" class="page active-page">
+    
+    <div class="auth-card">
+        <div style="text-align: center; margin-bottom: 10px;">
+            <h1 style="margin: 0; font-size: 42px; font-weight: 900; letter-spacing: 2px;">
+                <span style="color: #4ade80; text-shadow: 0px 0px 15px rgba(74, 222, 128, 0.6);">አማር</span> 
+                <span style="color: #ffffff; text-shadow: 0px 0px 15px rgba(255, 255, 255, 0.6);">ቢንጎ</span>
+            </h1>
+            <div style="color: #94a3b8; font-size: 13px; font-weight: bold; letter-spacing: 6px; margin-top: 5px; text-transform: uppercase;">AMAR BINGO</div>
+        </div>
+        
+        <p id="auth-subtitle" style="font-size: 12px; color: #94a3b8; margin: 20px 0 25px 0;">ይመዝገቡ (10 ETB ቦነስ ያገኛሉ)</p>
+        
+        <div class="input-group" id="name-group">
+            <input type="text" id="reg-name" class="auth-input" placeholder="ሙሉ ስም (Full Name)" onkeyup="v()">
+        </div>
+        
+        <div class="input-group">
+            <input type="tel" id="reg-phone" class="auth-input" placeholder="ስልክ ቁጥር (09... ወይም 07...)" onkeyup="v()">
+        </div>
+        
+        <div class="input-group">
+            <input type="password" id="reg-pass" class="auth-input" placeholder="የይለፍ ቃል (ቢያንስ 4 ፊደል/ቁጥር)" onkeyup="v()">
+            <span class="eye-icon" id="eye-icon" onclick="togglePass()">👁️</span>
+        </div>
+
+        <div class="input-group" id="ref-group">
+            <input type="text" id="reg-ref" class="auth-input ref-input" placeholder="የጋበዝዎት ሰው ኮድ (ካለዎት)" onkeyup="v()">
+        </div>
+        
+        <div id="terms-box" style="text-align:left; font-size:12px; margin: 5px 0 20px 0; color: #cbd5e1; line-height: 2.2;">
+            <label style="display: flex; align-items: center; gap: 10px;"><input type="checkbox" id="c1" checked onchange="v()"> እድሜዬ 21+ መሆኑን አረጋግጣለሁ</label>
+            <label style="display: flex; align-items: center; gap: 10px;"><input type="checkbox" id="c2" checked onchange="v()"> በውልና ደንቦች እስማማለሁ</label>
+        </div>
+        
+        <button id="start-btn" class="auth-btn" disabled onclick="authAction()">ወደ ጌም ግባ (REGISTER)</button>
+        <p style="font-size: 13px; color: #4ade80; cursor: pointer; margin-top: 25px; font-weight: bold; text-decoration: underline;" onclick="toggleAuthMode()" id="toggle-auth-text">አካውንት አለዎት? ይግቡ (Login)</p>
+        
+    </div>
+</div>
+
+<!-- TOP HEADER -->
+<div id="global-header" class="top-balance" style="display:none;">
+    <div class="hdr-user-sec">
+        <div class="icon">👤</div>
+        <div>
+            <div id="hdr-name" class="name">User</div>
+            <div id="hdr-phone" class="phone">09...</div>
+        </div>
+    </div>
+    <div class="hdr-wallets-right">
+        <div class="pill-wallet">
+            <span class="title play">PLAY WALLET</span><span class="amt" id="hdr-play-balance">0.00</span>
+        </div>
+        <div class="pill-wallet">
+            <span class="title main">MAIN WALLET</span><span class="amt" id="hdr-main-balance">0.00</span>
+        </div>
+    </div>
+</div>
+
+<!-- 2. HOME PAGE -->
+<div id="home-page" class="page">
+    
+    <!-- 🔥 ከፔጅ ጋር አብሮ የሚሄደው (Sticky) የላይኛው ክፍል (Timer, Jackpot, Bonus) 🔥 -->
+    <div style="position: sticky; top: 0; z-index: 1500; background: var(--bg-dark); padding: 5px 0 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <!-- Title -->
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; flex: 1;">
+                <h1 style="margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 1px; text-align: center;">
+                    <span style="color: #4ade80; text-shadow: 0px 0px 10px rgba(74, 222, 128, 0.6);">አማር</span> 
+                    <span style="color: #ffffff; text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);">ቢንጎ</span>
+                </h1>
+                <div style="color: #94a3b8; font-size: 10px; font-weight: bold; letter-spacing: 4px; margin-top: 2px; text-transform: uppercase;">AMAR BINGO</div>
+            </div>
+            <!-- Lang Toggle -->
+            <div style="display: flex; border: 1px solid #4ade80; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">
+                <div id="btn-am" onclick="setLang('AM')" style="background: white; color: black; padding: 4px 12px; font-size: 11px; font-weight: 900; cursor: pointer;">AM</div>
+                <div id="btn-en" onclick="setLang('EN')" style="background: black; color: white; padding: 4px 12px; font-size: 11px; font-weight: 900; cursor: pointer;">EN</div>
+            </div>
+        </div>
+
+        <!-- 3 BOXES: Timer (Left) | Jackpot (Center) | Bonus (Right) -->
+        <div style="display: flex; gap: 8px;">
+            <!-- Timer (Left) -->
+            <div class="new-timer-box" style="flex: 1; margin-bottom: 0; flex-direction: column; justify-content: center; align-items: center; padding: 10px 5px;">
+                <div class="nt-status" style="margin-bottom: 5px; font-size: 9px; text-align: center;">ጨዋታው ሊጀምር ነው</div>
+                <div class="nt-value" id="timer" style="font-size: 19px;">00:40</div> 
+            </div>
+            
+            <!-- Jackpot (Middle/Center) -->
+            <div class="new-timer-box" style="flex: 1.2; margin-bottom: 0; flex-direction: column; justify-content: center; align-items: center; padding: 10px 5px; border-color: var(--cyan); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);">
+                <div class="nt-badge" id="h-lbl-derash" style="margin-bottom: 5px; font-size: 10px; background: rgba(56, 189, 248, 0.15); color: var(--cyan); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.4); font-weight: bold;">ደራሽ</div>
+                <div class="nt-value" style="font-size: 18px; color: var(--cyan); text-shadow: 0 0 10px rgba(56,189,248,0.5);"><span id="jp">0.00</span> <span style="font-size: 9px; color: #94a3b8;">ETB</span></div>
+            </div>
+
+            <!-- Bonus Boost (Right - Animated) -->
+            <div class="new-timer-box pulse-bonus-box" id="boost-box-wrapper" style="flex: 1.2; margin-bottom: 0; flex-direction: column; justify-content: center; align-items: center; padding: 10px 2px; background: rgba(251, 191, 36, 0.05); transition: 0.4s; opacity: 0.6; filter: grayscale(70%);">
+                <div class="nt-badge" id="h-lbl-boost" style="margin-bottom: 5px; font-size: 8px; background: rgba(251, 191, 36, 0.2); color: var(--gold); padding: 2px 4px; border-radius: 4px; border: 1px solid rgba(251,191,36,0.5); font-weight: bold; text-align: center; line-height: 1.2;">የደራሽ ቦነስ በቅርቡ ይጠብቁ</div>
+                <div class="nt-value" style="font-size: 16px; color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.6);"><span id="h-boost-amt"><span class="waiting-hourglass">⏳</span></span></div>
+            </div>
+        </div>
+
+        <div class="grid-subtitle-row" style="margin-top: 10px; margin-bottom: 0;">
+            <div class="gs-left" id="h-lbl-select">ካርቴላ ይምረጡ (10 ብር)</div>
+            <div class="gs-right">
+                <span class="occupied-cards-pill" id="occupied-cards-pill"><span id="occupied-cards-lbl">የተያዙ ካርዶች:</span> <b id="occupied-cards-count">0</b></span>
+                <span class="sel-slot"><span id="grid-sel-count">0</span><span class="slash">/ 4</span></span>
+            </div>
+        </div>
+    </div>
+    <!-- 🟢 እዚህ ጋር Sticky Top አብቅቷል 🟢 -->
+
+    <div class="live-circle-badge" style="position: fixed; bottom: 75px; right: 15px; z-index: 1000;">
+        <div class="live-indicator"><span class="dot"></span> <span id="live-text-bottom">LIVE</span></div>
+        <div style="font-size:8px; color:#94a3b8; font-weight:bold;" id="h-lbl-derash-badge">ደራሽ</div>
+        <div class="jp-amount"><span id="h-jp-amt-2">0.00</span></div>
+        <div style="font-size:8px; font-weight:normal; color:#38bdf8;">ETB</div>
+    </div>
+    
+    <div id="grid-box" class="num-grid" style="padding-top: 15px;"></div>
+</div>
+
+<!-- COMPACT FIXED BET SLIP POPUP -->
+<div id="bet-slip-popup" class="bet-slip-popup">
+    <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:5px;">
+        <span style="color:white; font-size:10px; font-weight:bold;"><span id="lbl-sel-tickets">የመረጧቸው ካርቴላዎች: </span> <span id="slip-count" style="color:var(--faded-green);">0</span></span>
+        <span style="color:var(--faded-green); font-size:13px; font-weight:900;"><span id="slip-price">0</span> ETB</span>
+    </div>
+    <div id="ticket-preview-box" class="preview-tickets-wrapper"></div>
+</div>
+
+<!-- 3. GAME PAGE -->
+<div id="game-page" class="page">
+    <div class="top-info-wrapper">
+        <div class="top-info-box"><div class="info-title" id="g-lbl-round">#ዙር (Round)</div><div class="info-val" id="g-id">#---</div></div>
+        <div class="top-info-box"><div class="info-title" id="g-lbl-bet">መወራረጃ</div><div class="info-val" id="g-val-bet">10.00</div></div>
+        <div class="top-info-box prize-box"><div class="info-title prize-title" id="g-lbl-prize">ሽልማት (Prize)</div><div class="info-val highlight" id="g-prize">0.00</div></div>
+        <div class="top-info-box"><div class="info-title" id="g-lbl-balls">እጣ (Balls)</div><div class="info-val" id="g-balls">0/75</div></div>
+    </div>
+    <div id="history-scroll-top" class="history-top-bar"></div>
+    
+    <div class="game-layout-container"> 
+        <div class="master-board-wrapper"> 
+            <div id="master-board" class="mb-board"></div>
+        </div>
+        <div class="right-panel-stack">
+            <div class="caller-box" style="position: relative;">
+                <div id="caller-ball" class="caller-ball">--</div>
+                
+                <div style="position: absolute; top: 5px; right: 5px; display: flex; flex-direction: column; gap: 5px;">
+                    <div id="sound-toggle" onclick="toggleSound()" style="font-size: 14px; cursor: pointer; z-index: 10; background: #1e293b; border-radius: 50%; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border: 1px solid #4ade80; box-shadow: 0 0 5px rgba(0,0,0,0.7);">🔊</div>
+                    <div onclick="window.location.href='/promo_app?phone=' + currentUser.phone + '&pass=' + currentUser.password" style="font-size: 14px; cursor: pointer; z-index: 10; background: #1e293b; border-radius: 50%; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border: 1px solid #fbbf24; box-shadow: 0 0 5px rgba(0,0,0,0.7);">🎟️</div>
+                </div>
+
+            </div>
+            
+            <div class="tickets-history-box">
+                <div id="lbl-my-ticket" style="color: var(--faded-green); font-size: 11px; font-weight: bold; margin-bottom: 2px;">የእኔ ካርቴላ (My Ticket)</div>
+                <div id="game-mini-tickets" class="game-mini-tickets"></div>
+            </div>
+
+            <div class="live-circle-badge">
+                <div class="live-indicator" style="font-size: 8px;"><span class="dot" style="width:5px; height:5px;"></span> <span id="live-text-game">LIVE</span></div>
+                <div id="lbl-derash-game" style="font-size:7px; color:#94a3b8; font-weight:bold;">ደራሽ</div>
+                <div class="jp-amount"><span id="g-jp-amt">0.00</span></div>
+                <div style="font-size:6px; font-weight:normal; color:#38bdf8;">ETB</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. TICKETS PAGE -->
+<div id="ticket-page" class="page">
+    <div class="ticket-top-section">
+        
+        <div class="t-page-badges-container">
+            <div class="t-badge-box"><span>Balls:</span><b id="t-page-balls">0/75</b></div>
+            <div class="t-badge-box prize-b"><span>Prize:</span><b id="t-page-prize">0.00 ETB</b></div>
+        </div>
+        
+        <h3 id="t-page-title" style="text-align:left; color:var(--faded-green); margin: 0 0 5px 0; font-size: 18px;">የእኔ ካርቴላዎች</h3>
+        
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="caller-box" style="width: 50px; min-height: 50px; padding: 0;">
+                <div id="ticket-caller-ball" class="caller-ball" style="width: 35px; height: 35px; font-size: 12px; border-width: 3px;">--</div>
+            </div>
+            <div id="ticket-history-bar" class="history-top-bar" style="flex-grow: 1; margin: 0; min-height: 50px; padding-right: 90px;"><span style="color:var(--text-gray); font-size:11px;">ገና አልጀመረም...</span></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 5px;">
+            <button id="t-btn-mb" onclick="toggleTicketMasterBoard()" style="background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid var(--faded-green); color: white; border-radius: 8px; padding: 6px 20px; font-size: 14px; box-shadow: 0 2px 10px rgba(74, 222, 128, 0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto; gap: 8px;">
+                👁️ <span id="t-btn-mb-txt">ሙሉ ቦርድ እይ (Master Board)</span> <span id="mb-toggle-arrow" style="font-size: 12px; color: var(--faded-green);">▼</span>
+            </button>
+        </div>
+        
+        <p style="text-align: center; font-size: 12px; color: var(--text-gray); margin: 5px 0 0 0;" id="t-info">እስካሁን ካርቴላ አልገዙም</p>
+    </div>
+
+    <div id="ticket-mb-container">
+        <div id="ticket-master-board" class="mb-board"></div>
+    </div>
+    
+    <div id="ticket-list"></div>
+</div>
+
+<!-- 5. WALLET PAGE -->
+<div id="wallet-page" class="page">
+    <h3 id="wal-title" style="text-align:center; margin-top: 0; font-size: 20px;">የእኔ ሂሳብ (Wallet)</h3>
+    <div style="background: linear-gradient(135deg, #0b111a, #131b2f); border-radius: 15px; padding: 25px 20px; margin-bottom: 10px; border: 1px solid var(--border-color); text-align: center;">
+        <div id="wal-main-lbl" style="color: var(--text-gray); font-size: 13px; font-weight:bold;">ዋና ሂሳብ <span style="font-size:9px; color:#fbbf24;'>(ያሸነፉት/ወጪ የሚደረግ)</span></div>
+        <div style="font-size: 36px; font-weight: 900; color: white; margin: 5px 0; font-family: monospace;" id="main-bal">0.00</div>
+        <div style="color: #dbeafe; font-size: 12px; margin-bottom: 10px; display: inline-block;">
+            <span id="wal-play-lbl">መጫወቻ ሂሳብ:</span> <b style="color:#38bdf8;"><span id="play-bal">0.00</span> ETB</b>
+        </div>
+        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+            <button id="wal-btn-dep" style="background: linear-gradient(135deg, #0d9488, #0f766e); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 12px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);" onclick="openDepositModal()">➕ Deposit</button>
+            <button id="wal-btn-wit" style="background: linear-gradient(135deg, #e11d48, #be123c); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 12px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3);" onclick="openWithdrawModal()">💸 Withdraw</button>
+        </div>
+    </div>
+    <div style="margin-top: 30px; padding: 0 10px;">
+        <h4 id="wal-hist-lbl" style="color:var(--text-gray); font-size: 13px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px;">የሂሳብ ዝውውር ታሪክ (History)</h4>
+        <div id="wallet-history-list"><p style="text-align:center; color:var(--text-gray); font-size:11px;">ታሪክ የለም / No History</p></div>
+    </div>
+</div>
+
+<!-- 6. RANK PAGE -->
+<div id="rank-page" class="page">
+    <h3 id="rnk-title" style="text-align:center; color:var(--gold); margin-top: 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">🏆 አሸናፊዎች (Top 10 Rank)</h3>
+    <div id="rank-content"><p style="text-align:center; color:var(--text-gray); font-size:13px;">እየጫነ ነው...</p></div>
+    <div id="my-rank-banner" aria-live="polite">
+        <div class="my-rank-line"><span class="my-rank-kicker" id="my-rank-label">የእርስዎ ደረጃ:</span> <span class="my-rank-value" id="my-rank-value">—</span></div>
+        <div class="my-rank-cards" id="my-rank-cards">0 ካርዶች</div>
+    </div>
+</div>
+
+<!-- 7. PROFILE PAGE -->
+<div id="profile-page" class="page">
+    <h3 id="prof-title" style="text-align:center; margin-top: 0; font-size: 16px;">👤 የእኔ ፕሮፋይል</h3>
+    <button type="button" id="prof-history-btn" onclick="switchProfileTab('history')" style="width:100%; box-sizing:border-box; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg,#fbbf24,#d97706); color:#0b111a; border:none; border-radius:12px; padding:14px 16px; font-size:15px; font-weight:900; margin:0 0 12px 0; cursor:pointer;">
+        <span id="prof-history-lbl">📜 Game History (የጨዋታ ታሪክ)</span><span>></span>
+    </button>
+    <div class="prof-tabs">
+        <button type="button" class="prof-tab-btn active" id="prof-tab-account" onclick="switchProfileTab('account')">Account</button>
+        <button type="button" class="prof-tab-btn" id="prof-tab-history" onclick="switchProfileTab('history')" style="background:#fbbf24; color:#0b111a; border:2px solid #fbbf24;">Game History</button>
+    </div>
+    <div id="prof-account-panel">
+    
+    <div class="profile-stat-box" style="padding: 15px; margin-bottom: 10px;">
+        <div id="prof-avatar" class="prof-avatar-circle">U</div>
+        <h2 id="prof-name" style="margin: 0; color: white; font-size: 16px;">User Name</h2>
+        <p id="prof-phone" style="color: var(--text-gray); margin-top: 4px; font-size: 11px;">09...</p>
+        <p id="prof-id-display" style="color: var(--cyan); margin-top: 2px; font-size: 10px; font-weight: bold;">ID: #---</p>
+    </div>
+
+    <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9)); border: 1px solid var(--faded-green); border-radius: 12px; padding: 12px 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+        <div style="overflow: hidden;">
+            <div id="prof-bot-lbl" style="font-size: 11px; color: var(--faded-green); font-weight: bold; margin-bottom: 4px;">🤖 የራስዎ መጋበዣ ሊንክ (Share)</div>
+            <div id="prof-ref-text" style="font-size: 11px; color: white; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">t.me/amar_bingo_bot</div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="prof-btn-copy" style="background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Copy</button>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <div class="profile-stat-box" style="flex: 1; margin: 0; border-color: var(--blue); padding: 12px;">
+            <div style="font-size: 10px; color: var(--text-gray);"><span id="prof-played-lbl">ካርቴላ (Ticket)</span> <span class="week-stat-badge">1 Week</span></div>
+            <div style="font-size: 18px; font-weight: bold; color: var(--blue);" id="prof-played">0</div>
+        </div>
+        <div class="profile-stat-box" style="flex: 1; margin: 0; border-color: var(--faded-green); padding: 12px;">
+            <div style="font-size: 10px; color: var(--text-gray);"><span id="prof-won-lbl">ያሸነፉት (Won)</span> <span class="week-stat-badge">1 Week</span></div>
+            <div style="font-size: 18px; font-weight: bold; color: var(--faded-green);" id="prof-won">0 ETB</div>
+        </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0px;">
+        <button class="prof-list-btn" style="padding: 12px 15px; font-size: 12px; margin-bottom: 8px; border-color: var(--cyan);" onclick="window.location.href='https://t.me/amarbingo'">
+            <div style="display:flex; align-items:center;"><span class="icon-bg" style="padding: 6px; font-size: 14px; margin-right: 10px;">📞</span> <span id="prof-help-lbl" style="color:var(--cyan);">እርዳታ ያስፈልጎታል?</span></div><span style="color:var(--cyan)">></span>
+        </button>
+        
+        <!-- 🔥 የተስተካከለው የመመሪያ በተን (Guide Button) 🔥 -->
+        <button class="prof-list-btn" style="padding: 12px 15px; font-size: 12px; margin-bottom: 8px;" onclick="openGuideModal()">
+            <div style="display:flex; align-items:center;"><span class="icon-bg" style="padding: 6px; font-size: 14px; margin-right: 10px;">📖</span> <span id="prof-guide-lbl">የጨዋታው መመሪያ እና ደንብ</span></div><span style="color:var(--text-gray)">></span>
+        </button>
+        
+        <button class="prof-list-btn" style="padding: 12px 15px; font-size: 12px; margin-bottom: 8px; border-color: var(--gold);" onclick="window.location.href='/promo_app?phone=' + currentUser.phone + '&pass=' + currentUser.password">
+            <div style="display:flex; align-items:center;"><span class="icon-bg" style="padding: 6px; font-size: 14px; margin-right: 10px;">🎟️</span> <span id="prof-promo-lbl" style="color:var(--gold);">ፕሮሞ ኮድ (Promo Code)</span></div><span style="color:var(--gold)">></span>
+        </button>
+        
+        <button class="prof-list-btn" style="padding: 12px 15px; font-size: 12px; margin-bottom: 8px;" onclick="document.getElementById('pw-modal-overlay').style.display='flex'">
+            <div style="display:flex; align-items:center;"><span class="icon-bg" style="padding: 6px; font-size: 14px; margin-right: 10px;">🔐</span> <span id="prof-pw-lbl">የይለፍ ቃል ቀይር</span></div><span style="color:var(--text-gray)">></span>
+        </button>
+        <button class="prof-list-btn logout" style="padding: 12px 15px; font-size: 12px;" onclick="logout()">
+            <div style="display:flex; align-items:center;"><span class="icon-bg" style="background:transparent; padding: 6px; font-size: 14px; margin-right: 10px;">🚪</span> <span id="prof-out-lbl">ከሲስተም ውጣ</span></div>
+        </button>
+    </div>
+    </div>
+    <div id="prof-history-panel" style="display:none;">
+        <button type="button" class="prof-list-btn" id="prof-history-back" style="padding: 12px 15px; font-size: 12px; margin-bottom: 8px; border-color: var(--faded-green); display:flex;" onclick="switchProfileTab('account')">
+            <div style="display:flex; align-items:center;"><span class="icon-bg" style="padding: 6px; font-size: 14px; margin-right: 10px;">←</span> <span id="prof-history-back-lbl">Back to Profile</span></div><span style="color:var(--text-gray)">></span>
+        </button>
+        <div id="player-game-history-list"><p style="text-align:center; color:var(--text-gray); font-size:11px;">ታሪክ የለም</p></div>
+        <button id="hist-load-more" style="display:none; width:100%; margin-top:8px; background:#1e293b; color:white; border:1px solid var(--border-color); border-radius:8px; padding:10px; font-weight:bold;" onclick="loadPlayerGameHistory(true)">Load more</button>
+    </div>
+</div>
+
+<nav id="navbar" class="bottom-nav" style="display: none;">
+    <div class="nav-item active" id="nav-home" onclick="handleHomeNav()"><span class="nav-icon" id="nav-icon-home">🏠</span><span id="nav-txt-home">Home</span></div>
+    <div class="nav-item" onclick="showPage('ticket')"><div id="ticket-live-arrow" class="ticket-alert-arrow">⬇️</div><span class="nav-icon">🎟️</span><span id="nav-txt-ticket">Ticket</span></div>
+    <div class="nav-item" onclick="showPage('wallet')"><span class="nav-icon">💰</span><span id="nav-txt-wallet">Wallet</span></div>
+    <div class="nav-item" onclick="loadLeaderboard()"><span class="nav-icon">🏆</span><span id="nav-txt-rank">Rank</span></div>
+    <div class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span id="nav-txt-profile">Profile</span></div>
+</nav>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    // 🔥 ኢንተርኔት ሲቋረጥ ሜሴጅ የሚያሳየው ፈንክሽን 🔥
+    function showOfflineAlert() {
+        const alertBox = document.getElementById('offline-alert');
+        alertBox.classList.add('show');
+        setTimeout(() => { alertBox.classList.remove('show'); }, 3000);
+    }
+    window.addEventListener('offline', () => { showOfflineAlert(); });
+    let called = []; 
+    let isBingoFound = false;
+    window.currentUser = null;
+    let userTicketsData = [];
+    let isLoginMode = false;
+    let isGameRunningLocally = false;
+    let currentGameState = null;
+    let globalTakenTickets = []; 
+    let isSoundOn = true;
+    let maxTicketsLimit = 4; 
+    let currentTicketPrice = 10; 
+    let isProcessingTicket = false;
+    let boundRoundId = null;
+    let lastRoundState = null;
+    let uiLang = 'AM';
+    let lastMyStanding = null;
+    let pendingOccupiedIds = [];
+
+    function wipeLocalRoundBoard() {
+        userTicketsData = [];
+        called = [];
+        isProcessingTicket = false;
+        const histTop = document.getElementById('history-scroll-top');
+        const histTick = document.getElementById('ticket-history-bar');
+        if (histTop) histTop.innerHTML = '';
+        if (histTick) histTick.innerHTML = `<span style="color:var(--text-gray); font-size:11px;">ገና አልጀመረም...</span>`;
+        const ball = document.getElementById('caller-ball');
+        if (ball) ball.innerText = '--';
+        const ticketCb = document.getElementById('ticket-caller-ball');
+        if (ticketCb) ticketCb.innerText = '--';
+        document.querySelectorAll('.mb-cell').forEach(c => c.classList.remove('called', 'current'));
+        const list = document.getElementById('ticket-list');
+        const mini = document.getElementById('game-mini-tickets');
+        if (list) list.innerHTML = '';
+        if (mini) mini.innerHTML = '';
+        const info = document.getElementById('t-info');
+        if (info) info.innerText = 'እስካሁን ካርቴላ አልገዙም';
+        if (typeof initGrid === 'function') initGrid();
+        if (typeof updateBetPreview === 'function') updateBetPreview();
+    }
+
+    function ticketsBoundToRound(tickets, roundId) {
+        const round = Number(roundId);
+        if (!Number.isFinite(round)) return [];
+        return (tickets || []).filter((ticket) => {
+            if (!ticket) return false;
+            const bound = ticket.roundId != null && ticket.roundId !== '' ? Number(ticket.roundId) : (ticket.gameId != null && ticket.gameId !== '' ? Number(ticket.gameId) : round);
+            return bound === round;
+        }).map((ticket) => Object.assign({}, ticket, { roundId: round, gameId: round }));
+    }
+
+    function adoptActiveRound(nextId, state) {
+        const next = nextId == null || nextId === '' ? null : Number(nextId);
+        const changed = boundRoundId != null && Number.isFinite(next) && Number(boundRoundId) !== next;
+        const ended = state === 'FINISHED' && lastRoundState !== 'FINISHED';
+        if (changed || ended) wipeLocalRoundBoard();
+        if (Number.isFinite(next)) boundRoundId = next;
+        if (state) lastRoundState = state;
+        return changed || ended;
+    }
+
+    function wipeLocalRoundBoard() {
+        isBingoFound = false;
+        userTicketsData = [];
+        called = [];
+        pendingOccupiedIds = [];
+        isProcessingTicket = false;
+        const histTop = document.getElementById('history-scroll-top');
+        const histTick = document.getElementById('ticket-history-bar');
+        if (histTop) histTop.innerHTML = '';
+        if (histTick) histTick.innerHTML = `<span style="color:var(--text-gray); font-size:11px;">ገና አልጀመረም...</span>`;
+        const ball = document.getElementById('caller-ball');
+        if (ball) ball.innerText = '--';
+        const ticketCb = document.getElementById('ticket-caller-ball');
+        if (ticketCb) ticketCb.innerText = '--';
+        document.querySelectorAll('.mb-cell').forEach(c => c.classList.remove('called', 'current'));
+        const list = document.getElementById('ticket-list');
+        const mini = document.getElementById('game-mini-tickets');
+        if (list) list.innerHTML = '';
+        if (mini) mini.innerHTML = '';
+        const info = document.getElementById('t-info');
+        if (info) info.innerText = 'እስካሁን ካርቴላ አልገዙም';
+        if (typeof initGrid === 'function') initGrid();
+        if (typeof updateBetPreview === 'function') updateBetPreview();
+    }
+
+    function applyRoundTickets(data) {
+        const roundId = data && (data.currentRoundId != null ? data.currentRoundId : data.gameId);
+        const state = data && (data.gameState || data.state);
+        const changed = adoptActiveRound(roundId, state);
+        
+        if (state === 'FINISHED' || changed) {
+            userTicketsData = [];
+            called = [];
+            wipeLocalRoundBoard();
+            if (state === 'FINISHED') return;
+        }
+        
+        userTicketsData = ticketsBoundToRound(data.myTickets || data.ticketsData || [], boundRoundId);
+    }
+
+    function resyncRoundState() {
+        if (window.currentUser && window.currentUser.phone && socket && socket.connected) {
+            socket.emit('get_initial_data', window.currentUser.phone);
+        }
+    }
+    window.addEventListener('online', resyncRoundState);
+    window.addEventListener('focus', resyncRoundState);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') resyncRoundState();
+    });
+    socket.on('connect', resyncRoundState);
+
+    let audioQueue = [];
+    let isPlayingAudio = false;
+    let currentAudioObj = null;
+
+    let currentJackpotBoost = 0;
+
+    const depAccounts = { 'telebirr': {num: 'YOUR_PHONE_NUMBER', name: 'YOUR_ACCOUNT_NAME'}, 'cbe': {num: 'YOUR_PHONE_NUMBER', name: 'YOUR_ACCOUNT_NAME'} };
+    const bHeads = ['B', 'I', 'N', 'G', 'O'];
+    const bColors = ['#3b82f6', '#6366f1', '#a855f7', '#4ade80', '#f97316']; 
+
+    // 🔥 አዲሱ የመመሪያ (Guide) ፖፕ-አፕ መቆጣጠሪያ 🔥
+    function openGuideModal() { 
+        document.getElementById('guide-modal-overlay').style.display = 'flex'; 
+        setTimeout(() => { document.getElementById('guide-modal').classList.add('show'); }, 10); 
+    }
+    function closeGuideModal(e) { 
+        if(e && e.target.id !== 'guide-modal-overlay') return; 
+        document.getElementById('guide-modal').classList.remove('show'); 
+        setTimeout(() => { document.getElementById('guide-modal-overlay').style.display = 'none'; }, 300); 
+    }
+
+    function setLang(lang) {
+        uiLang = (lang === 'EN') ? 'EN' : 'AM';
+        let btnAm = document.getElementById('btn-am');
+        let btnEn = document.getElementById('btn-en');
+        
+        if(lang === 'AM') {
+            btnAm.style.background = 'white'; btnAm.style.color = 'black';
+            btnEn.style.background = 'black'; btnEn.style.color = 'white';
+            
+            document.getElementById('g-lbl-round').innerText = "#ዙር (Round)"; document.getElementById('g-lbl-bet').innerText = "መወራረጃ"; document.getElementById('g-lbl-prize').innerText = "ሽልማት (Prize)"; document.getElementById('g-lbl-balls').innerText = "እጣ (Balls)"; document.getElementById('lbl-my-ticket').innerText = "የእኔ ካርቴላ (My Ticket)"; document.getElementById('lbl-derash-game').innerText = "ደራሽ";
+            document.getElementById('h-lbl-derash').innerText = "ደራሽ"; document.getElementById('h-lbl-derash-badge').innerText = "ደራሽ"; 
+            
+            let hBoost = document.getElementById('h-lbl-boost');
+            if(hBoost) { hBoost.innerText = (currentJackpotBoost > 0) ? "🔥 ደራሽ ላይ የተጨመረ ቦነስ" : "የደራሽ ቦነስ በቅርቡ ይጠብቁ"; }
+
+            document.getElementById('h-lbl-select').innerText = `ካርቴላ ይምረጡ (${currentTicketPrice} ብር)`; 
+            document.getElementById('lbl-sel-tickets').innerText = "የመረጧቸው ካርቴላዎች: ";
+            
+            let status = document.querySelector('.nt-status');
+            if(status.innerText.includes("Starting") || status.innerText.includes("ሊጀምር")) { status.innerText = "ጨዋታው ሊጀምር ነው"; } else if(status.innerText.includes("LIVE") || status.innerText.includes("በመካሄድ")) { status.innerText = "ጨዋታው በመካሄድ ላይ ነው"; }
+            
+            document.getElementById('nav-txt-home').innerText = "Home"; document.getElementById('nav-txt-ticket').innerText = "Ticket"; document.getElementById('nav-txt-wallet').innerText = "Wallet"; document.getElementById('nav-txt-rank').innerText = "Rank"; document.getElementById('nav-txt-profile').innerText = "Profile";
+            document.getElementById('wal-title').innerText = "የእኔ ሂሳብ (Wallet)"; document.getElementById('wal-main-lbl').innerHTML = "ዋና ሂሳብ <span style='font-size:9px; color:#fbbf24;'>(ያሸነፉት/ወጪ የሚደረግ)</span>"; document.getElementById('wal-play-lbl').innerText = "መጫወቻ ሂሳብ:"; document.getElementById('wal-hist-lbl').innerText = "የሂሳብ ዝውውር ታሪክ (History)"; document.getElementById('wal-btn-dep').innerText = "➕ Deposit"; document.getElementById('wal-btn-wit').innerText = "💸 Withdraw";
+            document.getElementById('rnk-title').innerText = "🏆 አሸናፊዎች (Top 10 Rank)";
+            document.getElementById('prof-title').innerText = "👤 የእኔ ፕሮፋይል"; document.getElementById('prof-bot-lbl').innerText = "🤖 የራስዎ መጋበዣ ሊንክ (Share)"; document.getElementById('prof-played-lbl').innerText = "ካርቴላ (Ticket)"; document.getElementById('prof-won-lbl').innerText = "ያሸነፉት (Won)"; document.getElementById('prof-help-lbl').innerText = "እርዳታ ያስፈልጎታል?"; 
+            
+            // 🔥 የፕሮፋይል እና የመመሪያ ቋንቋ ቀያሪ 🔥
+            document.getElementById('prof-guide-lbl').innerText = "የጨዋታው መመሪያ እና ደንብ"; 
+            document.getElementById('guide-title').innerText = "የጨዋታው መመሪያ እና ደንብ";
+            document.getElementById('guide-chance-text').innerHTML = "";
+            document.getElementById('guide-rules-text').innerHTML = "<div style='font-size:15px; font-weight:800; margin-bottom:8px;'>አማር ቢንጎ — የተጠቃሚ መመሪያ እና የስምምነት ውል</div><p style='margin:0 0 12px 0;'>እንኳን ወደ አማር ቢንጎ ቤተሰብ በደህና መጡ! መዝናናትዎ እና ደህንነትዎ ቅድሚያ የምንሰጣቸው ጉዳዮች ናቸው። መጫወት ከመጀመርዎ በፊት እነዚህን መመሪያዎች በጥንቃቄ አንብበው እንዲከተሉ በትህትና እንጠይቃለን።</p><div style='font-weight:800; color:var(--faded-green); margin:0 0 6px 0;'>1. የጨዋታው ባህሪ እና አሠራር</div><ul style='margin:0 0 12px 0; padding-left:18px;'><li style='margin-bottom:8px;'><b>ሙሉ በሙሉ የዕድል ጨዋታ፦</b> የአማር ቢንጎ ውጤቶች ሙሉ በሙሉ በዕጣ እና በዕድል ይወሰናሉ። ስለዚህ ማንኛውንም ዙር እንደሚያሸንፉ ዋስትና ወይም አስቀድሞ የተወሰነ ውጤት የለም።</li><li style='margin-bottom:8px;'><b>እያንዳንዱ ዙር ለብቻው ነው፦</b> እያንዳንዱ ዙር ሙሉ በሙሉ የተለየ ክስተት ነው፤ ካለፉ ጨዋታዎች ጋር ቀጥተኛ ግንኙነት የለውም። መሸነፍ ወደፊት ድል እንደሚያረጋግጥ ማመን ስህተት ነው፤ ምንም ቀመር ወይም ሳይንሳዊ እርግጠኝነት የለም። ተከታታይ መሸነፍ ሊከሰት እንደሚችል በመገንዘብ በኃላፊነት ይጫወቱ።</li><li><b>ለመዝናኛ ብቻ፦</b> ይህ መድረክ የተዘጋጀው በትርፍ ጊዜዎ ለመዝናናት እና ለማረፍ ብቻ ነው። ቢጠፋ የዕለት ተዕለት ኑሮዎን ወይም የገንዘብ ደህንነትዎን የማይነካ፣ መለየት የሚችሉትን ገንዘብ ብቻ እንድትጫወቱ አጥብቀን እንመክራለን።</li></ul><div style='font-weight:800; color:var(--faded-green); margin:0 0 6px 0;'>2. የአካውንት እና የክፍያ አስተዳደር</div><ul style='margin:0; padding-left:18px;'><li><b>ተመላሽ የማይደረግ ገቢ፦</b> ወደ አማር ቢንጎ ሂሳብዎ የገባ ማንኛውም ገንዘብ በቀጥታ ለጨዋታ ተሳትፎ የተመደበ ነው። አንዴ ከተሞላ በኋላ ገቢው በፍጹም ተመላሽ አይደረግም።</li></ul>";
+            
+            document.getElementById('gw-title').innerText = "🏆 ማሸነፊያ መንገዶች";
+            document.getElementById('gw-desc').innerText = "ከታች ባሉት አራት ቅርፆች መሰረት አምስት ቁጥሮችን ካገኙ BINGO ብለው ያሸንፋሉ።";
+            document.getElementById('pt-1').innerText = "1. በአግድም";
+            document.getElementById('pt-2').innerText = "2. ወደ ታች";
+            document.getElementById('pt-3').innerText = "3. በማዕዘን";
+            document.getElementById('pt-4').innerText = "4. አራቱ ጥግ";
+
+            document.getElementById('guide-close-btn').innerText = "ተረዳሁ";
+
+            document.getElementById('prof-promo-lbl').innerText = "ፕሮሞ ኮድ (Promo Code)"; document.getElementById('prof-pw-lbl').innerText = "የይለፍ ቃል ቀይር"; document.getElementById('prof-out-lbl').innerText = "ከሲስተም ውጣ";
+            if (document.getElementById('prof-history-lbl')) document.getElementById('prof-history-lbl').innerText = "የጨዋታ ታሪክ (Game History)";
+            if (document.getElementById('prof-tab-history')) document.getElementById('prof-tab-history').innerText = "Game History";
+            if (document.getElementById('prof-history-back-lbl')) document.getElementById('prof-history-back-lbl').innerText = "ወደ ፕሮፋይል ተመለስ";
+            document.getElementById('t-page-title').innerText = "የእኔ ካርቴላዎች"; document.getElementById('t-btn-mb-txt').innerText = "ሙሉ ቦርድ እይ (Master Board)";
+            
+            document.getElementById('dep-title').innerText = "Deposit Funds"; document.getElementById('wit-title').innerText = "Withdraw Funds";
+            let warnEl = document.getElementById('dep-strict-warn'); if(warnEl) warnEl.innerHTML = "⚠️ <b>ማሳሰቢያ:</b> እባክዎ ከ ቴሌብር ወደ ቴሌብር፣ እንዲሁም ከ ሲቢኢ ብር ወደ ሲቢኢ ብር (CBE Birr) ብቻ ገቢ ያድርጉ።";
+            document.getElementById('lbl-dep-sms').innerText = "የከፈሉበት ማረጋገጫ (SMS)";
+            document.getElementById('m-dep-sms').placeholder = "ከባንክ የተላከሎትን SMS በሙሉ እዚህ Paste ያድርጉ (ትክክለኛ የከፈሉበትን ደረሰኝ)";
+            document.getElementById('dep-sms-hint').innerHTML = "💡 <b>ማሳሰቢያ:</b> ከባንክ የተላከሎትን SMS <b>ሙሉውን</b> ኮፒ በማድረግ እዚህ ይለጥፉ። በተለይ በ <b>CBE Birr</b> ሲያስገቡ የባንኩን ሙሉ ደረሰኝ (SMS) ማካተትዎን አይርሱ።";
+            document.getElementById('m-dep-btn').innerText = "ላክ";
+            document.getElementById('m-wit-btn').innerText = "ላክ";
+
+        } else {
+            btnEn.style.background = 'white'; btnEn.style.color = 'black';
+            btnAm.style.background = 'black'; btnAm.style.color = 'white';
+            
+            document.getElementById('g-lbl-round').innerText = "Game Round"; document.getElementById('g-lbl-bet').innerText = "Bet Amount"; document.getElementById('g-lbl-prize').innerText = "Prize Pool"; document.getElementById('g-lbl-balls').innerText = "Called Balls"; document.getElementById('lbl-my-ticket').innerText = "My Tickets"; document.getElementById('lbl-derash-game').innerText = "JACKPOT";
+            document.getElementById('h-lbl-derash').innerText = "JACKPOT"; document.getElementById('h-lbl-derash-badge').innerText = "JACKPOT"; 
+            
+            let hBoost = document.getElementById('h-lbl-boost');
+            if(hBoost) { hBoost.innerText = (currentJackpotBoost > 0) ? "🔥 ADDED TO JACKPOT" : "BONUS COMING SOON"; }
+
+            document.getElementById('h-lbl-select').innerText = `Select Tickets (${currentTicketPrice} ETB)`; 
+            document.getElementById('lbl-sel-tickets').innerText = "Selected Tickets: ";
+            
+            let status = document.querySelector('.nt-status');
+            if(status.innerText.includes("ሊጀምር") || status.innerText.includes("Starting")) { status.innerText = "Game is Starting"; } else if(status.innerText.includes("በመካሄድ") || status.innerText.includes("LIVE")) { status.innerText = "Game is LIVE"; }
+
+            document.getElementById('nav-txt-home').innerText = "Home"; document.getElementById('nav-txt-ticket').innerText = "Tickets"; document.getElementById('nav-txt-wallet').innerText = "Wallet"; document.getElementById('nav-txt-rank').innerText = "Rank"; document.getElementById('nav-txt-profile').innerText = "Profile";
+            document.getElementById('wal-title').innerText = "My Wallet"; document.getElementById('wal-main-lbl').innerHTML = "Main Balance <span style='font-size:9px; color:#fbbf24;'>(Withdrawable)</span>"; document.getElementById('wal-play-lbl').innerText = "Play Balance:"; document.getElementById('wal-hist-lbl').innerText = "Transaction History"; document.getElementById('wal-btn-dep').innerText = "➕ Deposit"; document.getElementById('wal-btn-wit').innerText = "💸 Withdraw";
+            document.getElementById('rnk-title').innerText = "🏆 Leaderboard (Top 10)";
+            document.getElementById('prof-title').innerText = "👤 My Profile"; document.getElementById('prof-bot-lbl').innerText = "🤖 Your Referral Link (Share)"; document.getElementById('prof-played-lbl').innerText = "Tickets"; document.getElementById('prof-won-lbl').innerText = "Won"; document.getElementById('prof-help-lbl').innerText = "Need Help?"; 
+            
+            // 🔥 የፕሮፋይል እና የመመሪያ ቋንቋ ቀያሪ (English) 🔥
+            document.getElementById('prof-guide-lbl').innerText = "Game Guide & Rules";
+            document.getElementById('guide-title').innerText = "Game Guide & Rules";
+            document.getElementById('guide-chance-text').innerHTML = "";
+            document.getElementById('guide-rules-text').innerHTML = "<div style='font-size:15px; font-weight:800; margin-bottom:8px;'>Amar Bingo — User Guide &amp; Terms of Agreement</div><p style='margin:0 0 12px 0;'>Welcome to the Amar Bingo family! Your entertainment and safety are our top priorities. Before starting to play, we kindly ask you to read and follow these guidelines:</p><div style='font-weight:800; color:var(--faded-green); margin:0 0 6px 0;'>1. Nature and Mechanics of the Game</div><ul style='margin:0 0 12px 0; padding-left:18px;'><li style='margin-bottom:8px;'><b>Pure Game of Chance:</b> Amar Bingo results are completely determined by a random lottery/chance. Therefore, there is no guarantee or predetermined outcome to win any round.</li><li style='margin-bottom:8px;'><b>Independent Rounds:</b> Each round is an entirely separate event and has no direct connection to past games. Believing a loss will guarantee a future win is a fallacy; there is no formula or scientific certainty. Please play responsibly, knowing that consecutive losses can happen.</li><li><b>For Entertainment Only:</b> This platform is designed solely for leisure and relaxation in your free time. We strongly advise you to play only with disposable funds that will not affect your daily life or financial well-being if lost.</li></ul><div style='font-weight:800; color:var(--faded-green); margin:0 0 6px 0;'>2. Account &amp; Payment Management</div><ul style='margin:0; padding-left:18px;'><li><b>Non-Refundable Deposits:</b> Any funds deposited into your Amar Bingo balance are dedicated directly to gameplay participation. Once credited, deposits are strictly non-refundable.</li></ul>";
+            
+            document.getElementById('gw-title').innerText = "🏆 Winning Patterns";
+            document.getElementById('gw-desc').innerText = "Match 5 numbers based on the following patterns to win BINGO:";
+            document.getElementById('pt-1').innerText = "1. Horizontal";
+            document.getElementById('pt-2').innerText = "2. Vertical";
+            document.getElementById('pt-3').innerText = "3. Diagonal (X Shape)";
+            document.getElementById('pt-4').innerText = "4. Four Corners";
+
+            document.getElementById('guide-close-btn').innerText = "Got it (Close)";
+
+            document.getElementById('prof-promo-lbl').innerText = "Promo Code"; document.getElementById('prof-pw-lbl').innerText = "Change Password"; document.getElementById('prof-out-lbl').innerText = "Logout";
+            if (document.getElementById('prof-history-lbl')) document.getElementById('prof-history-lbl').innerText = "Game History";
+            if (document.getElementById('prof-tab-history')) document.getElementById('prof-tab-history').innerText = "Game History";
+            if (document.getElementById('prof-history-back-lbl')) document.getElementById('prof-history-back-lbl').innerText = "Back to Profile";
+            document.getElementById('t-page-title').innerText = "My Tickets"; document.getElementById('t-btn-mb-txt').innerText = "View Master Board";
+            
+            document.getElementById('dep-title').innerText = "Deposit Funds"; document.getElementById('wit-title').innerText = "Withdraw Funds";
+            let warnEl = document.getElementById('dep-strict-warn'); if(warnEl) warnEl.innerHTML = "⚠️ <b>Notice:</b> Please transfer Telebirr to Telebirr ONLY, and CBE Birr to CBE Birr ONLY.";
+            document.getElementById('lbl-dep-sms').innerText = "Payment Confirmation (SMS)";
+            document.getElementById('m-dep-sms').placeholder = "Paste the full SMS receipt from your bank here";
+            document.getElementById('dep-sms-hint').innerHTML = "💡 <b>Hint:</b> Copy and paste the <b>full</b> SMS message you received from the bank. Especially for <b>CBE Birr</b>, make sure to include the entire receipt.";
+            document.getElementById('m-dep-btn').innerText = "Send";
+            document.getElementById('m-wit-btn').innerText = "Send";
+        }
+        paintOccupiedLabel();
+        paintMyRankBanner();
+    }
+
+    function playNumberSound(num) {
+        if (!isSoundOn) return;
+        audioQueue.push({ type: 'number', file: num });
+        processAudioQueue();
+    }
+
+    function playBingoSound() {
+        if (!isSoundOn) return;
+        audioQueue = []; 
+        if(currentAudioObj) { currentAudioObj.pause(); currentAudioObj.currentTime = 0; isPlayingAudio = false; }
+        audioQueue.push({ type: 'bingo', file: 'New Recording 9' });
+        processAudioQueue();
+    }
+
+    function processAudioQueue() {
+        if (isPlayingAudio || audioQueue.length === 0) return;
+        isPlayingAudio = true;
+        let item = audioQueue.shift();
+        
+        let path = '';
+        if (item.type === 'bingo') { path = `/jo sound/${item.file}.m4a`; } 
+        else { path = `/jo sound/${item.file}.mp3`; }
+
+        currentAudioObj = new Audio(path); 
+        
+        currentAudioObj.onended = () => { isPlayingAudio = false; currentAudioObj = null; processAudioQueue(); };
+        currentAudioObj.onerror = () => { console.log(`Sound missing for: ${path}`); isPlayingAudio = false; currentAudioObj = null; processAudioQueue(); };
+        
+        let playPromise = currentAudioObj.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => { isPlayingAudio = false; currentAudioObj = null; processAudioQueue(); });
+        }
+    }
+
+    window.onload = async () => {
+        buildMasterBoard(); buildTicketMasterBoard(); initGrid();
+        
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+            const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+            const tgId = tgUser.id.toString();
+            
+            document.getElementById('start-btn').innerText = "በቴሌግራም እየገባ ነው...";
+            document.getElementById('start-btn').disabled = true;
+            try {
+                let res = await fetch('/api/telegram-login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ telegramId: tgId, username: tgUser.username || '', firstName: tgUser.first_name || '' }) });
+                let data = await res.json();
+                if (data.success) {
+                    processLoginSuccess(data.user);
+                    let tRes = await fetch(`/api/user/my-active-tickets/${data.user.phone}`);
+                    let tData = await tRes.json();
+                    if(tData.success) {
+                        applyRoundTickets(tData); renderConfirmedTickets(); renderGridTakenStates(); 
+                        if(tData.gameState !== 'FINISHED' && Number(tData.gameId) === Number(boundRoundId) && tData.calledNumbers && tData.calledNumbers.length > 0) {
+                            called = tData.calledNumbers;
+                            called.forEach(num => {
+                                let colIdx = num <= 15 ? 0 : num <= 30 ? 1 : num <= 45 ? 2 : num <= 60 ? 3 : 4; let ballText = bHeads[colIdx] + "-" + num; let topH = document.getElementById('history-scroll-top'); let tickH = document.getElementById('ticket-history-bar');
+                                if (topH.innerHTML === '' || tickH.innerText.includes("ገና")) { tickH.innerHTML = ''; }
+                                let topDiv = document.createElement('div'); topDiv.className = 'hist-top-ball'; topDiv.innerText = ballText; let tickDiv = document.createElement('div'); tickDiv.className = 'hist-top-ball'; tickDiv.innerText = ballText;
+                                topH.insertBefore(topDiv, topH.firstChild); tickH.insertBefore(tickDiv, tickH.firstChild); 
+                            });
+                            called.forEach(num => {
+                                document.querySelectorAll('.t-v-' + num).forEach(c => c.classList.add('marked'));
+                                let mbCell = document.getElementById('mb-' + num); if(mbCell) mbCell.classList.add('called'); let tmbCell = document.getElementById('tmb-' + num); if(tmbCell) tmbCell.classList.add('called');
+                            });
+                        }
+                    }
+                    socket.emit('get_initial_data', data.user.phone); return; 
+                } else { document.getElementById('start-btn').innerText = "ወደ ጌም ግባ (REGISTER)"; document.getElementById('start-btn').disabled = false; alert(data.message || "Please register via Telegram bot first!"); }
+            } catch(e) { document.getElementById('start-btn').innerText = "ወደ ጌም ግባ (REGISTER)"; document.getElementById('start-btn').disabled = false; }
+        }
+
+        let savedPhone = localStorage.getItem('bingo_user_phone'); let savedPass = localStorage.getItem('bingo_user_pass');
+        
+        if(savedPhone && savedPass) {
+            document.getElementById('start-btn').innerText = "እየገባ ነው... (Logging in...)"; document.getElementById('start-btn').disabled = true;
+            try {
+                let res = await fetch('/api/login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({phone: savedPhone, password: savedPass}) }); let data = await res.json();
+                if(data.success) { 
+                    processLoginSuccess(data.user); 
+                    let tRes = await fetch(`/api/user/my-active-tickets/${data.user.phone}`); let tData = await tRes.json();
+                    if(tData.success) {
+                        applyRoundTickets(tData); renderConfirmedTickets(); renderGridTakenStates(); 
+                        if(tData.gameState !== 'FINISHED' && Number(tData.gameId) === Number(boundRoundId) && tData.calledNumbers && tData.calledNumbers.length > 0) {
+                            called = tData.calledNumbers;
+                            called.forEach(num => {
+                                let colIdx = num <= 15 ? 0 : num <= 30 ? 1 : num <= 45 ? 2 : num <= 60 ? 3 : 4; let ballText = bHeads[colIdx] + "-" + num; let topH = document.getElementById('history-scroll-top'); let tickH = document.getElementById('ticket-history-bar');
+                                if (topH.innerHTML === '' || tickH.innerText.includes("ገና")) { tickH.innerHTML = ''; }
+                                let topDiv = document.createElement('div'); topDiv.className = 'hist-top-ball'; topDiv.innerText = ballText; let tickDiv = document.createElement('div'); tickDiv.className = 'hist-top-ball'; tickDiv.innerText = ballText;
+                                topH.insertBefore(topDiv, topH.firstChild); tickH.insertBefore(tickDiv, tickH.firstChild); 
+                            });
+                            called.forEach(num => {
+                                document.querySelectorAll('.t-v-' + num).forEach(c => c.classList.add('marked'));
+                                let mbCell = document.getElementById('mb-' + num); if(mbCell) mbCell.classList.add('called'); let tmbCell = document.getElementById('tmb-' + num); if(tmbCell) tmbCell.classList.add('called');
+                            });
+                        }
+                    }
+                    socket.emit('get_initial_data', data.user.phone); 
+                } else { logout(); }
+            } catch(e) { document.getElementById('start-btn').innerText = "ወደ ጌም ግባ (REGISTER)"; document.getElementById('start-btn').disabled = false; }
+        }
+    };
+
+    socket.on('new_promo_alert', (data) => {
+        const floatBtn = document.getElementById('promo-claim-float');
+        if(floatBtn) {
+            document.getElementById('promo-float-amt').innerText = data.amount;
+            floatBtn.style.display = 'block';
+        }
+    });
+
+    async function claimWebPromo() {
+        if(!currentUser) return alert("እባክዎ መጀመሪያ ይግቡ (Login)");
+        document.getElementById('promo-claim-float').style.display = 'none'; 
+        try {
+            let res = await fetch('/api/claim-promo-web', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({phone: currentUser.phone}) });
+            let data = await res.json();
+            if(data.success) { alert(`🎉 እንኳን ደስ አሎት! የ ${data.amount} ETB ቦነስ አግኝተዋል!`); fetchUpdatedBalance(); } 
+            else { alert("❌ " + data.message); }
+        } catch(e) { alert("❌ ኮኔክሽን ተቋርጧል! (Connection Error)"); }
+    }
+
+    function toggleSound() {
+        isSoundOn = !isSoundOn; let st = document.getElementById('sound-toggle'); if(st) st.innerText = isSoundOn ? '🔊' : '🔇';
+        if (!isSoundOn) { audioQueue = []; isPlayingAudio = false; if(currentAudioObj) { currentAudioObj.pause(); currentAudioObj.currentTime = 0; } }
+    }
+
+    function toggleTicketMasterBoard() {
+        const page = document.getElementById('ticket-page'); const arrow = document.getElementById('mb-toggle-arrow');
+        page.classList.toggle('show-mb'); if(page.classList.contains('show-mb')) { arrow.innerText = '▲'; } else { arrow.innerText = '▼'; }
+    }
+
+    function logout() { localStorage.removeItem('bingo_user_phone'); localStorage.removeItem('bingo_user_pass'); window.location.href = "/"; }
+    function togglePass() { let x = document.getElementById("reg-pass"); let icon = document.getElementById("eye-icon"); if (x.type === "password") { x.type = "text"; icon.innerText = "🙈"; } else { x.type = "password"; icon.innerText = "👁️"; } }
+
+    function openDepositModal() { document.getElementById('dep-modal-overlay').style.display = 'flex'; setTimeout(() => { document.getElementById('dep-modal').classList.add('show'); }, 10); }
+    function closeDepositModal(e) { if(e && e.target.id !== 'dep-modal-overlay') return; document.getElementById('dep-modal').classList.remove('show'); setTimeout(() => { document.getElementById('dep-modal-overlay').style.display = 'none'; }, 300); }
+    
+    function openWithdrawModal() { if(currentUser && currentUser.phone) { document.getElementById('m-wit-phone').value = currentUser.phone; } document.getElementById('wit-modal-overlay').style.display = 'flex'; setTimeout(() => { document.getElementById('wit-modal').classList.add('show'); }, 10); }
+    function closeWithdrawModal(e) { if(e && e.target.id !== 'wit-modal-overlay') return; document.getElementById('wit-modal').classList.remove('show'); setTimeout(() => { document.getElementById('wit-modal-overlay').style.display = 'none'; }, 300); }
+    
+    function selectBank(method, element, type) {
+        let gridId = type === 'dep' ? 'dep-bank-grid' : 'wit-bank-grid'; let buttons = document.querySelectorAll(`#${gridId} .bank-btn`); buttons.forEach(btn => btn.classList.remove('active')); element.classList.add('active');
+        if(type === 'dep') { let copyBox = document.getElementById('dep-copy-box'); copyBox.classList.remove('pop-anim'); void copyBox.offsetWidth; copyBox.classList.add('show', 'pop-anim'); document.getElementById('m-dep-acc').innerText = depAccounts[method].num; document.getElementById('m-dep-name').innerText = depAccounts[method].name; }
+    }
+    function copyModalNumber(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); alert("ቁጥሩ ኮፒ ተደርጓል!"); }
+
+    async function processNewDeposit() {
+        let amt = parseFloat(document.getElementById('m-dep-amt').value); let activeBtn = document.querySelector('#dep-bank-grid .bank-btn.active'); let method = activeBtn ? activeBtn.getAttribute('data-bankname') : ''; let smsText = document.getElementById('m-dep-sms').value.trim();
+        if(!method) return alert("እባክዎ ባንክ ይምረጡ!"); if(!amt || amt < 50) return alert("ዝቅተኛው መጠን 50 ብር ነው!"); if(!smsText) return alert("እባክዎ የSMS ማረጋገጫ ያስገቡ!");
+        let btn = document.getElementById('m-dep-btn'); btn.innerText = "እየላከ ነው...";
+        try { 
+            let res = await fetch('/api/request-tx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: currentUser.phone, type: 'deposit', amount: amt, method: method, sms: smsText }) }); 
+            let data = await res.json(); 
+            alert(data.message); 
+            if(data.success) { 
+                document.getElementById('m-dep-amt').value = ''; 
+                document.getElementById('m-dep-sms').value = ''; 
+                closeDepositModal(); 
+                loadTransactionHistory();
+            }
+        } catch(e) {}
+        btn.innerText = document.getElementById('btn-en').style.background === 'white' ? "Submit" : "ላክ";
+    }
+
+    async function processNewWithdraw() {
+        let amt = parseFloat(document.getElementById('m-wit-amt').value); let activeBtn = document.querySelector('#wit-bank-grid .bank-btn.active'); let method = activeBtn ? activeBtn.getAttribute('data-bankname') : ''; let phone = document.getElementById('m-wit-phone').value.trim();
+        if(!method) return alert("እባክዎ ባንክ ይምረጡ!"); if(!phone) return alert("እባክዎ ስልክ ቁጥር ያስገቡ!"); if(!amt || amt < 50 || amt > 300000) return alert("መጠን በ 50 እና 300,000 መሃል መሆን አለበት!");
+        let currentMainBal = parseFloat(currentUser.mainBalance) || 0; if(amt > currentMainBal) return alert("በዋና (ያሸነፉት) ሂሳብዎ ላይ በቂ ገንዘብ የሎትም!"); 
+        let btn = document.getElementById('m-wit-btn'); btn.innerText = "እየላከ ነው...";
+        try { 
+            let res = await fetch('/api/request-tx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: currentUser.phone, type: 'withdraw', amount: amt, method: method, destinationPhone: phone }) }); 
+            let data = await res.json(); 
+            if(data.success) { 
+                await fetchUpdatedBalance(); 
+                alert(data.message); 
+                document.getElementById('m-wit-amt').value = ''; 
+                document.getElementById('m-wit-phone').value = ''; 
+                closeWithdrawModal(); 
+                loadTransactionHistory();
+            } else { 
+                alert(data.message); 
+            } 
+        } catch(e) {}
+        btn.innerText = document.getElementById('btn-en').style.background === 'white' ? "Submit" : "ላክ";
+    }
+
+    async function savePassword() {
+        let oldPass = document.getElementById('pw-old').value; let newPass = document.getElementById('pw-new').value; let confPass = document.getElementById('pw-conf').value;
+        if(!oldPass || !newPass || !confPass) return alert("እባክዎ ሁሉንም ያስገቡ!"); if(newPass !== confPass) return alert("አዲሱ የይለፍ ቃል አይመሳሰልም!");
+        try {
+            let res = await fetch('/api/user/change-password', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({phone: currentUser.phone, oldPass, newPass}) }); let data = await res.json(); alert(data.message);
+            if(data.success) { localStorage.setItem('bingo_user_pass', newPass); document.getElementById('pw-old').value = ''; document.getElementById('pw-new').value = ''; document.getElementById('pw-conf').value = ''; document.getElementById('pw-modal-overlay').style.display='none'; }
+        } catch(e) {}
+    }
+
+    function toggleAuthMode() {
+        isLoginMode = !isLoginMode;
+        document.getElementById('name-group').style.display = isLoginMode ? 'none' : 'block'; document.getElementById('ref-group').style.display = isLoginMode ? 'none' : 'block'; document.getElementById('terms-box').style.display = isLoginMode ? 'none' : 'block';
+        if(isLoginMode) { document.getElementById('start-btn').innerText = "ግባ (LOGIN)"; document.getElementById('auth-subtitle').innerText = "ወደ አካውንትዎ ይግቡ"; document.getElementById('toggle-auth-text').innerText = "አዲስ አካውንት ይክፈቱ (Register)";
+        } else { document.getElementById('start-btn').innerText = "ወደ ጌም ግባ (REGISTER)"; document.getElementById('auth-subtitle').innerText = "ይመዝገቡ (10 ETB ቦነስ ያገኛሉ)"; document.getElementById('toggle-auth-text').innerText = "አካውንት አለዎት? ይግቡ (Login)"; }
+        v();
+    }
+
+    function v() { 
+        let phone = document.getElementById('reg-phone').value.trim(); let pass = document.getElementById('reg-pass').value.trim(); let name = document.getElementById('reg-name').value.trim(); let btn = document.getElementById('start-btn');
+        let phoneValid = (phone.startsWith('09') || phone.startsWith('07')) && phone.length === 10 && /^\d+$/.test(phone); let passValid = pass.length >= 4;
+        if(isLoginMode) { btn.disabled = !(phoneValid && passValid); } else { let nameValid = name.length > 0; let c1 = document.getElementById('c1').checked; let c2 = document.getElementById('c2').checked; btn.disabled = !(phoneValid && passValid && nameValid && c1 && c2); }
+    }
+
+    async function authAction() {
+        let phone = document.getElementById('reg-phone').value.trim(); let pass = document.getElementById('reg-pass').value.trim(); let name = document.getElementById('reg-name').value.trim(); let refCode = document.getElementById('reg-ref').value.trim();
+        document.getElementById('start-btn').innerText = "እባክዎ ይጠብቁ..."; document.getElementById('start-btn').disabled = true;
+        let endpoint = isLoginMode ? '/api/login' : '/api/register';
+        
+        try {
+            let res = await fetch(endpoint, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({phone, password: pass, name, refCode}) }); 
+            let data = await res.json();
+            
+            if(data.success) { 
+                if(isLoginMode) { 
+                    localStorage.setItem('bingo_user_phone', phone); localStorage.setItem('bingo_user_pass', pass); 
+                    processLoginSuccess(data.user); 
+                } else { 
+                    alert("✅ በተሳካ ሁኔታ ተመዝግበዋል! ወደ አካውንትዎ እየገባ ነው...");
+                    toggleAuthMode();
+                    
+                    document.getElementById('start-btn').disabled = true;
+                    document.getElementById('start-btn').innerText = "እየገባ ነው...";
+                    
+                    let logRes = await fetch('/api/login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({phone, password: pass}) });
+                    let logData = await logRes.json();
+                    
+                    if(logData.success) {
+                        localStorage.setItem('bingo_user_phone', phone); localStorage.setItem('bingo_user_pass', pass); 
+                        processLoginSuccess(logData.user); 
+                    } else {
+                        alert("እባክዎ ዳግም ይግቡ (Login)");
+                        document.getElementById('start-btn').disabled = false;
+                        document.getElementById('start-btn').innerText = "ግባ (LOGIN)";
+                    }
+                }
+            } else { 
+                alert(data.message || "ስህተት አጋጥሟል!"); 
+                document.getElementById('start-btn').disabled = false; 
+                document.getElementById('start-btn').innerText = isLoginMode ? "ግባ (LOGIN)" : "ወደ ጌም ግባ (REGISTER)"; 
+            }
+        } catch(e) {
+            alert("ኮኔክሽን ተቋርጧል! እባክዎ ኢንተርኔትዎን አረጋግጠው እንደገና ይሞክሩ።");
+            document.getElementById('start-btn').disabled = false; 
+            document.getElementById('start-btn').innerText = isLoginMode ? "ግባ (LOGIN)" : "ወደ ጌም ግባ (REGISTER)"; 
+        }
+    }
+
+    function profileWonAmount(user) {
+        if (!user) return 0;
+        return Math.max(0, Number(user.periodWon) || 0);
+    }
+
+    function profileTicketCount(user) {
+        if (!user) return 0;
+        return Math.max(0, Number(user.periodTickets) || 0);
+    }
+
+    function renderProfileStats(user) {
+        const ticketEl = document.getElementById('prof-played');
+        const wonEl = document.getElementById('prof-won');
+        if (ticketEl) ticketEl.innerText = profileTicketCount(user).toLocaleString('en-US');
+        if (wonEl) wonEl.innerText = profileWonAmount(user).toLocaleString('en-US', {minimumFractionDigits: 2}) + " ETB";
+    }
+
+    function processLoginSuccess(userObj) {
+        currentUser = userObj;
+        document.getElementById('hdr-name').innerText = currentUser.name; document.getElementById('hdr-phone').innerText = currentUser.phone; document.getElementById('prof-name').innerText = currentUser.name; document.getElementById('prof-phone').innerText = currentUser.phone; document.getElementById('prof-avatar').innerText = currentUser.name.charAt(0).toUpperCase();
+        let displayId = currentUser.userId || currentUser.id || currentUser._id || currentUser.phone.slice(-5); document.getElementById('prof-id-display').innerText = "ID: #" + displayId;
+        renderProfileStats(currentUser);
+        
+        let myCode = currentUser.refCode ? currentUser.refCode : currentUser.phone;
+        let myRefLink = "https://t.me/amar_bingo_bot?start=" + myCode;
+        document.getElementById('prof-ref-text').innerText = "t.me/amar_bingo_bot?start=" + myCode;
+        document.getElementById('prof-btn-copy').onclick = () => { navigator.clipboard.writeText(myRefLink); alert('ሊንኩ ኮፒ ተደርጓል!'); };
+        
+        updateUIBalance(); document.getElementById('auth-page').classList.remove('active-page'); document.getElementById('navbar').style.display = 'flex'; document.getElementById('global-header').style.display = 'flex'; handleHomeNav();
+    }
+
+    async function fetchUpdatedBalance() {
+        if(!currentUser) return;
+        let res = await fetch(`/api/getUser/${currentUser.phone}`); let data = await res.json();
+        if(data.success) {
+            const keptPassword = currentUser && currentUser.password;
+            currentUser = data.user;
+            if (keptPassword && !currentUser.password) currentUser.password = keptPassword;
+            updateUIBalance();
+            renderProfileStats(currentUser);
+        }
+    }
+
+    function standingCopy() {
+        const am = uiLang !== 'EN';
+        return {
+            occupied: am ? 'የተያዙ ካርዶች:' : 'Occupied Cards:',
+            yourRank: am ? 'የእርስዎ ደረጃ:' : 'Your Rank:',
+            cards: (n) => am ? (Number(n || 0).toLocaleString('en-US') + ' ካርዶች') : (Number(n || 0).toLocaleString('en-US') + ' Cards')
+        };
+    }
+
+    function paintOccupiedLabel() {
+        const el = document.getElementById('occupied-cards-lbl');
+        if (el) el.innerText = standingCopy().occupied;
+    }
+
+    function occupiedCardTotal(list) {
+        return normalizeTakenIds(list).length;
+    }
+
+    function displayedOccupiedTotal() {
+        return normalizeTakenIds((globalTakenTickets || []).concat(pendingOccupiedIds)).length;
+    }
+
+    function holdPendingOccupied(id) {
+        const n = Number(id);
+        if (!Number.isInteger(n) || n <= 0) return;
+        if (pendingOccupiedIds.indexOf(n) === -1) pendingOccupiedIds.push(n);
+        renderOccupiedCards();
+    }
+
+    function releasePendingOccupied(ids) {
+        if (!pendingOccupiedIds.length) return;
+        if (ids == null) {
+            pendingOccupiedIds = [];
+        } else {
+            const drop = new Set(normalizeTakenIds(ids));
+            pendingOccupiedIds = pendingOccupiedIds.filter((id) => drop.has(id) === false);
+        }
+        renderOccupiedCards();
+    }
+
+    function normalizeTakenIds(list) {
+        const seen = new Set();
+        const out = [];
+        (Array.isArray(list) ? list : []).forEach((id) => {
+            const n = Number(id);
+            if (!Number.isInteger(n) || n <= 0 || seen.has(n)) return;
+            seen.add(n);
+            out.push(n);
+        });
+        return out;
+    }
+
+    let takenLookup = new Set();
+    let cardButtons = null;
+
+    function sameTakenIds(prev, next) {
+        if (prev.length !== next.length) return false;
+        const prevSet = new Set(prev);
+        for (let i = 0; i < next.length; i++) {
+            if (!prevSet.has(next[i])) return false;
+        }
+        return true;
+    }
+
+    function renderOccupiedCards() {
+        const el = document.getElementById('occupied-cards-count');
+        if (!el) return;
+        const next = String(displayedOccupiedTotal());
+        const prev = el.innerText;
+        if (prev === next) return;
+        el.innerText = next;
+        const pill = document.getElementById('occupied-cards-pill');
+        if (pill && prev !== '') {
+            pill.classList.remove('bump');
+            void pill.offsetWidth;
+            pill.classList.add('bump');
+        }
+    }
+
+    function noteTakenTickets(list) {
+        const next = normalizeTakenIds(list);
+        const serverSet = new Set(next);
+        pendingOccupiedIds = pendingOccupiedIds.filter((id) => serverSet.has(id) === false);
+        const prev = globalTakenTickets || [];
+        const changed = !sameTakenIds(prev, next);
+        globalTakenTickets = next;
+        takenLookup = serverSet;
+        if (changed) renderGridTakenStates();
+        else renderOccupiedCards();
+    }
+
+    function syncOccupiedFromStatus(data) {
+        if (data && Array.isArray(data.takenTickets)) noteTakenTickets(data.takenTickets);
+        else if (data && data.takenCount != null && Number(data.takenCount) !== (globalTakenTickets ? globalTakenTickets.length : 0) && currentUser && currentUser.phone) {
+            socket.emit('get_initial_data', currentUser.phone);
+        } else renderOccupiedCards();
+    }
+
+    function showMyRankBanner() {
+        const banner = document.getElementById('my-rank-banner');
+        if (!banner) return;
+        if (!currentUser || !currentUser.phone) {
+            banner.classList.remove('show');
+            return;
+        }
+        banner.classList.add('show');
+        paintMyRankBanner();
+    }
+
+    function hideMyRankBanner() {
+        const banner = document.getElementById('my-rank-banner');
+        if (banner) banner.classList.remove('show');
+    }
+
+    function paintMyRankBanner() {
+        const banner = document.getElementById('my-rank-banner');
+        if (!banner || !banner.classList.contains('show')) return;
+        const copy = standingCopy();
+        const standing = lastMyStanding || {};
+        const rankNum = Number(standing.rank);
+        const rankText = Number.isFinite(rankNum) && rankNum > 0 ? ('#' + rankNum) : '—';
+        const played = Math.max(0, Number(standing.cardsPlayed) || 0);
+        const label = document.getElementById('my-rank-label');
+        const value = document.getElementById('my-rank-value');
+        const cards = document.getElementById('my-rank-cards');
+        if (label) label.innerText = copy.yourRank;
+        if (value) value.innerText = rankText;
+        if (cards) cards.innerText = copy.cards(played);
+    }
+
+    async function loadLeaderboard() {
+        showPage('rank');
+        showMyRankBanner();
+        const content = document.getElementById('rank-content'); content.innerHTML = `<p style="text-align:center; color:var(--text-gray); font-size:13px;">እየጫነ ነው...</p>`;
+        try {
+            const phoneQ = (currentUser && currentUser.phone) ? ('?phone=' + encodeURIComponent(currentUser.phone)) : '';
+            let res = await fetch('/api/leaderboard' + phoneQ); let data = await res.json();
+            if (data && data.me) lastMyStanding = data.me;
+            paintMyRankBanner();
+            if(data.success) {
+                if(data.leaderboard.length === 0) { content.innerHTML = `<div style="background:rgba(15,23,42,0.5); border-radius:12px; padding:15px; text-align:center; color:var(--text-gray);">እስካሁን አሸናፊ የለም</div>`; } 
+                else {
+                    let top3 = data.leaderboard.slice(0, 3); let others = data.leaderboard.slice(3); let html = '<div class="podium-container">';
+                    const cardsLabel = (u) => `${Number(u.cardsPlayed != null ? u.cardsPlayed : u.won).toLocaleString('en-US', {maximumFractionDigits: 0})} Cards`;
+                    if(top3[1]) html += `<div class="podium-box podium-2"><div class="podium-avatar p-2-ava">2</div><div class="podium-name">${top3[1].name}</div><div class="podium-prize">${cardsLabel(top3[1])}</div></div>`;
+                    if(top3[0]) html += `<div class="podium-box podium-1"><div class="crown-icon">👑</div><div class="podium-avatar p-1-ava">1</div><div class="podium-name">${top3[0].name}</div><div class="podium-prize">${cardsLabel(top3[0])}</div></div>`;
+                    if(top3[2]) html += `<div class="podium-box podium-3"><div class="podium-avatar p-3-ava">3</div><div class="podium-name">${top3[2].name}</div><div class="podium-prize">${cardsLabel(top3[2])}</div></div>`;
+                    html += '</div>';
+                    others.forEach((u, i) => { html += `<div class="rank-card"><div style="display:flex; align-items:center;"><div class="rank-badge">${i+4}</div><div style="font-weight:bold; color:white; font-size:12px;">${u.name}</div></div><div style="color:var(--faded-green); font-weight:bold; font-size:12px;">${Number(u.cardsPlayed != null ? u.cardsPlayed : u.won).toLocaleString('en-US', {maximumFractionDigits: 0})} Cards</div></div>`; });
+                    content.innerHTML = html;
+                }
+            }
+        } catch(e) { content.innerHTML = `<p style="text-align:center; color:var(--red);">ስህተት አጋጥሟል</p>`; }
+    }
+
+    async function loadTransactionHistory() {
+        if(!currentUser) return;
+        const hc = document.getElementById('wallet-history-list'); hc.innerHTML = `<p style="text-align:center; color:var(--text-gray); font-size:11px;">እየጫነ ነው...</p>`;
+        try {
+            let res = await fetch(`/api/user/transactions/${currentUser.phone}`); let data = await res.json();
+            const visibleTxs = (data.success && Array.isArray(data.txs))
+                ? data.txs.filter(tx => {
+                    const kind = String(tx.type || '').toLowerCase().replace(/[\s-]+/g, '_');
+                    return kind === 'deposit' || kind === 'withdraw' || kind === 'win';
+                })
+                : [];
+            if(visibleTxs.length > 0) {
+                hc.innerHTML = '';
+                visibleTxs.forEach(tx => {
+                    let isCredit = tx.type === 'deposit' || tx.type === 'win';
+                    let color = isCredit ? '#0d9488' : '#ef4444'; 
+                    let sign = isCredit ? '+' : '-'; 
+                    let time = new Date(tx.date).toLocaleString();
+                    
+                    let statusColor = tx.status === 'Approved' ? '#34d399' : (tx.status === 'Pending' ? '#fbbf24' : '#ef4444');
+                    let statusText = tx.status === 'Approved' ? '✅ Approved' : (tx.status === 'Pending' ? '⏳ Pending' : '❌ Rejected');
+
+                    let bonusStr = (tx.bonusGiven && tx.bonusGiven > 0) ? `<br><span style="color:var(--gold); font-size:11px; font-weight:bold;">+ ${tx.bonusGiven} ETB (Bonus)</span>` : '';
+
+                    hc.innerHTML += `
+                    <div class="list-card" style="border-left: 3px solid ${color}; padding: 10px 15px; background: linear-gradient(90deg, #0b111a, #111827); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="font-weight:bold; font-size: 11px; color:white; text-transform:uppercase;">${tx.type} (${tx.method})</span><br>
+                            <span style="font-size: 10px; font-weight: bold; color: ${statusColor};">${statusText}</span><br>
+                            <small style="color:var(--text-gray); font-size: 9px;">${time}</small>
+                        </div>
+                        <b style="color:${color}; font-size:14px; text-shadow: 0 0 5px ${color}; text-align:right;">${sign}${Number(tx.amount).toLocaleString('en-US', {minimumFractionDigits: 2})} ETB ${bonusStr}</b>
+                    </div>`;
+                });
+            } else { hc.innerHTML = `<p style="text-align:center; color:var(--text-gray); font-size:11px;">ታሪክ የለም</p>`; }
+        } catch(e) { hc.innerHTML = `<p style="text-align:center; color:#ef4444; font-size:11px;">Error loading history.</p>`; }
+    }
+
+    function getSessionUser(scope) {
+        try {
+            if (!scope) return null;
+            const session = scope.currentUser;
+            if (session && session.phone) return session;
+            if (scope === window && window.currentUser && window.currentUser.phone) return window.currentUser;
+        } catch (e) {
+            return null;
+        }
+        return null;
+    }
+
+    function switchProfileTab(which) {
+        const account = document.getElementById('prof-account-panel');
+        const history = document.getElementById('prof-history-panel');
+        const accBtn = document.getElementById('prof-tab-account');
+        const histBtn = document.getElementById('prof-tab-history');
+        const showHist = which === 'history';
+        if (account) account.style.display = showHist ? 'none' : 'block';
+        if (history) history.style.display = showHist ? 'block' : 'none';
+        if (accBtn) accBtn.classList.toggle('active', !showHist);
+        if (histBtn) histBtn.classList.toggle('active', showHist);
+        if (showHist) loadPlayerGameHistory(false);
+    }
+
+    function renderHistorySplitNote(round) {
+        const winnerCount = Number((round && round.winnerCount) || 0);
+        if (!(winnerCount > 1)) return '';
+        return `<span class="hist-won-split">Winner Count: ${winnerCount} Winners / ${winnerCount} አሸናፊዎች</span>`;
+    }
+
+    function renderHistoryWonBadge(round) {
+        const amount = Number((round && round.payout) || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+        return `<div class="hist-won-badge"><span class="hist-won-amount">Won ${amount} ETB</span>${renderHistorySplitNote(round)}</div>`;
+    }
+
+    function renderHistoryLostBadge(round) {
+        const linesNeeded = Number(round && round.linesNeeded);
+        const linesNote = Number.isFinite(linesNeeded) && linesNeeded > 0
+            ? `<span class="hist-lines-needed">${linesNeeded} remaining to win a line</span>`
+            : '';
+        return `<div class="hist-lost-badge"><span class="hist-lost-label">Lost</span>${linesNote}${renderHistorySplitNote(round)}</div>`;
+    }
+
+    function formatHistoryEatTime(round) {
+        if (round && round.eatDateTime) return String(round.eatDateTime);
+        if (!round || !round.date) return '';
+        const ts = new Date(round.date).getTime();
+        if (!Number.isFinite(ts)) return '';
+        const d = new Date(ts + (3 * 60 * 60 * 1000));
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const pad = (n) => String(n).padStart(2, '0');
+        return pad(d.getUTCDate()) + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ', ' +
+            pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + ' EAT';
+    }
+
+    let playerHistoryCursor = null;
+    async function loadPlayerGameHistory(append) {
+        const session = getSessionUser(window);
+        const list = document.getElementById('player-game-history-list');
+        if (!session || !session.phone || !list) return;
+        if (!append) {
+            playerHistoryCursor = null;
+            list.innerHTML = `<p style="text-align:center; color:var(--text-gray); font-size:11px;">እየጫነ ነው...</p>`;
+        }
+        const url = '/api/user/game-history/' + encodeURIComponent(session.phone) + '?limit=10' + (append && playerHistoryCursor ? ('&before=' + encodeURIComponent(playerHistoryCursor)) : '');
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            const rounds = (data && data.rounds) || [];
+            if (!append) list.innerHTML = '';
+            if (!rounds.length && !append) {
+                list.innerHTML = `<p style="text-align:center; color:var(--text-gray); font-size:11px;">ታሪክ የለም</p>`;
+            }
+            rounds.forEach((round) => {
+                const called = (round.calledNumbers || []).map((n) => {
+                    return `<span class="hist-num">${n}</span>`;
+                }).join('');
+                const outcome = round.won ? renderHistoryWonBadge(round) : renderHistoryLostBadge(round);
+                const when = formatHistoryEatTime(round);
+                const timeHtml = when ? `<div class="hist-round-time">🕒 ${when}</div>` : '';
+                const roundNo = (round.roundId != null && round.roundId !== '') ? round.roundId : round.gameId;
+                const card = document.createElement('div');
+                card.className = 'hist-round-card';
+                card.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;"><b style="color:#38bdf8;">Round #${roundNo}</b>${outcome}</div>
+                    ${timeHtml}
+                    <div style="margin-top:6px; font-size:11px; color:#94a3b8;">Cards/Tickets Held: <b style="color:white;">${(round.cardIds || []).join(', ') || '-'}</b></div>
+                    <div style="margin-top:8px; font-size:10px; color:#94a3b8;">Called Numbers</div>
+                    <div style="margin-top:4px;">${called || '-'}</div>`;
+                list.appendChild(card);
+                if (round.date) playerHistoryCursor = round.date;
+            });
+            const more = document.getElementById('hist-load-more');
+            if (more) more.style.display = rounds.length >= 10 ? 'block' : 'none';
+        } catch (e) {
+            if (!append) list.innerHTML = `<p style="text-align:center; color:#ef4444; font-size:11px;">Error loading history.</p>`;
+        }
+    }
+
+    function updateUIBalance() {
+        document.getElementById('hdr-main-balance').innerText = (parseFloat(currentUser.mainBalance) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('hdr-play-balance').innerText = (parseFloat(currentUser.playBalance) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('main-bal').innerText = (parseFloat(currentUser.mainBalance) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        let playEl = document.getElementById('play-bal'); if(playEl) playEl.innerText = (parseFloat(currentUser.playBalance) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    function formatTime(seconds) { if(isNaN(seconds)) return seconds; let m = Math.floor(seconds / 60); let s = seconds % 60; return `0${m}:${s < 10 ? '0' : ''}${s}`; }
+
+    socket.on('balance_updated', async (phone) => { if(currentUser && phone === currentUser.phone) { await fetchUpdatedBalance(); if(document.getElementById('wallet-page').classList.contains('active-page')) loadTransactionHistory(); } });
+
+    socket.on('bet_error', (msg) => {
+        releasePendingOccupied();
+        alert(msg);
+        socket.emit('get_initial_data', currentUser.phone);
+    });
+
+    socket.on('ticket_cancelled_success', (tid) => {
+        userTicketsData = userTicketsData.filter(t => t.id !== tid);
+        renderGridTakenStates();
+        renderConfirmedTickets();
+        updateBetPreview();
+        fetchUpdatedBalance();
+    });
+
+    socket.on('card_grid_seed', (seed) => { noteRoundCardSeed(seed, boundRoundId, currentGameState); });
+
+    socket.on('sync_data', (data) => {
+        noteRoundCardSeed(data && data.cardGridSeed, data && (data.currentRoundId != null ? data.currentRoundId : data.gameId), data && data.gameState);
+        applyRoundTickets(data);
+        const roundClosed = data.gameState === 'FINISHED';
+        globalTakenTickets = normalizeTakenIds(roundClosed ? [] : (data.globalTakenTickets || []));
+        called = roundClosed ? [] : (data.calledNumbers || []);
+        document.getElementById('g-balls').innerText = called.length + "/75"; document.getElementById('t-page-balls').innerText = called.length + "/75"; 
+        
+        isProcessingTicket = false; // ሎዲንግ ያጠፋል
+        renderGridTakenStates();
+        updateBetPreview();
+        
+        // 🛑 ማስተካከያ: ሰርቨሩ የላከውን ትክክለኛ ካርቴላ ብቻ ያሳያል (የውሸት ካርቴላን ያጠፋል)
+        renderConfirmedTickets();
+        if(userTicketsData.length > 0) { 
+            document.getElementById('t-info').innerText = "የገዙት ካርቴላ ብዛት: " + userTicketsData.length;
+        } else { 
+            document.getElementById('t-info').innerText = "እስካሁን ካርቴላ አልገዙም"; 
+        }
+        
+        document.querySelectorAll('.mb-cell').forEach(c => c.classList.remove('called', 'current'));
+        document.getElementById('history-scroll-top').innerHTML = ''; document.getElementById('ticket-history-bar').innerHTML = '';
+        called.forEach((num, idx) => { updateLiveUI(num, idx === called.length - 1); });
+    });
+
+    socket.on('update_taken_tickets', (ticketsArr) => { noteTakenTickets(ticketsArr); });
+
+    function cardButtonList() {
+        if (!cardButtons || !cardButtons.length) cardButtons = document.querySelectorAll('#grid-box .num-btn');
+        return cardButtons;
+    }
+
+    function renderGridTakenStates() {
+        const buttons = cardButtonList();
+        const mine = new Set();
+        if (userTicketsData) {
+            for (let i = 0; i < userTicketsData.length; i++) mine.add(Number(userTicketsData[i] && userTicketsData[i].id));
+        }
+        takenLookup = new Set(globalTakenTickets || []);
+        for (let i = 0; i < buttons.length; i++) {
+            const btn = buttons[i];
+            const num = btn._cardNum || Number(btn.getAttribute('data-num'));
+            let isMine = mine.has(num);
+            const taken = !isMine && takenLookup.has(num);
+            const nextClass = isMine ? 'num-btn bought-by-me' : (taken ? 'num-btn taken' : 'num-btn');
+            if (btn.className !== nextClass) btn.className = nextClass;
+            if (btn.textContent !== String(num)) btn.textContent = String(num);
+        }
+        renderOccupiedCards();
+    }
+
+    socket.on('game_status', (data) => {
+        noteRoundCardSeed(data && data.cardGridSeed, data && data.gameId, data && data.state);
+        if (data.gameId != null) adoptActiveRound(data.gameId, data.state);
+        currentTicketPrice = data.ticketPrice || 10;
+        window.vaultTransferEnabled = data.vaultTransferEnabled !== false;
+        let betValEl = document.getElementById('g-val-bet');
+        if(betValEl) betValEl.innerText = currentTicketPrice.toFixed(2);
+
+        let isAm = document.getElementById('btn-am').style.background === 'white';
+        let lblSelect = document.getElementById('h-lbl-select');
+        if(lblSelect) lblSelect.innerText = isAm ? `ካርቴላ ይምረጡ (${currentTicketPrice} ብር)` : `Select Tickets (${currentTicketPrice} ETB)`;
+
+        let bannerTextAm = data.depBannerTextAm || "ልዩ ስጦታ<br>ከ 100 ብር ጀምሮ ገቢ ሲያደርጉ ተጨማሪ 20% ጉርሻ ያግኙ!";
+        let bannerTextEn = data.depBannerTextEn || "Special Gift<br>Get 20% bonus when you deposit 100 ETB or more!";
+        let dynBanner = document.getElementById('dynamic-dep-banner');
+        if(dynBanner) { dynBanner.innerHTML = isAm ? bannerTextAm.replace(/\n/g, '<br>') : bannerTextEn.replace(/\n/g, '<br>'); }
+        let witBannerAm = data.witBannerTextAm || "⚠️ <b>ማሳሰቢያ:</b> ለደህንነት ሲባል ገንዘብ ወጪ ማድረግ የሚቻለው <b>ሲመዘገቡ በተጠቀሙበት ስልክ ቁጥር</b> ብቻ ነው።";
+        let witBannerEn = data.witBannerTextEn || "⚠️ <b>Notice:</b> For security reasons, you can only withdraw to the <b>phone number you registered with</b>.";
+        
+        let dynWitBanner = document.getElementById('dynamic-wit-banner');
+        if(dynWitBanner) { 
+            dynWitBanner.innerHTML = isAm ? witBannerAm.replace(/\n/g, '<br>') : witBannerEn.replace(/\n/g, '<br>'); 
+        }
+
+        currentJackpotBoost = data.jackpotBoost || 0;
+        let boostBoxWrapper = document.getElementById('boost-box-wrapper');
+        let boostAmtBox = document.getElementById('h-boost-amt');
+        let hBoostLbl = document.getElementById('h-lbl-boost');
+
+        if (currentJackpotBoost > 0) {
+            if(boostBoxWrapper) {
+                boostBoxWrapper.classList.add('pulse-bonus-box');
+                boostBoxWrapper.style.opacity = '1';
+                boostBoxWrapper.style.filter = 'none';
+            }
+            if(hBoostLbl) hBoostLbl.innerText = isAm ? "🔥 ደራሽ ላይ የተጨመረ ቦነስ" : "🔥 ADDED TO JACKPOT";
+            if(boostAmtBox) boostAmtBox.innerText = "+" + currentJackpotBoost;
+        } else {
+            if(boostBoxWrapper) {
+                boostBoxWrapper.classList.remove('pulse-bonus-box');
+                boostBoxWrapper.style.opacity = '0.6';
+                boostBoxWrapper.style.filter = 'grayscale(70%)';
+            }
+            if(hBoostLbl) hBoostLbl.innerText = isAm ? "የደራሽ ቦነስ በቅርቡ ይጠብቁ" : "BONUS COMING SOON";
+            if(boostAmtBox) boostAmtBox.innerHTML = '<span class="waiting-hourglass">⏳</span>';
+        }
+
+        // 🔥 ማስተካከያ: Backend ላይ totalPrizePool ካልተደመረ እንዲደምረው၊ ከተደመረ እንዳይደግመው በ Frontend Explicitly መደመር አድርገን አስተካክለናል 🔥
+        let actualJackpot = Number(data.totalPrizePool || 0) + Number(currentJackpotBoost || 0);
+
+        document.getElementById('jp').innerText = actualJackpot.toLocaleString('en-US', {minimumFractionDigits: 2}); 
+        let jpAmtBox2 = document.getElementById('h-jp-amt-2'); if(jpAmtBox2) jpAmtBox2.innerText = actualJackpot.toLocaleString('en-US', {minimumFractionDigits: 2});
+        let jpAmtBox = document.getElementById('g-jp-amt'); if(jpAmtBox) jpAmtBox.innerText = actualJackpot.toLocaleString('en-US', {minimumFractionDigits: 2});
+        let tPagePrize = document.getElementById('t-page-prize'); if(tPagePrize) tPagePrize.innerText = actualJackpot.toLocaleString('en-US', {minimumFractionDigits: 2}) + " ETB";
+        
+        if(data.gameId) document.getElementById('g-id').innerText = "#" + data.gameId; 
+        document.getElementById('g-prize').innerText = actualJackpot.toLocaleString('en-US', {minimumFractionDigits: 2});
+        
+        if(data.maxTickets) {
+            maxTicketsLimit = data.maxTickets;
+            document.getElementById('grid-sel-count').nextElementSibling.innerText = "/ " + maxTicketsLimit;
+        }
+
+        let tla = document.getElementById('ticket-live-arrow'); if(tla) tla.style.display = 'none';
+
+        // 🔥 1. ከአድሚን የሚላከውን የባንክ መረጃ መቀበያ (ከሁሉም በላይ መሆን አለበት)
+        if (data.bankInfo) {
+            depAccounts.telebirr = { num: data.bankInfo.tbNum, name: data.bankInfo.tbName };
+            depAccounts.cbe = { num: data.bankInfo.cbeNum, name: data.bankInfo.cbeName };
+
+            let activeBtn = document.querySelector('#dep-bank-grid .bank-btn.active');
+            if (activeBtn) {
+                let method = activeBtn.getAttribute('data-bankname');
+                document.getElementById('m-dep-acc').innerText = depAccounts[method].num;
+                document.getElementById('m-dep-name').innerText = depAccounts[method].name;
+            }
+        }
+
+        // 🟢 2. የ MAINTENANCE (ጥገና) ቁጥጥር
+        if (data.state === "MAINTENANCE") {
+            document.body.classList.add('paused-mode');
+            document.getElementById('timer').innerText = "PAUSED";
+            document.querySelector('.nt-status').innerText = document.getElementById('btn-en').style.background === 'white' ? "Maintenance Mode" : "ጥገና ላይ ነን (Paused)";
+            syncOccupiedFromStatus(data);
+            return; 
+        } else {
+            document.body.classList.remove('paused-mode');
+        }
+
+        if (data.state === "WAITING") {
+            isGameRunningLocally = false;
+            document.getElementById('bingo-overlay').style.display = 'none';
+            document.getElementById('timer').innerText = formatTime(data.timer); 
+            document.querySelector('.nt-status').innerText = document.getElementById('btn-en').style.background === 'white' ? "Game is Starting" : "ጨዋታው ሊጀምር ነው";
+
+            if (currentGameState !== "WAITING") {
+                currentGameState = "WAITING";
+                document.querySelectorAll('.mb-cell').forEach(c => c.classList.remove('called', 'current'));
+                document.getElementById('history-scroll-top').innerHTML = ''; 
+                document.getElementById('ticket-history-bar').innerHTML = `<span style="color:var(--text-gray); font-size:11px;">ገና አልጀመረም...</span>`;
+                
+                document.getElementById('caller-ball').innerText = "--"; 
+                let ticketCb = document.getElementById('ticket-caller-ball'); if(ticketCb) ticketCb.innerText = "--";
+                document.getElementById('g-balls').innerText = "0/75"; 
+                document.getElementById('t-page-balls').innerText = "0/75"; 
+                called = []; 
+                
+                    if (currentUser) {
+                    userTicketsData = []; globalTakenTickets = []; pendingOccupiedIds = [];
+                    initGrid(); updateBetPreview();
+                    document.getElementById('ticket-list').innerHTML = ''; document.getElementById('game-mini-tickets').innerHTML = '';
+                    document.getElementById('t-info').innerText = "እስካሁን ካርቴላ አልገዙም";
+                    
+                    if (document.getElementById('game-page').classList.contains('active-page') || document.getElementById('ticket-page').classList.contains('active-page')) { 
+                        showPage('home'); 
+                    }
+                }
+            }
+            
+        } else if (data.state === "PLAYING") {
+            isGameRunningLocally = true; document.getElementById('timer').innerText = "LIVE 🔴"; 
+            document.querySelector('.nt-status').innerText = document.getElementById('btn-en').style.background === 'white' ? "Game is LIVE" : "ጨዋታው በመካሄድ ላይ ነው";
+
+            let tla = document.getElementById('ticket-live-arrow'); if(tla && userTicketsData.length > 0) tla.style.display = 'block';
+
+            if (currentGameState !== "PLAYING") {
+                currentGameState = "PLAYING"; 
+                if (currentUser && !document.getElementById('game-page').classList.contains('active-page')) { showPage('game'); }
+            }
+            called = data.calledNumbers || []; 
+            document.getElementById('g-balls').innerText = called.length + "/75";
+            document.getElementById('t-page-balls').innerText = called.length + "/75"; 
+            
+            document.querySelectorAll('.mb-cell').forEach(c => c.classList.remove('called', 'current'));
+            document.getElementById('history-scroll-top').innerHTML = ''; document.getElementById('ticket-history-bar').innerHTML = '';
+            called.forEach((num, idx) => { updateLiveUI(num, idx === called.length - 1); });
+        }
+        syncOccupiedFromStatus(data);
+    });
+
+    socket.on('new_number', (num) => {
+        if (!isGameRunningLocally || isBingoFound) return; 
+        called.push(num); 
+        playNumberSound(num); 
+        document.getElementById('g-balls').innerText = called.length + "/75"; 
+        document.getElementById('t-page-balls').innerText = called.length + "/75"; 
+        updateLiveUI(num, true);
+        userTicketsData.forEach(t => { for(let c=0; c<5; c++) { for(let r=0; r<5; r++) { if(t.grid[c][r] === num) t.marks[c][r] = 1; } } });
+    });
+
+    function renderSplitBotKartelas(data) {
+        const cards = (data && data.cards) || [];
+        const bots = cards.filter((card) => card && card.isBot && card.closed && Array.isArray(card.grid));
+        if (!bots.length) return '';
+        const cld = data.calledNumbers || [];
+        let html = `<div id="split-bot-kartelas" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:12px; width:100%; max-height:42vh; overflow-y:auto;">`;
+        bots.forEach((card) => {
+            const g = card.grid;
+            html += `<div data-closed="1" data-bot-kartela="${card.id}" style="width:160px;">`;
+            html += `<div style="font-size:12px; color:#38bdf8; font-weight:900; margin-bottom:4px;">ካርቴላ #${card.id}</div>`;
+            html += `<div style="border-radius: 18px; overflow: hidden; background: #ffffff; box-shadow: 0 0 16px rgba(34,197,94,0.45); border: 3px solid #22c55e; padding: 4px;">`;
+            html += `<div class="preview-t-grid" style="gap: 1px; background: #cbd5e1; border-radius: 14px; overflow: hidden;">`;
+            for (let i = 0; i < 5; i++) {
+                html += `<div class="preview-t-head" style="background:${bColors[i]}; color:#fff; height:18px; font-size:10px; display:flex; align-items:center; justify-content:center;">${bHeads[i]}</div>`;
+            }
+            for (let r = 0; r < 5; r++) {
+                for (let c = 0; c < 5; c++) {
+                    const num = g[c][r];
+                    if (r === 2 && c === 2) {
+                        html += `<div class="preview-t-cell marked" style="background:#fff; height:22px; display:flex; align-items:center; justify-content:center; color:#38bdf8; font-size:14px;">★</div>`;
+                    } else if (cld.includes(num)) {
+                        html += `<div class="preview-t-cell marked" style="background:#fff; height:22px; display:flex; align-items:center; justify-content:center;"><div style="background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color:#fff; font-size: 9px; font-weight: 900;">${num}</div></div>`;
+                    } else {
+                        html += `<div class="preview-t-cell" style="background:#fff; color:#000; height:22px; font-size:9px; font-weight:bold; display:flex; align-items:center; justify-content:center;">${num}</div>`;
+                    }
+                }
+            }
+            html += `</div></div></div>`;
+        });
+        html += `</div>`;
+        return html;
+    }
+
+    socket.on('game_winner', (data) => {
+        isBingoFound = true;
+        playBingoSound(); 
+        document.getElementById('bingo-overlay').style.display = 'flex'; 
+        
+        let amIWinner = false;
+        if (currentUser && currentUser.phone && data.phone.includes(currentUser.phone)) { amIWinner = true; }
+
+        let titleHtml = amIWinner ? "🎉 እንኳን ደስ አሎት! 🎉" : "አሸናፊ (WINNER)";
+        let nameHtml = "";
+
+        if (amIWinner) {
+            nameHtml = data.isShared 
+                ? "እርስዎ ከሌሎች ጋር በጋራ አሸንፈዋል!" 
+                : "እርስዎ አሸንፈዋል! 👏";
+        } else {
+            nameHtml = data.isShared 
+                ? "እነዚህ ተጫዋቾች በጋራ አሸንፈዋል" 
+                : data.winnerName;
+        }
+
+        let sharedListHtml = "";
+        if (data.isShared && data.winnerDetails) {
+            // ፎንቶች አነስ ተደርገዋል፣ max-height: 140px ተደርጓል (በትክክል 3 ሰው ብቻ ያሳያል፣ 4+ ከሆነ scroll ይሆናል)
+            sharedListHtml = `<div style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 12px; border: 1px solid #4ade80; margin-top: 10px; width: 100%; box-sizing: border-box;">
+                <h4 style="margin:0 0 8px 0; color:#4ade80; font-size:13px; text-align:center;">✨ አሸናፊዎች (${data.winnerCount}) ✨</h4>
+                <ul style="list-style:none; padding:0; margin:0; text-align:left; max-height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; padding-right: 4px;">`;
+            data.winnerDetails.forEach(w => {
+                sharedListHtml += `<li style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-size: 13px; font-weight: bold; color: #ffffff;">👤 ${w.name}</div>
+                        <div style="color:#94a3b8; font-size:10px; margin-top:3px;">ስልክ: <span style="color:white;">09XXXXXX</span> | ካርቴላ: <b style="color:#38bdf8; font-size:12px;">#${w.ticket}</b></div>
+                    </div>
+                    <div style="color:#fbbf24; font-weight:900; font-size: 14px;">${w.prize.toLocaleString('en-US', {maximumFractionDigits: 0})} ETB</div>
+                </li>`;
+            });
+            sharedListHtml += `</ul></div>`;
+            nameHtml = "በጋራ አሸንፈዋል!";
+        }
+
+        let winnerCard = document.querySelector('.winner-card');
+
+        if (!data.isShared) {
+            // 1 ሰው ብቻ ሲያሸንፍ (ካርቴላውን ያሳያል)
+            winnerCard.innerHTML = `
+                <h3 style="margin:0; color:${amIWinner ? '#4ade80' : 'white'}; font-size:${amIWinner ? '20px' : '16px'}; letter-spacing: 2px; text-transform: uppercase;">${titleHtml}</h3>
+                <h1 class="bingo-text">B I N G O !</h1>
+                <div id="win-ticket-display"></div>
+                <h2 id="win-name" style="margin:15px 0 10px 0; color:${amIWinner ? '#fbbf24' : '#ffffff'}; font-size:28px; font-weight:900; text-shadow: 0 0 15px rgba(255,255,255,0.5);">${nameHtml}</h2>
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size:16px; color:var(--text-gray); font-weight:bold; margin-bottom:5px;">ስልክ: <span style="color:#fff;">09XXXXXX</span></div>
+                    <div style="font-size:16px; color:var(--text-gray); font-weight:bold;">አሸናፊ ካርቴላ: <b id="win-ticket" style="font-size:28px; color:#38bdf8; text-shadow: 0 0 10px rgba(56,189,248,0.5);">#${data.ticketId}</b></div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 12px; border: 1px solid #fbbf24; width: fit-content; margin: 0 auto;">
+                    <p style="margin:0; font-size:12px; color:#fff; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">የገንዘብ ሽልማት (Prize)</p>
+                    <h1 style="margin:5px 0 0 0; color:#fff; font-size: 28px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);" id="win-prize">${data.totalPrize.toLocaleString('en-US', {maximumFractionDigits: 0})} ETB</h1>
+                </div>
+            `;
+
+            let g = data.ticketGrid; let cld = data.calledNumbers;
+            let html = `<div style="width:200px; margin: 15px auto 0 auto; border-radius: 30px; overflow: hidden; background: #ffffff; box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); border: 3px solid #cbd5e1; padding: 6px;">`;
+            html += `<div class="preview-t-grid" style="gap: 1px; background: #cbd5e1; border-radius: 24px; overflow: hidden;">`;
+            for(let i=0; i<5; i++) { html += `<div class="preview-t-head" style="background:${bColors[i]}; color:#fff; height:25px; font-size:12px; display:flex; align-items:center; justify-content:center;">${bHeads[i]}</div>`; }
+            for(let r=0; r<5; r++){
+                for(let c=0; c<5; c++){
+                    let num = g[c][r];
+                    if(r===2 && c===2) { 
+                        html += `<div class="preview-t-cell marked" style="background:#fff; height:30px; display:flex; align-items:center; justify-content:center; color:#38bdf8; font-size:18px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
+                    } 
+                    else if(cld.includes(num)) { 
+                        html += `<div class="preview-t-cell" style="background:#fff; height:30px; display:flex; align-items:center; justify-content:center;"><div style="background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color:#fff; font-size: 12px; font-weight: 900; box-shadow: 0 0 8px rgba(34,197,94,0.6);">${num}</div></div>`; 
+                    } 
+                    else { 
+                        html += `<div class="preview-t-cell" style="background:#fff; color:#000; height:30px; font-size:12px; font-weight:bold; display:flex; align-items:center; justify-content:center;">${num}</div>`; 
+                    }
+                }
+            }
+            html += `</div></div>`; 
+            document.getElementById('win-ticket-display').innerHTML = html;
+
+        } else {
+            // በጋራ ሲያሸንፉ ቦክሱ እና ስም ዝርዝሩ ብቻ ይታያል
+            winnerCard.innerHTML = `
+                <h3 style="margin:0; color:${amIWinner ? '#4ade80' : 'white'}; font-size:${amIWinner ? '20px' : '16px'}; letter-spacing: 2px; text-transform: uppercase;">${titleHtml}</h3>
+                <h1 class="bingo-text" style="margin: 5px 0;">B I N G O !</h1>
+                
+                <h2 style="margin:5px 0 10px 0; color:#fbbf24; font-size:22px; font-weight: 900; text-shadow: 0 0 15px rgba(251,191,36,0.5);">${nameHtml}</h2>
+                
+                <div style="background: rgba(0, 0, 0, 0.4); padding: 8px 15px; border-radius: 12px; border: 1px solid #fbbf24; width: fit-content; margin: 0 auto;">
+                    <p style="margin:0; font-size:11px; color:#fff; font-weight:bold; letter-spacing:1px; text-transform:uppercase;">ጠቅላላ የደራሽ ሽልማት</p>
+                    <h1 style="margin:2px 0 0 0; color:#fff; font-size: 24px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);" id="win-prize">${data.totalPrize.toLocaleString('en-US', {maximumFractionDigits: 0})} ETB</h1>
+                </div>
+                
+                ${sharedListHtml}
+            `;
+        }
+
+        for (let i = 0; i < 20; i++) {
+            let coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.innerText = '💰';
+            coin.style.left = Math.random() * 100 + 'vw';
+            coin.style.top = '100vh';
+            coin.style.animation = `floatUp ${1.5 + Math.random()}s ease-out forwards`;
+            document.body.appendChild(coin);
+            setTimeout(() => coin.remove(), 2500);
+        }
+
+        if(amIWinner) fetchUpdatedBalance(); 
+    });
+
+    const TOTAL_CARDS = 700;
+    let roundSeedLockId = null;
+    function noteRoundCardSeed(seed, roundId, state) {
+        const round = roundId == null || roundId === '' ? boundRoundId : Number(roundId);
+        const next = Number(seed);
+        const hasSeed = Number.isFinite(next);
+        if (roundSeedLockId !== round) {
+            roundSeedLockId = round;
+            if (hasSeed) window.cardGridSeed = next;
+            return;
+        }
+        if (!hasSeed) return;
+        if (state === 'PLAYING' || state === 'FINISHED') return;
+        if (userTicketsData && userTicketsData.length) return;
+        window.cardGridSeed = next;
+    }
+    function getCardBoardOrder() {
+        const order = [];
+        for (let i = 1; i <= 700; i++) order.push(i);
+        return order;
+    }
+    function initGrid() { 
+        const box = document.getElementById('grid-box'); box.innerHTML = '';
+        cardButtons = null;
+        getCardBoardOrder().forEach((i) => { 
+            let d = document.createElement('div'); 
+            d.className='num-btn'; 
+            d.innerText=i; 
+            d.id = 'gbtn-' + i;
+            d._cardNum = i;
+            d.setAttribute('data-num', i);
+            
+            d.onclick = () => { 
+                // 🛑 ኢንተርኔት መኖሩን ቼክ ማድረጊያ 🛑
+            if (!navigator.onLine || !socket.connected) {
+                showOfflineAlert();
+                return; 
+            }
+                if(isProcessingTicket) return; 
+
+                if(document.getElementById('timer').innerText.includes("LIVE")) return; 
+                if(d.classList.contains('taken') && !d.classList.contains('bought-by-me')) return; 
+
+                if(d.classList.contains('bought-by-me')) {
+                    isProcessingTicket = true;
+                    d.innerText = "...";
+                    socket.emit('cancel_ticket', { phone: currentUser.phone, ticketId: i, gameId: boundRoundId, roundId: boundRoundId });
+                    setTimeout(() => isProcessingTicket = false, 800);
+                } 
+                else { 
+                    if(userTicketsData.length >= maxTicketsLimit) { 
+                        alert("በአጠቃላይ ከ " + maxTicketsLimit + " ካርቴላ በላይ መግዛት አይቻልም!"); 
+                        return;
+                    } 
+                    
+                    let currentPlayBal = parseFloat(currentUser.playBalance) || 0; 
+                    let currentMainBal = parseFloat(currentUser.mainBalance) || 0;
+                    if((currentPlayBal + currentMainBal) < currentTicketPrice) { 
+                        alert("በሂሳብዎ ላይ በቂ ገንዘብ የሎትም!"); 
+                        return; 
+                    }
+
+                    isProcessingTicket = true;
+                    d.innerText = "...";
+                    
+                    let cols = generateFixedCard(i);
+                    let marksObj = [[0,0,0,0,0], [0,0,0,0,0], [0,0,1,0,0], [0,0,0,0,0], [0,0,0,0,0]]; 
+                    let singleTicket = [{ id: i, grid: cols, marksObj }];
+                    
+                    // 🛑 ማስተካከያ: ሰርቨሩ እስኪያረጋግጥ ካርቴላውን ስክሪን ላይ አናስገባም
+                    socket.emit('buy_tickets', {
+                        name: currentUser.name, 
+                        phone: currentUser.phone, 
+                        ticketCount: 1, 
+                        ticketIds: [i], 
+                        ticketsData: singleTicket,
+                        gameId: boundRoundId,
+                        roundId: boundRoundId
+                    });
+                    holdPendingOccupied(i);
+
+                    setTimeout(() => isProcessingTicket = false, 800);
+                } 
+            }; 
+            box.appendChild(d); 
+        }); 
+        renderGridTakenStates();
+    }
+
+    function updateBetPreview() {
+        document.getElementById('grid-sel-count').innerText = userTicketsData.length;
+        const popup = document.getElementById('bet-slip-popup'); 
+        const previewBox = document.getElementById('ticket-preview-box');
+        previewBox.innerHTML = '';
+
+        if(userTicketsData.length > 0) {
+            if (document.getElementById('home-page').classList.contains('active-page')) {
+                popup.classList.add('show'); 
+            }
+            document.getElementById('slip-count').innerText = userTicketsData.length; 
+            document.getElementById('slip-price').innerText = userTicketsData.length * currentTicketPrice;
+            userTicketsData.forEach(t => {
+                let card = document.createElement('div'); card.className = 'preview-t-card'; 
+                let html = `<div style="text-align:center; font-size:10px; font-weight:bold; color:#1e293b; padding:1px;">#${t.id}</div><div class="preview-t-grid">`;
+                for(let i=0; i<5; i++) { html += `<div class="preview-t-head" style="background:${bColors[i]}; color: #ffffff; text-shadow: 0 0 5px #ffffff;">${bHeads[i]}</div>`; }
+                for(let r=0; r<5; r++) { for(let c=0; c<5; c++) { 
+                    if(r==2 && c==2) html += `<div class="preview-t-cell marked" style="color:#38bdf8; font-size:12px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
+                    else html += `<div class="preview-t-cell">${t.grid[c][r]}</div>`; 
+                } }
+                card.innerHTML = html + "</div>"; previewBox.appendChild(card);
+            });
+        } else { 
+            popup.classList.remove('show'); 
+        }
+    }
+    
+    function renderConfirmedTickets() { 
+        const list = document.getElementById('ticket-list'); const gameList = document.getElementById('game-mini-tickets');
+        list.innerHTML = ''; gameList.innerHTML = ''; 
+        userTicketsData.forEach(t => { 
+            let id = t.id; let cols = t.grid;
+            
+            let card = document.createElement('div'); card.className = 't-card'; 
+            let miniCard = document.createElement('div'); miniCard.className = 'mini-t-card'; 
+            
+            let htmlMain = `<div class="t-id-badge">#${id}</div><div class="t-grid-wrapper"><div class="t-side-text">AMAR BINGO</div><div class="t-grid">`;
+            let htmlMini = `<div class="mini-t-id-badge">#${id}</div><div class="t-grid-wrapper"><div class="t-side-text" style="font-size:3px;">AMAR BINGO</div><div class="mini-t-grid">`;
+
+            for(let i=0; i<5; i++) { 
+                htmlMain += `<div class="t-cell" style="background:${bColors[i]}; color:white; border:none;">${bHeads[i]}</div>`; 
+                htmlMini += `<div class="mini-t-head" style="background:${bColors[i]}; border:none;">${bHeads[i]}</div>`; 
+            } 
+            for(let r=0; r<5; r++) { 
+                for(let c=0; c<5; c++) { 
+                    if(r==2 && c==2) { 
+                        htmlMain += `<div class="t-cell marked" style="color:#38bdf8; font-size:16px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
+                        htmlMini += `<div class="mini-t-cell marked" style="color:#38bdf8; font-size:14px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
+                    } else { 
+                        htmlMain += `<div class="t-cell t-v-${cols[c][r]}">${cols[c][r]}</div>`; 
+                        htmlMini += `<div class="mini-t-cell t-v-${cols[c][r]}">${cols[c][r]}</div>`; 
+                    } 
+                } 
+            } 
+            htmlMain += "</div></div>"; htmlMini += "</div></div>";
+            card.innerHTML = htmlMain; miniCard.innerHTML = htmlMini; 
+            list.appendChild(card); gameList.appendChild(miniCard);
+        }); 
+        document.getElementById('t-info').innerText = "የገዙት ካርቴላ ብዛት: " + userTicketsData.length;
+    }
+
+    function buildMasterBoard() {
+        const board = document.getElementById('master-board'); board.innerHTML = '';
+        for(let c=0; c<5; c++) { let h = document.createElement('div'); h.className = 'mb-head'; h.style.background = bColors[c]; h.innerText = bHeads[c]; board.appendChild(h); }
+        for(let r=1; r<=15; r++) { for(let c=0; c<5; c++) { let num = r + (c * 15); let d = document.createElement('div'); d.className = 'mb-cell'; d.id = 'mb-' + num; d.innerText = num; d.style.color = bColors[c]; board.appendChild(d); } }
+    }
+
+    function buildTicketMasterBoard() {
+        const tBoard = document.getElementById('ticket-master-board');
+        if(!tBoard) return;
+        tBoard.innerHTML = '';
+        for(let c=0; c<5; c++) { let h = document.createElement('div'); h.className = 'mb-head'; h.style.background = bColors[c]; h.innerText = bHeads[c]; tBoard.appendChild(h); }
+        for(let r=1; r<=15; r++) { 
+            for(let c=0; c<5; c++) { 
+                let num = r + (c * 15); 
+                let d = document.createElement('div'); 
+                d.className = 'mb-cell'; 
+                d.id = 'tmb-' + num; 
+                d.innerText = num; 
+                d.style.color = bColors[c]; 
+                tBoard.appendChild(d); 
+            } 
+        }
+    }
+
+    function updateLiveUI(num, isLatest) {
+        if(isLatest) document.querySelectorAll('.mb-cell').forEach(c => c.classList.remove('current'));
+        
+        let cell = document.getElementById('mb-' + num);
+        if(cell) { cell.classList.add('called'); if(isLatest) cell.classList.add('current'); }
+
+        let tCell = document.getElementById('tmb-' + num);
+        if(tCell) { tCell.classList.add('called'); if(isLatest) tCell.classList.add('current'); }
+
+        document.querySelectorAll('.t-v-' + num).forEach(c => c.classList.add('marked'));
+
+        let colIdx = num <= 15 ? 0 : num <= 30 ? 1 : num <= 45 ? 2 : num <= 60 ? 3 : 4;
+        let ballText = bHeads[colIdx] + "-" + num;
+        
+        if(isLatest) { document.getElementById('caller-ball').innerText = ballText; let ticketCb = document.getElementById('ticket-caller-ball'); if(ticketCb) ticketCb.innerText = ballText; }
+
+        let topH = document.getElementById('history-scroll-top'); let tickH = document.getElementById('ticket-history-bar');
+        
+        let topDiv = document.createElement('div'); topDiv.className = 'hist-top-ball'; topDiv.innerText = ballText;
+        let tickDiv = document.createElement('div'); tickDiv.className = 'hist-top-ball'; tickDiv.innerText = ballText;
+        topH.insertBefore(topDiv, topH.firstChild); tickH.insertBefore(tickDiv, tickH.firstChild); 
+    }
+
+    function rn(min, max) { let a=[]; while(a.length<5){ let r=Math.floor(Math.random()*(max-min+1))+min; if(!a.includes(r)) a.push(r); } return a.sort((a,b)=>a-b); }
+    
+    function generateFixedCard(ticketId) {
+        let seed = (Number(ticketId) ^ 0xDEADBEEF) >>> 0;
+        const extraMix = Number(window.cardGridSeed) || 0;
+        if (extraMix) seed = (seed ^ (extraMix >>> 0)) >>> 0;
+        function nextRand() {
+            seed = (seed + 0x9E3779B9) >>> 0;
+            let z = seed;
+            z = (z ^ (z >>> 16)) * 0x21F0AAAD;
+            z = (z ^ (z >>> 15)) * 0x735A2D97;
+            z = (z ^ (z >>> 15)) >>> 0;
+            return z / 4294967296;
+        }
+        nextRand(); nextRand();
+
+        function getCol(min, max) {
+            let arr = [];
+            while(arr.length < 5) {
+                let val = Math.floor(nextRand() * (max - min + 1)) + min;
+                if(!arr.includes(val)) arr.push(val);
+            }
+            return arr; // Sort የሚለውን አጥፍተነዋል!
+        }
+        let grid = [getCol(1, 15), getCol(16, 30), getCol(31, 45), getCol(46, 60), getCol(61, 75)];
+        grid[2][2] = "FREE";
+        return grid;
+    }
+    
+    function handleHomeNav() { if(isGameRunningLocally) showPage('game'); else showPage('home'); }
+    function showPage(id) { 
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id + '-page').classList.add('active-page'); document.getElementById('global-header').style.display = (id === 'auth' || id === 'game') ? 'none' : 'flex'; 
+
+        if(id === 'wallet') loadTransactionHistory();
+        if(id === 'profile') fetchUpdatedBalance();
+        
+        if(id === 'home' && userTicketsData.length > 0) {
+            document.getElementById('bet-slip-popup').classList.add('show');
+        } else {
+            document.getElementById('bet-slip-popup').classList.remove('show');
+        }
+        
+        if(id === 'ticket') { let tla = document.getElementById('ticket-live-arrow'); if(tla) tla.style.display = 'none'; }
+        if(id !== 'rank') hideMyRankBanner();
+
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
+        if(event && event.currentTarget.classList.contains('nav-item')) { event.currentTarget.classList.add('active'); } else { document.getElementById('nav-home').classList.add('active'); }
+    }
+</script>
+</body>
+</html
