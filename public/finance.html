@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Finance Dashboard - Private</title>
     <style>
-        :root { --bg-dark: #16130f; --panel: #241e19; --faded-green: #14b8a6; --text-gray: #c4b8a8; --border: #3d342c; --red: #fb7185; --blue: #818cf8; --purple: #c084fc; --orange: #fb923c; --cyan: #7dd3fc; --gold: #e8b86d; }
+        :root { --bg-dark: #07261c; --panel: #0e3a2c; --faded-green: #c6a85a; --text-gray: #d4cba8; --border: #7a6844; --red: #c45656; --blue: #3e8f6e; --purple: #b08968; --orange: #d4924a; --cyan: #e6d7a8; --gold: #c9a35a; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: white; margin: 0; display: flex; height: 100vh; overflow: hidden; flex-direction: row; }
         
-        #login-sec { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #241e19 0%, #16130f 100%); position: absolute; z-index: 9999; }
-        .login-card { background: rgba(0,0,0,0.8); padding: 40px; border-radius: 15px; border: 1px solid var(--red); text-align: center; width: 90%; max-width: 380px; box-shadow: 0 10px 30px rgba(251, 113, 133, 0.2); backdrop-filter: blur(10px); }
-        input { padding: 14px; border-radius: 6px; border: 1px solid var(--border); background: #100e0c; color: white; width: 100%; box-sizing: border-box; margin-bottom: 20px; outline: none; font-size: 16px; text-align: center; letter-spacing: 2px;}
-        input:focus { border-color: var(--red); box-shadow: 0 0 10px rgba(251, 113, 133, 0.3); }
+        #login-sec { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #0e3a2c 0%, #07261c 100%); position: absolute; z-index: 9999; }
+        .login-card { background: rgba(0,0,0,0.8); padding: 40px; border-radius: 15px; border: 1px solid var(--red); text-align: center; width: 90%; max-width: 380px; box-shadow: 0 10px 30px rgba(196, 86, 86, 0.2); backdrop-filter: blur(10px); }
+        input { padding: 14px; border-radius: 6px; border: 1px solid var(--border); background: #041910; color: white; width: 100%; box-sizing: border-box; margin-bottom: 20px; outline: none; font-size: 16px; text-align: center; letter-spacing: 2px;}
+        input:focus { border-color: var(--red); box-shadow: 0 0 10px rgba(196, 86, 86, 0.3); }
         button.action-btn { background: var(--faded-green); color: black; border: none; padding: 14px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;}
-        button.action-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 113, 133, 0.4); }
+        button.action-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(196, 86, 86, 0.4); }
         
         #dash-sec { display: none; width: 100%; height: 100%; flex-direction: row; position: relative; }
         
         .sidebar { width: 250px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; transition: 0.3s ease; height: 100%; box-sizing: border-box; z-index: 1000; overflow-y: auto; }
         .nav-btn { background: transparent; color: var(--text-gray); border: none; padding: 15px 20px; text-align: left; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; border-left: 4px solid transparent; white-space: nowrap; transition: 0.2s; width: 100%; }
-        .nav-btn:hover { background: rgba(45, 212, 191, 0.05); color: white; }
-        .nav-btn.active { background: rgba(45, 212, 191, 0.1) !important; color: var(--faded-green) !important; border-left-color: var(--faded-green) !important; }
+        .nav-btn:hover { background: rgba(212, 188, 120, 0.05); color: white; }
+        .nav-btn.active { background: rgba(212, 188, 120, 0.1) !important; color: var(--faded-green) !important; border-left-color: var(--faded-green) !important; }
         .close-sidebar { display: none; background: transparent; border: none; color: white; font-size: 24px; position: absolute; top: 10px; right: 15px; cursor: pointer; }
         
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 999; }
@@ -32,12 +32,12 @@
         .kpi-title { color: var(--text-gray); font-size: 11px; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; display: block; }
         .kpi-value { font-size: 24px; font-weight: 900; margin: 0; }
         
-        .summary-box { background: rgba(20, 184, 166, 0.05); border: 1px solid var(--faded-green); padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: inset 0 0 20px rgba(20, 184, 166, 0.1);}
+        .summary-box { background: rgba(198, 168, 90, 0.05); border: 1px solid var(--faded-green); padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: inset 0 0 20px rgba(198, 168, 90, 0.1);}
         
         .profit-split-grid { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center;}
         .split-card { flex: 1; min-width: 140px; padding: 15px; border-radius: 8px; text-align: center; }
-        .split-card.admin { background: rgba(129, 140, 248, 0.1); border: 1px solid var(--blue); }
-        .split-card.partner { background: rgba(251, 146, 60, 0.1); border: 1px solid var(--orange); }
+        .split-card.admin { background: rgba(62, 143, 110, 0.1); border: 1px solid var(--blue); }
+        .split-card.partner { background: rgba(212, 146, 74, 0.1); border: 1px solid var(--orange); }
 
         .card-dep { border-left-color: var(--faded-green); }
         .card-wit { border-left-color: var(--red); }
@@ -45,14 +45,14 @@
         .card-turnover { border-left-color: var(--blue); }
         .card-win { border-left-color: var(--gold); }
         .card-ggr { border-left-color: var(--purple); }
-        .card-bonus { border-left-color: #fecdd3; }
+        .card-bonus { border-left-color: #e7b4b4; }
         .card-promo { border-left-color: var(--orange); }
         .hint-text { font-size: 9px; color: var(--text-gray); position: absolute; bottom: 10px; right: 15px; }
 
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
         .clickable-header { position: relative; display: inline-block; background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 10px; border: 1px dashed var(--cyan); cursor: pointer; transition: 0.2s; }
-        .clickable-header:hover { background: rgba(125, 211, 252, 0.1); }
+        .clickable-header:hover { background: rgba(230, 215, 168, 0.1); }
 
         @media (max-width: 768px) {
             .sidebar { position: fixed; top: 0; left: -260px; bottom: 0; width: 250px; height: 100vh; box-shadow: 2px 0 15px rgba(0,0,0,0.9); z-index: 10000; display: block; padding-top: 50px; }
@@ -111,12 +111,12 @@
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
-                <div style="display:flex; align-items:center; gap:10px; background: rgba(251, 146, 60, 0.1); border: 1px solid var(--orange); padding: 8px 12px; border-radius: 8px; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center; gap:10px; background: rgba(212, 146, 74, 0.1); border: 1px solid var(--orange); padding: 8px 12px; border-radius: 8px; flex-wrap:wrap;">
                     <span style="font-size:12px; color:var(--orange); font-weight:bold;">🔍 የተወሰነ ቀን ፈልግ:</span>
                     <input type="date" id="visibleDatePick" onchange="applyHeaderDate(this.value)" style="background: transparent; border: none; color: white; font-size: 14px; font-weight: bold; outline: none; cursor: pointer; padding: 0; margin: 0; min-width:120px;">
                 </div>
 
-                <div id="range-picker-container" style="display:none; align-items:center; gap:10px; background: rgba(192, 132, 252, 0.1); border: 1px solid var(--purple); padding: 8px 12px; border-radius: 8px; flex-wrap:wrap;">
+                <div id="range-picker-container" style="display:none; align-items:center; gap:10px; background: rgba(176, 137, 104, 0.1); border: 1px solid var(--purple); padding: 8px 12px; border-radius: 8px; flex-wrap:wrap;">
                     <span style="font-size:12px; color:var(--purple); font-weight:bold;">⏳ ከዚህ - እስከዚህ:</span>
                     <input type="date" id="rangeStart" onchange="applyDateRange()" style="background: transparent; border: 1px solid var(--border); color: white; font-size: 12px; font-weight: bold; outline: none; cursor: pointer; padding: 4px; margin: 0; border-radius: 4px;">
                     <span style="color:var(--text-gray); font-size:12px;">እስከ</span>
@@ -147,7 +147,7 @@
 
         <!-- 🔥 አዲሱ MAIN WALLET (ተጫዋቾች ገና ያላወጡት ብር) ማሳያ 🔥 -->
         <div style="display:flex; justify-content:center; margin-bottom: 20px;">
-            <div class="kpi-card" style="background: rgba(125, 211, 252, 0.1); border-left-color: var(--cyan); text-align:center; width: 100%; max-width: 500px; padding: 25px;">
+            <div class="kpi-card" style="background: rgba(230, 215, 168, 0.1); border-left-color: var(--cyan); text-align:center; width: 100%; max-width: 500px; padding: 25px;">
                 <span class="kpi-title" style="color: var(--cyan); font-size:14px;">💰 Players' Main Wallet Balance</span>
                 <h2 class="kpi-value" id="val-main-wallet" style="color: white; font-size:36px; margin-top:5px;">0 ETB</h2>
                 <p style="font-size: 11px; color: var(--text-gray); margin:8px 0 0 0;">(ተጫዋቾች ገና ያላወጡት እና ያጠራቀሙት ጠቅላላ የተጣራ የገንዘብ መጠን)</p>
@@ -166,13 +166,13 @@
             <div class="kpi-card card-turnover"><span class="kpi-title">🎟️ Turnover (Bets Placed)</span><h2 class="kpi-value" id="val-turnover" style="color: var(--blue);">0</h2><span class="hint-text">Total Ticket Sales</span></div>
             <div class="kpi-card card-win"><span class="kpi-title">🏆 Winnings Paid</span><h2 class="kpi-value" id="val-winnings" style="color: var(--gold);">0</h2><span class="hint-text">Prizes Won</span></div>
             <div class="kpi-card card-ggr"><span class="kpi-title">📈 Gross Game Profit</span><h2 class="kpi-value" id="val-game-profit" style="color: var(--purple);">0</h2><span class="hint-text">Company's % Cut</span></div>
-            <div class="kpi-card card-bonus"><span class="kpi-title">🎁 All Bonus Expenses</span><h2 class="kpi-value" id="val-bonus" style="color: #fecdd3;">0</h2><span class="hint-text">Reg, Invite, Claim, Dep/Wit</span></div>
+            <div class="kpi-card card-bonus"><span class="kpi-title">🎁 All Bonus Expenses</span><h2 class="kpi-value" id="val-bonus" style="color: #e7b4b4;">0</h2><span class="hint-text">Reg, Invite, Claim, Dep/Wit</span></div>
             <div class="kpi-card card-promo"><span class="kpi-title">🗣️ Promoter Comm. Paid</span><h2 class="kpi-value" id="val-promoter-paid" style="color: var(--orange);">0</h2><span class="hint-text">Withdrawn Commissions</span></div>
         </div>
 
         <div class="kpi-card" style="border-left-color: gray; text-align:center; margin-top:10px;">
             <span class="kpi-title" style="color: gray;">⚠️ Overall System Liability (ጠቅላላ ዕዳ)</span>
-            <h2 class="kpi-value" id="val-liability" style="color: #c4b8a8; font-size: 18px;">0</h2>
+            <h2 class="kpi-value" id="val-liability" style="color: #d4cba8; font-size: 18px;">0</h2>
             <p style="font-size: 11px; color: var(--text-gray); margin:5px 0 0 0;">(Total Main Balance + Total Play Balance of all users)</p>
         </div>
     </div>
