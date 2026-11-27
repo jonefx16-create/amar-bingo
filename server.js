@@ -56,11 +56,11 @@ app.use(express.static(__dirname));
 // ==========================================
 // 🔵 DATABASE CONNECTION (ULTIMATE FIX)
 // ==========================================
-// Amar Bingo: replace these placeholders with the new database credentials before deploying.
-const dbUser = "YOUR_MONGODB_USER";
+// Amar Bingo cluster. Replace YOUR_MONGODB_PASSWORD with the Atlas database password before deploying.
+const dbUser = "amarmeftuh971_db_user";
 const dbPass = encodeURIComponent("YOUR_MONGODB_PASSWORD"); // ፓስወርዱን በራሱ አስተካክሎ እንዲያነብ ያደርገዋል
-const dbName = "YOUR_MONGODB_DBNAME";
-const dbCluster = "YOUR_CLUSTER.mongodb.net";
+const dbName = "amarBingo";
+const dbCluster = "cluster0.ktvuu20.mongodb.net";
 
 const mongoURI = `mongodb+srv://${dbUser}:${dbPass}@${dbCluster}/${dbName}?retryWrites=true&w=majority`;
 
