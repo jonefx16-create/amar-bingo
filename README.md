@@ -4,7 +4,7 @@ Live bingo game server for Amar Bingo. The app was copied from the Bingo Habesha
 
 Before deploying, replace the placeholders in `server.js` (and the deposit defaults in `public/index.html` and `publicindex.html`):
 
-- `YOUR_MONGODB_PASSWORD` in `server.js`. The user is `amarmeftuh971_db_user`, the cluster is `cluster0.ktvuu20.mongodb.net`, and the database name is `amarBingo`.
+- `MONGODB_PASSWORD` in the host environment (Render). The user is `amarmeftuh971_db_user`, the cluster is `cluster0.ktvuu20.mongodb.net`, and the database name is `amarBingo`. Do not commit the password.
 - `YOUR_TELEGRAM_BOT_TOKEN` (also used as the webhook path)
 - `YOUR_ADMIN_PASSWORD` and `YOUR_FINANCE_PASSWORD`
 - `YOUR_SMS_WEBHOOK_SECRET`
