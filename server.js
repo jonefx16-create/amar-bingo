@@ -56,9 +56,9 @@ app.use(express.static(__dirname));
 // ==========================================
 // 🔵 DATABASE CONNECTION (ULTIMATE FIX)
 // ==========================================
-// Amar Bingo cluster. Replace YOUR_MONGODB_PASSWORD with the Atlas database password before deploying.
+// Amar Bingo cluster. Set MONGODB_PASSWORD in the host environment (Render) before deploying.
 const dbUser = "amarmeftuh971_db_user";
-const dbPass = encodeURIComponent("YOUR_MONGODB_PASSWORD"); // ፓስወርዱን በራሱ አስተካክሎ እንዲያነብ ያደርገዋል
+const dbPass = encodeURIComponent(process.env.MONGODB_PASSWORD || "YOUR_MONGODB_PASSWORD"); // ፓስወርዱን በራሱ አስተካክሎ እንዲያነብ ያደርገዋል
 const dbName = "amarBingo";
 const dbCluster = "cluster0.ktvuu20.mongodb.net";
 
@@ -769,7 +769,7 @@ async function setBirrBalance(amount) {
 // Amar Bingo: paste the new Telegram bot token here. The webhook path uses this value.
 const telegramToken = "YOUR_TELEGRAM_BOT_TOKEN";
 const bot = new TelegramBot(telegramToken, { polling: false }); 
-const WEB_URL = "https://amarbingo.onrender.com"; 
+const WEB_URL = "https://amar-bingo.onrender.com"; 
 
 async function checkTelegramJoin(telegramId) {
     if (!GLOBAL_SETTINGS.telegramChannel || !telegramId) return true; 
@@ -1171,7 +1171,10 @@ app.post('/api/register', strictRateLimiter, async (req, res) => {
         if (invite.bonusApplied && invite.actualRef) io.emit('balance_updated', invite.actualRef);
 
         res.json({ success: true });
-    } catch (e) { res.status(500).json({ success: false }); }
+    } catch (e) {
+        console.log("❌ Register error:", e.message);
+        res.status(500).json({ success: false, message: "❌ ስርዓቱ መለያውን ማስቀመጥ አልቻለም። እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።" });
+    }
 });
 
 // 🔥 SECURITY FIX: ፓስወርድ ወደ ውጪ እንዳይላክ መዝጊያ
@@ -1180,12 +1183,12 @@ app.post('/api/login', async (req, res) => {
     let password = String(req.body.password);
     
     let user = await User.findOne({ phone: phone, password: password });
-    // ተጫዋቹ ገብቶ ሲሳካለት ሰዓቱን ይመዘግባል
-User.updateOne({ phone: user.phone }, { $set: { lastActive: new Date() } }).exec();
     if(user && user.status === 'banned') return res.json({ success: false, message: "❌ አካውንትዎ ታግዷል!" });
     if(user && !user.refCode) { user.refCode = generateRefCode(); await user.save(); } 
     
     if (user) {
+        // ተጫዋቹ ገብቶ ሲሳካለት ሰዓቱን ይመዘግባል
+        User.updateOne({ phone: user.phone }, { $set: { lastActive: new Date() } }).exec();
         let safeUser = user.toObject();
         delete safeUser.password; // ፓስወርዱን አጥፍቶ ይልካል
         res.json({ success: true, user: safeUser });
@@ -1256,7 +1259,7 @@ app.get('/api/getUser/:phone', async (req, res) => {
     const userAgent = (req.headers['user-agent'] || "").toLowerCase();
     const fetchSite = req.headers['sec-fetch-site']; // ትክክለኛ ብራውዘር መሆኑን የሚያሳውቅ
 
-    const isFromOurSite = referer.includes("amarbingo.onrender.com") || referer.includes("localhost");
+    const isFromOurSite = referer.includes("amar-bingo.onrender.com") || referer.includes("amarbingo.onrender.com") || referer.includes("localhost");
 
     // 1. ሀከሮች የሚጠቀሙትን ሶፍትዌር (Postman, Python, Curl) እና ባዶ ሪኩዌስት ያግዳል
     const isHackerTool = !userAgent || userAgent.includes("postman") || userAgent.includes("python") || userAgent.includes("curl") || userAgent.includes("axios");
@@ -1365,7 +1368,7 @@ app.post('/api/promoter/withdraw', async (req, res) => {
 app.get('/api/user/transactions/:phone', async (req, res) => { 
     // ሪኩዌስቱ የመጣው ከራሱ ከዌብሳይትህ (Frontend) መሆኑን ማረጋገጥ
     const referer = req.headers.referer || req.headers.origin || "";
-    const isFromOurSite = referer.includes("amarbingo.onrender.com") || referer.includes("localhost");
+    const isFromOurSite = referer.includes("amar-bingo.onrender.com") || referer.includes("amarbingo.onrender.com") || referer.includes("localhost");
     
     if (!isFromOurSite) {
         // ሀከሩ በ Postman ወይም በሶፍትዌር ዳታ ለመስረቅ ከሞከረ ባዶውን ይመልስለታል
