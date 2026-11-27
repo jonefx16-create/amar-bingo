@@ -205,7 +205,7 @@ const PromoCode = mongoose.model('PromoCode', new mongoose.Schema({
 }));
 
 const SystemSettings = mongoose.model('SystemSettings', new mongoose.Schema({
-    adminPass: { type: String, default: "YOUR_ADMIN_PASSWORD" }, 
+    adminPass: { type: String, default: "Jo97BJbi3208" }, 
     financePass: { type: String, default: "YOUR_FINANCE_PASSWORD" }, 
     telegramChannel: { type: String, default: "" }, 
     ticketPrice: { type: Number, default: 10 }, 
