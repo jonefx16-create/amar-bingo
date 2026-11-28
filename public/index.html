@@ -106,10 +106,11 @@
         
         .preview-tickets-wrapper { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; margin-bottom: 8px; width: 100%; scrollbar-width: none; min-height: 48px; padding-bottom: 4px; }
         .preview-tickets-wrapper::-webkit-scrollbar { display: none; }
-        .preview-t-card { background: white; min-width: 85px; flex: 0 0 auto; border-radius: 12px; overflow: hidden; border: 1px solid #cbd5e1; padding: 1px;}
-        .preview-t-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #94a3b8; border: 1px solid #94a3b8;}
+        .preview-t-card { background: #050806; min-width: 85px; flex: 0 0 auto; border-radius: 12px; overflow: hidden; border: 1px solid #c6a85a; padding: 1px;}
+        .preview-t-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #1a1408; border: 1px solid #1a1408;}
         .preview-t-head { color: white; height: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 7px;}
-        .preview-t-cell { background: #fff; height: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 8px; color: #000;}
+        .preview-t-cell { background: #050806; height: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 8px; color: #f6e7c1;}
+        .preview-t-cell.marked { background: #e0c16a; color: #1a1408; }
 
         /* Game Page Top Info */
         .top-info-wrapper { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 5px; flex-shrink: 0; overflow-x: auto; scrollbar-width: none;}
@@ -127,9 +128,9 @@
         #game-page .game-layout-container { flex-grow: 1; display: flex; min-height: 0; align-items: stretch; gap: 2%; }
         
         .master-board-wrapper { width: 45%; flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; min-height: 0;}
-        .mb-board { height: 100%; display: grid; grid-template-rows: auto repeat(15, minmax(0, 1fr)); grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #1e293b; border: 1px solid #1e293b; border-radius: 4px; width: 100%; }
+        .mb-board { height: 100%; display: grid; grid-template-rows: auto repeat(15, minmax(0, 1fr)); grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: #000; border: 1px solid #000; border-radius: 4px; width: 100%; }
         .mb-head { background: var(--faded-green); color: black; display: flex; align-items: center; justify-content: center; font-size: 2vh; font-weight: 900;}
-        .mb-cell { background: #111827; display: flex; align-items: center; justify-content: center; font-size: 2vh; font-weight: bold; transition: 0.2s; min-height: 0; overflow: hidden;}
+        .mb-cell { background: #000; display: flex; align-items: center; justify-content: center; font-size: 2vh; font-weight: bold; transition: 0.2s; min-height: 0; overflow: hidden;}
         
         .mb-cell.called { background: #e0c16a !important; color: #1a1408 !important; font-weight: 900; border: 1px solid #a8843a; box-shadow: none;}
         .mb-cell.current { background: #f6e7c1 !important; color: #1a1408 !important; font-weight: 900; z-index: 2; transform: scale(1.05); box-shadow: 0 0 8px rgba(224, 193, 106, 0.9); border: 2px solid #fff6d8;}
@@ -141,18 +142,18 @@
         #game-page .tickets-history-box { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; padding: 5px; background: var(--panel); border: 1px solid var(--border-color); border-radius: 8px; min-height: 0; }
         
         #game-page .game-mini-tickets { flex-grow: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; overflow: hidden; align-content: stretch; min-height: 0; padding-bottom: 2px; }
-        .mini-t-card { background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px; display: flex; flex-direction: column; box-sizing: border-box; height: 100%; min-height: 0; }
+        .mini-t-card { background: #050806; border-radius: 8px; border: 1px solid #c6a85a; padding: 2px; display: flex; flex-direction: column; box-sizing: border-box; height: 100%; min-height: 0; }
         
-        .t-id-badge { text-align: center; font-size: 11px; font-weight: 900; color: #1e293b; margin-bottom: 2px; flex-shrink: 0; }
-        .mini-t-id-badge { text-align: center; font-size: 10px; font-weight: 900; color: #1e293b; margin-bottom: 2px; flex-shrink: 0; }
+        .t-id-badge { text-align: center; font-size: 11px; font-weight: 900; color: #e6c878; margin-bottom: 2px; flex-shrink: 0; }
+        .mini-t-id-badge { text-align: center; font-size: 10px; font-weight: 900; color: #e6c878; margin-bottom: 2px; flex-shrink: 0; }
         .t-grid-wrapper { display: flex; flex-grow: 1; min-height: 0; align-items: stretch; }
         
         .t-side-text { writing-mode: vertical-rl; transform: rotate(180deg); color: #94a3b8; opacity: 0.5; font-weight: normal; font-size: 4px !important; margin-right: 2px; letter-spacing: 0.5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
-        .mini-t-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 1px; background: #e2e8f0; flex-grow: 1; min-height: 0;}
+        .mini-t-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 1px; background: #1a1408; flex-grow: 1; min-height: 0;}
         .mini-t-head { color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(7px, 1.5vh, 12px); padding: 2px 0; min-height: 0;}
-        .mini-t-cell { background: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(7px, 1.5vh, 12px); color: #000; min-height: 0;}
-        .mini-t-cell.marked { background: #000 !important; color: #fff !important; }
+        .mini-t-cell { background: #050806; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(7px, 1.5vh, 12px); color: #f6e7c1; min-height: 0;}
+        .mini-t-cell.marked { background: #e0c16a !important; color: #1a1408 !important; }
 
         .history-top-bar { display: flex; gap: 8px; overflow-x: auto; padding: 8px 10px; background: rgba(8, 40, 30, 0.72); border: 1px solid #7a6844; border-radius: 28px; box-shadow: inset 0 0 0 1px rgba(212, 188, 120, 0.15); align-items: center; scrollbar-width: none; flex-shrink: 0; min-height: 52px;}
         .history-top-bar::-webkit-scrollbar { display: none; }
@@ -177,8 +178,12 @@
         .t-badge-box.prize-b { background: rgba(212, 188, 120, 0.12); border: 1px solid #c6a85a; border-radius: 8px; padding: 2px 6px; box-shadow: none; }
         .t-badge-box.prize-b b { color: #e6c878; }
 
+        .ticket-board-row { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
         #ticket-mb-container { display: none; width: 85%; max-width: 320px; margin: 0 auto 6px auto; flex: 0 0 24vh; min-height: 0; }
         #ticket-page.show-mb #ticket-mb-container { display: flex; flex-direction: column; }
+        #ticket-page.has-cards.show-mb .ticket-board-row { flex-direction: row; align-items: stretch; gap: 6px; }
+        #ticket-page.has-cards.show-mb #ticket-mb-container { width: auto; max-width: none; margin: 0; flex: 1.05 1 0; height: 100%; min-height: 0; }
+        #ticket-page.has-cards.show-mb #ticket-list { width: auto; flex: 1 1 0; height: 100%; padding-top: 0; align-content: stretch; }
         
         #ticket-master-board { height: 100%; }
         #ticket-master-board .mb-head { font-size: 1.2vh; padding: 1px 0; min-height: 0;}
@@ -187,14 +192,14 @@
         #ticket-list { flex-grow: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; box-sizing: border-box; overflow: hidden; align-content: start; min-height: 0; padding-bottom: 4px; padding-top: 4px;}
         #ticket-page.show-mb #ticket-list { grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 6px; } 
 
-        .t-card { background: #fff; color: #000; border-radius: 8px; padding: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #ddd; display: flex; flex-direction: column; box-sizing: border-box; min-height: 0; height: 100%;}
+        .t-card { background: #050806; color: #f6e7c1; border-radius: 8px; padding: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #c6a85a; display: flex; flex-direction: column; box-sizing: border-box; min-height: 0; height: 100%;}
         #ticket-page.show-mb .t-card { padding: 3px; border-radius: 6px; border-width: 1px;}
 
-        .t-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 1px; background: #000; flex-grow: 1; min-height: 0;}
-        .t-cell { background: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: clamp(8px, 1.8vh, 16px); min-height: 0;}
+        .t-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, minmax(0, 1fr)); gap: 1px; background: #1a1408; flex-grow: 1; min-height: 0;}
+        .t-cell { background: #050806; color: #f6e7c1; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: clamp(8px, 1.8vh, 16px); min-height: 0;}
         #ticket-page.show-mb .t-cell { font-size: clamp(7px, 1.5vh, 12px); }
         
-        .t-cell.marked { background: #000 !important; color: white !important;}
+        .t-cell.marked { background: #e0c16a !important; color: #1a1408 !important;}
 
         /* Bingo Winner Overlay */
         .bingo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 15, 24, 0.95); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; backdrop-filter: blur(8px);}
@@ -242,9 +247,11 @@
 
         .profile-stat-box { background: var(--panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; text-align: center; margin-bottom: 10px;}
         .week-stat-badge { display: inline-block; margin-left: 4px; padding: 1px 6px; border-radius: 999px; font-size: 8px; font-weight: 700; letter-spacing: 0.2px; color: var(--text-gray); background: rgba(148, 163, 184, 0.16); border: 1px solid rgba(148, 163, 184, 0.35); vertical-align: middle; }
+        .theme-btn { background: rgba(10, 48, 36, 0.92); color: #f3e6c0; border: 1px solid #c6a85a; border-radius: 12px; font-weight: 900; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(212, 188, 120, 0.15); }
+        .theme-btn-fill { background: linear-gradient(180deg, #f0e2b0, #d4bc78 58%, #a88b4a); color: #1a1408; border-color: #f6e7c1; }
         .prof-tabs { display:flex; gap:8px; margin-bottom:12px; }
-        .prof-tab-btn { flex:1; display:block; background:#111827; color:#e2e8f0; border:1px solid #fbbf24; border-radius:8px; padding:12px 6px; font-size:13px; font-weight:900; cursor:pointer; }
-        .prof-tab-btn.active { color:#0b111a; background:var(--faded-green); border-color:var(--faded-green); }
+        .prof-tab-btn { flex:1; display:block; background: rgba(10, 48, 36, 0.92); color: #f3e6c0; border: 1px solid #c6a85a; border-radius: 12px; padding: 12px 6px; font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(212, 188, 120, 0.15); }
+        .prof-tab-btn.active { color: #1a1408; background: linear-gradient(180deg, #f0e2b0, #d4bc78 58%, #a88b4a); border-color: #f6e7c1; }
         .hist-round-card { background:linear-gradient(180deg,#111827,#0b111a); border:1px solid var(--border-color); border-radius:12px; padding:12px; margin-bottom:10px; text-align:left; }
         .hist-won-badge { text-align:right; line-height:1.15; flex-shrink:0; }
         .hist-won-amount { display:block; color:#4ade80; font-weight:900; font-size:13px; }
@@ -256,7 +263,11 @@
         .hist-num { display:inline-flex; min-width:22px; height:22px; align-items:center; justify-content:center; border-radius:50%; font-size:10px; font-weight:800; margin:2px; background:#1e293b; color:#cbd5e1; }
         .hist-num.match { background:#16a34a; color:white; box-shadow:0 0 8px rgba(34,197,94,.6); }
         .prof-avatar-circle { width: 50px; height: 50px; background: linear-gradient(135deg, var(--faded-green), #059669); border-radius: 50%; margin: 0 auto 8px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #000; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);}
-        .prof-list-btn { background: var(--panel); border: 1px solid var(--border-color); color: white; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: bold; width: 100%; box-sizing: border-box;}
+        .prof-list-btn { background: rgba(10, 48, 36, 0.92); border: 1px solid #c6a85a; color: #f3e6c0; padding: 12px 15px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: bold; width: 100%; box-sizing: border-box; box-shadow: inset 0 0 0 1px rgba(212, 188, 120, 0.12);}
+        .prof-list-btn.logout { border-color: var(--red); color: #f3d0d0; }
+        .wallet-card { background: rgba(10, 48, 36, 0.92); border-radius: 15px; padding: 25px 20px; margin-bottom: 10px; border: 1px solid #c6a85a; text-align: center; box-shadow: inset 0 0 0 1px rgba(212, 188, 120, 0.12); }
+        .wallet-actions { display: flex; gap: 15px; justify-content: center; margin-top: 15px; }
+        .wallet-actions .theme-btn { padding: 10px 20px; border-radius: 20px; font-size: 12px; }
         
         /* Modals */
         .trx-modal-overlay, .pw-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 9999; display: none; flex-direction: column; justify-content: flex-end; }
@@ -709,25 +720,26 @@
         <p style="text-align: center; font-size: 12px; color: var(--text-gray); margin: 5px 0 0 0;" id="t-info">እስካሁን ካርቴላ አልገዙም</p>
     </div>
 
-    <div id="ticket-mb-container">
-        <div id="ticket-master-board" class="mb-board"></div>
+    <div class="ticket-board-row">
+        <div id="ticket-mb-container">
+            <div id="ticket-master-board" class="mb-board"></div>
+        </div>
+        <div id="ticket-list"></div>
     </div>
-    
-    <div id="ticket-list"></div>
 </div>
 
 <!-- 5. WALLET PAGE -->
 <div id="wallet-page" class="page">
     <h3 id="wal-title" style="text-align:center; margin-top: 0; font-size: 20px;">የእኔ ሂሳብ (Wallet)</h3>
-    <div style="background: linear-gradient(135deg, #0b111a, #131b2f); border-radius: 15px; padding: 25px 20px; margin-bottom: 10px; border: 1px solid var(--border-color); text-align: center;">
-        <div id="wal-main-lbl" style="color: var(--text-gray); font-size: 13px; font-weight:bold;">ዋና ሂሳብ <span style="font-size:9px; color:#fbbf24;'>(ያሸነፉት/ወጪ የሚደረግ)</span></div>
-        <div style="font-size: 36px; font-weight: 900; color: white; margin: 5px 0; font-family: monospace;" id="main-bal">0.00</div>
-        <div style="color: #dbeafe; font-size: 12px; margin-bottom: 10px; display: inline-block;">
-            <span id="wal-play-lbl">መጫወቻ ሂሳብ:</span> <b style="color:#38bdf8;"><span id="play-bal">0.00</span> ETB</b>
+    <div class="wallet-card">
+        <div id="wal-main-lbl" style="color: var(--text-gray); font-size: 13px; font-weight:bold;">ዋና ሂሳብ <span style="font-size:9px; color:var(--gold);">(ያሸነፉት/ወጪ የሚደረግ)</span></div>
+        <div style="font-size: 36px; font-weight: 900; color: #f7f1df; margin: 5px 0; font-family: monospace;" id="main-bal">0.00</div>
+        <div style="color: #e6d7a8; font-size: 12px; margin-bottom: 10px; display: inline-block;">
+            <span id="wal-play-lbl">መጫወቻ ሂሳብ:</span> <b style="color:#e6c878;"><span id="play-bal">0.00</span> ETB</b>
         </div>
-        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
-            <button id="wal-btn-dep" style="background: linear-gradient(135deg, #0d9488, #0f766e); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 12px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);" onclick="openDepositModal()">➕ Deposit</button>
-            <button id="wal-btn-wit" style="background: linear-gradient(135deg, #e11d48, #be123c); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 12px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3);" onclick="openWithdrawModal()">💸 Withdraw</button>
+        <div class="wallet-actions">
+            <button id="wal-btn-dep" class="theme-btn theme-btn-fill" onclick="openDepositModal()">➕ Deposit</button>
+            <button id="wal-btn-wit" class="theme-btn" onclick="openWithdrawModal()">💸 Withdraw</button>
         </div>
     </div>
     <div style="margin-top: 30px; padding: 0 10px;">
@@ -749,12 +761,12 @@
 <!-- 7. PROFILE PAGE -->
 <div id="profile-page" class="page">
     <h3 id="prof-title" style="text-align:center; margin-top: 0; font-size: 16px;">👤 የእኔ ፕሮፋይል</h3>
-    <button type="button" id="prof-history-btn" onclick="switchProfileTab('history')" style="width:100%; box-sizing:border-box; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg,#fbbf24,#d97706); color:#0b111a; border:none; border-radius:12px; padding:14px 16px; font-size:15px; font-weight:900; margin:0 0 12px 0; cursor:pointer;">
+    <button type="button" id="prof-history-btn" class="theme-btn theme-btn-fill" onclick="switchProfileTab('history')" style="width:100%; box-sizing:border-box; display:flex; justify-content:space-between; align-items:center; padding:14px 16px; font-size:15px; margin:0 0 12px 0;">
         <span id="prof-history-lbl">📜 Game History (የጨዋታ ታሪክ)</span><span>></span>
     </button>
     <div class="prof-tabs">
         <button type="button" class="prof-tab-btn active" id="prof-tab-account" onclick="switchProfileTab('account')">Account</button>
-        <button type="button" class="prof-tab-btn" id="prof-tab-history" onclick="switchProfileTab('history')" style="background:#fbbf24; color:#0b111a; border:2px solid #fbbf24;">Game History</button>
+        <button type="button" class="prof-tab-btn" id="prof-tab-history" onclick="switchProfileTab('history')">Game History</button>
     </div>
     <div id="prof-account-panel">
     
@@ -765,13 +777,13 @@
         <p id="prof-id-display" style="color: var(--cyan); margin-top: 2px; font-size: 10px; font-weight: bold;">ID: #---</p>
     </div>
 
-    <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9)); border: 1px solid var(--faded-green); border-radius: 12px; padding: 12px 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+    <div style="background: rgba(10, 48, 36, 0.92); border: 1px solid #c6a85a; border-radius: 12px; padding: 12px 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 0 1px rgba(212, 188, 120, 0.12);">
         <div style="overflow: hidden;">
             <div id="prof-bot-lbl" style="font-size: 11px; color: var(--faded-green); font-weight: bold; margin-bottom: 4px;">🤖 የራስዎ መጋበዣ ሊንክ (Share)</div>
             <div id="prof-ref-text" style="font-size: 11px; color: white; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">t.me/amar_bingo_bot</div>
         </div>
         <div style="display: flex; gap: 8px;">
-            <button id="prof-btn-copy" style="background: #334155; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Copy</button>
+            <button id="prof-btn-copy" class="theme-btn theme-btn-fill" style="padding: 6px 12px; font-size: 11px;">Copy</button>
         </div>
     </div>
 
@@ -812,7 +824,7 @@
             <div style="display:flex; align-items:center;"><span class="icon-bg" style="padding: 6px; font-size: 14px; margin-right: 10px;">←</span> <span id="prof-history-back-lbl">Back to Profile</span></div><span style="color:var(--text-gray)">></span>
         </button>
         <div id="player-game-history-list"><p style="text-align:center; color:var(--text-gray); font-size:11px;">ታሪክ የለም</p></div>
-        <button id="hist-load-more" style="display:none; width:100%; margin-top:8px; background:#1e293b; color:white; border:1px solid var(--border-color); border-radius:8px; padding:10px; font-weight:bold;" onclick="loadPlayerGameHistory(true)">Load more</button>
+        <button id="hist-load-more" class="theme-btn" style="display:none; width:100%; margin-top:8px; padding:10px;" onclick="loadPlayerGameHistory(true)">Load more</button>
     </div>
 </div>
 
@@ -901,6 +913,8 @@
         called = [];
         pendingOccupiedIds = [];
         isProcessingTicket = false;
+        const heldPage = document.getElementById('ticket-page');
+        if (heldPage) heldPage.classList.remove('has-cards');
         const histTop = document.getElementById('history-scroll-top');
         const histTick = document.getElementById('ticket-history-bar');
         if (histTop) histTop.innerHTML = '';
@@ -990,7 +1004,7 @@
             if(status.innerText.includes("Starting") || status.innerText.includes("ሊጀምር")) { status.innerText = "ጨዋታው ሊጀምር ነው"; } else if(status.innerText.includes("LIVE") || status.innerText.includes("በመካሄድ")) { status.innerText = "ጨዋታው በመካሄድ ላይ ነው"; }
             
             document.getElementById('nav-txt-home').innerText = "Home"; document.getElementById('nav-txt-ticket').innerText = "Ticket"; document.getElementById('nav-txt-wallet').innerText = "Wallet"; document.getElementById('nav-txt-rank').innerText = "Rank"; document.getElementById('nav-txt-profile').innerText = "Profile";
-            document.getElementById('wal-title').innerText = "የእኔ ሂሳብ (Wallet)"; document.getElementById('wal-main-lbl').innerHTML = "ዋና ሂሳብ <span style='font-size:9px; color:#fbbf24;'>(ያሸነፉት/ወጪ የሚደረግ)</span>"; document.getElementById('wal-play-lbl').innerText = "መጫወቻ ሂሳብ:"; document.getElementById('wal-hist-lbl').innerText = "የሂሳብ ዝውውር ታሪክ (History)"; document.getElementById('wal-btn-dep').innerText = "➕ Deposit"; document.getElementById('wal-btn-wit').innerText = "💸 Withdraw";
+            document.getElementById('wal-title').innerText = "የእኔ ሂሳብ (Wallet)"; document.getElementById('wal-main-lbl').innerHTML = "ዋና ሂሳብ <span style='font-size:9px; color:var(--gold);'>(ያሸነፉት/ወጪ የሚደረግ)</span>"; document.getElementById('wal-play-lbl').innerText = "መጫወቻ ሂሳብ:"; document.getElementById('wal-hist-lbl').innerText = "የሂሳብ ዝውውር ታሪክ (History)"; document.getElementById('wal-btn-dep').innerText = "➕ Deposit"; document.getElementById('wal-btn-wit').innerText = "💸 Withdraw";
             document.getElementById('rnk-title').innerText = "🏆 አሸናፊዎች (Top 10 Rank)";
             document.getElementById('prof-title').innerText = "👤 የእኔ ፕሮፋይል"; document.getElementById('prof-bot-lbl').innerText = "🤖 የራስዎ መጋበዣ ሊንክ (Share)"; document.getElementById('prof-played-lbl').innerText = "ካርቴላ (Ticket)"; document.getElementById('prof-won-lbl').innerText = "ያሸነፉት (Won)"; document.getElementById('prof-help-lbl').innerText = "እርዳታ ያስፈልጎታል?"; 
             
@@ -1040,7 +1054,7 @@
             if(status.innerText.includes("ሊጀምር") || status.innerText.includes("Starting")) { status.innerText = "Game is Starting"; } else if(status.innerText.includes("በመካሄድ") || status.innerText.includes("LIVE")) { status.innerText = "Game is LIVE"; }
 
             document.getElementById('nav-txt-home').innerText = "Home"; document.getElementById('nav-txt-ticket').innerText = "Tickets"; document.getElementById('nav-txt-wallet').innerText = "Wallet"; document.getElementById('nav-txt-rank').innerText = "Rank"; document.getElementById('nav-txt-profile').innerText = "Profile";
-            document.getElementById('wal-title').innerText = "My Wallet"; document.getElementById('wal-main-lbl').innerHTML = "Main Balance <span style='font-size:9px; color:#fbbf24;'>(Withdrawable)</span>"; document.getElementById('wal-play-lbl').innerText = "Play Balance:"; document.getElementById('wal-hist-lbl').innerText = "Transaction History"; document.getElementById('wal-btn-dep').innerText = "➕ Deposit"; document.getElementById('wal-btn-wit').innerText = "💸 Withdraw";
+            document.getElementById('wal-title').innerText = "My Wallet"; document.getElementById('wal-main-lbl').innerHTML = "Main Balance <span style='font-size:9px; color:var(--gold);'>(Withdrawable)</span>"; document.getElementById('wal-play-lbl').innerText = "Play Balance:"; document.getElementById('wal-hist-lbl').innerText = "Transaction History"; document.getElementById('wal-btn-dep').innerText = "➕ Deposit"; document.getElementById('wal-btn-wit').innerText = "💸 Withdraw";
             document.getElementById('rnk-title').innerText = "🏆 Leaderboard (Top 10)";
             document.getElementById('prof-title').innerText = "👤 My Profile"; document.getElementById('prof-bot-lbl').innerText = "🤖 Your Referral Link (Share)"; document.getElementById('prof-played-lbl').innerText = "Tickets"; document.getElementById('prof-won-lbl').innerText = "Won"; document.getElementById('prof-help-lbl').innerText = "Need Help?"; 
             
@@ -1543,17 +1557,17 @@
                 hc.innerHTML = '';
                 visibleTxs.forEach(tx => {
                     let isCredit = tx.type === 'deposit' || tx.type === 'win';
-                    let color = isCredit ? '#0d9488' : '#ef4444'; 
+                    let color = isCredit ? '#e6c878' : '#c45656'; 
                     let sign = isCredit ? '+' : '-'; 
                     let time = new Date(tx.date).toLocaleString();
                     
-                    let statusColor = tx.status === 'Approved' ? '#34d399' : (tx.status === 'Pending' ? '#fbbf24' : '#ef4444');
+                    let statusColor = tx.status === 'Approved' ? '#e6c878' : (tx.status === 'Pending' ? '#d4bc78' : '#c45656');
                     let statusText = tx.status === 'Approved' ? '✅ Approved' : (tx.status === 'Pending' ? '⏳ Pending' : '❌ Rejected');
 
                     let bonusStr = (tx.bonusGiven && tx.bonusGiven > 0) ? `<br><span style="color:var(--gold); font-size:11px; font-weight:bold;">+ ${tx.bonusGiven} ETB (Bonus)</span>` : '';
 
                     hc.innerHTML += `
-                    <div class="list-card" style="border-left: 3px solid ${color}; padding: 10px 15px; background: linear-gradient(90deg, #0b111a, #111827); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="list-card" style="border-left: 3px solid ${color}; padding: 10px 15px; background: rgba(10, 48, 36, 0.92); border: 1px solid #7a6844; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <span style="font-weight:bold; font-size: 11px; color:white; text-transform:uppercase;">${tx.type} (${tx.method})</span><br>
                             <span style="font-size: 10px; font-weight: bold; color: ${statusColor};">${statusText}</span><br>
@@ -1854,6 +1868,7 @@
                     userTicketsData = []; globalTakenTickets = []; pendingOccupiedIds = [];
                     initGrid(); updateBetPreview();
                     document.getElementById('ticket-list').innerHTML = ''; document.getElementById('game-mini-tickets').innerHTML = '';
+                    document.getElementById('ticket-page').classList.remove('has-cards');
                     document.getElementById('t-info').innerText = "እስካሁን ካርቴላ አልገዙም";
                     
                     if (document.getElementById('game-page').classList.contains('active-page') || document.getElementById('ticket-page').classList.contains('active-page')) { 
@@ -2143,7 +2158,7 @@
                 let html = `<div style="text-align:center; font-size:10px; font-weight:bold; color:#1e293b; padding:1px;">#${t.id}</div><div class="preview-t-grid">`;
                 for(let i=0; i<5; i++) { html += `<div class="preview-t-head" style="background:${bColors[i]}; color: #ffffff; text-shadow: 0 0 5px #ffffff;">${bHeads[i]}</div>`; }
                 for(let r=0; r<5; r++) { for(let c=0; c<5; c++) { 
-                    if(r==2 && c==2) html += `<div class="preview-t-cell marked" style="color:#38bdf8; font-size:12px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
+                    if(r==2 && c==2) html += `<div class="preview-t-cell marked" style="font-size:12px;">★</div>`; 
                     else html += `<div class="preview-t-cell">${t.grid[c][r]}</div>`; 
                 } }
                 card.innerHTML = html + "</div>"; previewBox.appendChild(card);
@@ -2172,8 +2187,8 @@
             for(let r=0; r<5; r++) { 
                 for(let c=0; c<5; c++) { 
                     if(r==2 && c==2) { 
-                        htmlMain += `<div class="t-cell marked" style="color:#38bdf8; font-size:16px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
-                        htmlMini += `<div class="mini-t-cell marked" style="color:#38bdf8; font-size:14px; text-shadow:0 0 5px #38bdf8;">★</div>`; 
+                        htmlMain += `<div class="t-cell marked" style="font-size:16px;">★</div>`; 
+                        htmlMini += `<div class="mini-t-cell marked" style="font-size:14px;">★</div>`; 
                     } else { 
                         htmlMain += `<div class="t-cell t-v-${cols[c][r]}">${cols[c][r]}</div>`; 
                         htmlMini += `<div class="mini-t-cell t-v-${cols[c][r]}">${cols[c][r]}</div>`; 
@@ -2185,6 +2200,8 @@
             list.appendChild(card); gameList.appendChild(miniCard);
         }); 
         document.getElementById('t-info').innerText = "የገዙት ካርቴላ ብዛት: " + userTicketsData.length;
+        const ticketPage = document.getElementById('ticket-page');
+        if (ticketPage) ticketPage.classList.toggle('has-cards', userTicketsData.length > 0);
     }
 
     function buildMasterBoard() {
